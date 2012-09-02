@@ -1,10 +1,10 @@
-Welcome to Valet
+# Welcome to Valet
 
-Overview
+## Overview
 
 This project provides Quicksiver/Alfred menu lookup functionality for your Drupal install. It should work with all major browsers but has only been fully tested on Firefox, Safari and Chrome. RIP IE.
 
-Install
+## Install
 
 Place the entirety of this directory in sites/all/modules/valet
 
@@ -16,4 +16,4 @@ Navigate to administer >> build >> modules. Enable Valet.
 
 You can then visit admin/config/user-interface/valet to configure Valet.
 
-Enjoy!
+## Enjoy!
