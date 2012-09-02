@@ -1,0 +1,214 @@
+#valet{
+	position: fixed;
+	background:#fff;
+	width:600px;
+	left:50%;
+	top:100px;
+	margin-left:-310px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: 10px solid rgba(0,0,0,0.2);
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding;
+	background-clip: padding-box;
+	z-index:9999;
+}
+
+#valet-inner{
+	position: relative;
+	padding:10px;
+}
+
+#valet-form{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	height: 74px;
+	overflow: hidden;
+}
+
+#valet label{
+	display:none;
+}
+
+#valet-search{
+	position: absolute;
+	top:10px;
+	left:10px;
+	font-size:30px;
+	line-height:50px;
+	height:50px;
+	width:470px;
+	padding:10px;
+	background-color:#e4e4e4;
+	border: 1px solid #cccccc;
+	color:#19191A;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#valet-search:focus{
+	border-color: rgba(82, 168, 236, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+#valet-submit{
+	position: absolute;
+	top:10px;
+	right:10px;
+	background: url(../images/valet.png);
+	width:75px;
+	height:75px;
+	border:none;
+	padding:0;
+	margin:0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	overflow: hidden;
+	text-indent: 200px;
+}
+
+#valet-results .ui-autocomplete {
+	position: static;
+	border:none;
+	width: 100% !important;
+	margin:0;
+	padding:10px 0;
+	pointer-events:none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+
+}
+
+#valet-results .ui-autocomplete li{
+	border-bottom:1px solid #e4e4e4;
+}
+
+#valet-results .ui-autocomplete li:last-child{
+	border-bottom:none;
+}
+
+#valet-results .ui-autocomplete li a{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	padding:8px 8px;
+	line-height: 17px;
+	position: relative;
+}
+
+#valet-results .ui-autocomplete li a strong{
+	font-size: 22px;
+	font-weight:200;
+}
+
+#valet-results .ui-autocomplete li a em{
+	font-size:10px;
+	color:#9c9c9c;
+}
+
+#valet-results .ui-autocomplete li a.ui-state-hover em,
+#valet-results .ui-autocomplete li a.ui-state-active em{
+	color:#fff;
+}
+
+#valet-results .ui-autocomplete li a.ui-state-hover,
+#valet-results .ui-autocomplete li a.ui-state-active{
+	color:#fff;
+	border-color:#fff;
+	background: rgb(59,103,158);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+	background: -moz-linear-gradient(top,  rgba(59,103,158,1) 0%, rgba(32,124,202,1) 49%, rgba(43,136,217,1) 99%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(59,103,158,1)), color-stop(49%,rgba(32,124,202,1)), color-stop(99%,rgba(43,136,217,1)));
+	background: -webkit-linear-gradient(top,  rgba(59,103,158,1) 0%,rgba(32,124,202,1) 49%,rgba(43,136,217,1) 99%);
+	background: -o-linear-gradient(top,  rgba(59,103,158,1) 0%,rgba(32,124,202,1) 49%,rgba(43,136,217,1) 99%);
+	background: -ms-linear-gradient(top,  rgba(59,103,158,1) 0%,rgba(32,124,202,1) 49%,rgba(43,136,217,1) 99%);
+	background: linear-gradient(to bottom,  rgba(59,103,158,1) 0%,rgba(32,124,202,1) 49%,rgba(43,136,217,1) 99%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#2b88d9',GradientType=0 );
+	text-shadow: 0 -1px 1px rgba(0,0,0,.5);
+}
+
+.valet-icon{
+	display: block;
+	width: 48px;
+	height:48px;
+	position: absolute;
+	right:14px;
+	top:0px;
+	background-repeat: none;
+}
+
+.valet-icon-return{
+	background-image: url(../images/return.png);
+}
+
+.valet-icon-1{
+	background-image: url(../images/1.png);
+}
+
+.valet-icon-2{
+	background-image: url(../images/2.png);
+}
+
+.valet-icon-3{
+	background-image: url(../images/3.png);
+}
+
+/* Loading */
+
+#valet-loading{
+	display:none;
+	padding:5px 0 0 10px;
+}
+
+.loading #valet-loading{
+	display:block;
+}
+
+.loading #valet-search-form{
+	display:none;
+}
+
+#valet-loading-info{
+	font-size:30px;
+	line-height:40px;
+	font-weight:500;
+	color:#343234;
+}
+
+#valet-loading-value{
+	color:#a9a9a9;
+}
+
+#valet-loading-value span{
+	font-weight:500;
+}
+
+#valet-loading-icon{
+	position: absolute;
+	right:35px;
+	top:32px;
+	width:20px;
+	height:20px;
+	background:url(../images/loader.gif) no-repeat;
+	z-index: 5;
+}

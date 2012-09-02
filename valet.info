@@ -1,0 +1,6 @@
+name 				= Valet
+description = A site navigation tool similar to Alfred for OSX.
+version     = VERSION
+core 				= 7.x
+
+dependencies[] = libraries

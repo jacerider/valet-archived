@@ -1,0 +1,150 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function valet_permission() {
+  return array(
+    'administer valet' => array(
+      'title' => t('Administer Valet'),
+      'description' => t('Administer Valet.'),
+    ),
+    'use valet' => array(
+      'title' => t('Use Valet'),
+      'description' => t('Use Valet.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function valet_menu() {
+  $items['valet/lookup'] = array(
+    'page callback' => 'valet_lookup',
+    'page arguments' => array(2),
+    'access arguments' => array('use valet'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/user-interface/valet'] = array(
+    'title' => 'Valet',
+    'description' => 'Configure Valet.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('valet_admin_form'),
+    'access arguments' => array('administer valet'),
+    'file' => 'valet.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function valet_theme($existing, $type, $theme, $path) {
+  return array(
+    'valet' => array(
+      'render element' => 'content',
+      'template' => 'theme/valet',
+    )
+  );
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function valet_preprocess_html(&$vars) {
+  if (user_access('use valet')) {
+    $form = drupal_get_form('valet_search_form');
+    $content = array(
+      'form' => render($form),
+    );
+
+    $valet_markup = theme('valet', $content);
+    if (!isset($vars['page']['page_bottom'])) {
+      $vars['page']['page_bottom'] = array();
+    }
+    $vars['page']['page_bottom']['valet'] = array(
+      '#type' => 'markup',
+      '#markup' => $valet_markup,
+    );
+
+    drupal_add_css(drupal_get_path('module', 'valet') . '/css/valet.css');
+    switch(variable_get('valet_compression', 0)){
+      case 1:
+        drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.js');
+        break;
+      default:
+        drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.min.js');
+        break;
+    }
+
+    $settings = array('valet' => array());
+    // Rebuild links if cache has been cleared
+    $settings['valet']['purge'] = cache_get('valet_lookup') ? FALSE : TRUE;
+    $settings['valet']['hotkey'] = variable_get('valet_key_modifier', 'Alt').'+'.variable_get('valet_key', 'space');
+    drupal_add_js($settings, 'setting');
+
+    // Include jquery.hotkeys library.
+    if (module_exists('libraries')) {
+
+      $path = libraries_get_path('jquery.hotkeys');
+      if ($path) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
+
+      $path = libraries_get_path('lawnchair');
+      if ($path) drupal_add_js($path . '/lawnchair.min.js', array('group' => JS_LIBRARY));
+
+    }
+
+    drupal_add_library('system', 'ui.autocomplete');
+  }
+}
+
+/**
+ * Popup search box form.
+ */
+function valet_search_form($form, &$form_state) {
+  $form['query'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Jump to'),
+    '#size' => 30,
+    '#maxlength' => 60,
+    '#id' => 'valet-search',
+  );
+
+  return $form;
+}
+
+/**
+ * Item bulk results
+ */
+function valet_lookup(){
+  if ($cache = cache_get('valet_lookup')) {
+    $links = $cache->data;
+  }else{
+
+    // Menu cache
+    $menus = variable_get('valet_index_menus', array());
+    foreach($menus as $key => $mid) if(empty($mid)) unset($menus[$key]);
+    if(!empty($menus)){
+      $result = db_select('menu_links', 'm')
+        ->fields('m', array('link_title', 'link_path'))
+        ->condition('menu_name', $menus,'IN')
+        ->condition('link_title', '','<>')
+        ->condition('link_path', '%\%%','NOT LIKE')
+        ->execute()
+        ->fetchAll();
+
+      $links = array();
+      foreach($result as $link){
+        $links[$link->link_title] = array(
+          'label' => $link->link_title,
+          'value' => $link->link_path,
+        );
+      }
+    }
+    $links = array_values($links);
+    cache_set('valet_lookup', $links, 'cache');
+  }
+  drupal_json_output(array('key' => 'links', 'items' => $links));
+}
