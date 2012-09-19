@@ -40,6 +40,7 @@ Drupal.behaviors.valet = {
       minLength: 2,
       delay: 0,
       autoFocus: true,
+      selectFirst: true,
       appendTo: '#valet-results',
       source: function(request, response) {
         // We only want 4 results max
@@ -147,6 +148,21 @@ Drupal.behaviors.valet = {
     return key ? '<span class="valet-icon valet-icon-'+key+'"><span>' : '';
   }
 
+}
+
+// Autofocus was added in jquery 1.8.11
+var version = jQuery.ui.version.split('.').join('');
+if(parseInt(version) < '1811'){
+  $( ".ui-autocomplete-input" ).live( "autocompleteopen", function() {
+  var autocomplete = $( this ).data( "autocomplete" ),
+  menu = autocomplete.menu;
+
+  if ( !autocomplete.options.selectFirst ) {
+  return;
+  }
+
+  menu.activate( $.Event({ type: "mouseenter" }), menu.element.children().first() );
+  });
 }
 
 })(jQuery);
