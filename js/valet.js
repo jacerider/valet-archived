@@ -85,7 +85,7 @@ Drupal.behaviors.valet = {
     .data( "autocomplete" )._renderItem = function( ui, item ) {
       var icon = Drupal.behaviors.valet.shortcut(item.value);
       var children = Drupal.behaviors.valet.children(item);
-      var value = item.value.length > 100  ? item.value.substring(0,100)+'...' : (item.value.length > 0 ? item.value : '/')
+      var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
       return $( "<li></li>" )
         .data( "item.autocomplete", item )
         .append( "<a><strong>" + item.label + "</strong><br><em>" + value + "</em>" + children + icon + "</a>" )
@@ -147,12 +147,14 @@ Drupal.behaviors.valet = {
     if(url == 'devel/cache/clear') url = 'devel/cache/clear?destination='+(window.location.pathname.substring(1));
     if(url == 'devel/ambit/clear') url = 'devel/ambit/clear?destination='+(window.location.pathname.substring(1));
     if(url.indexOf("valet/cache/clear") != -1) url += '?destination='+(window.location.pathname.substring(1));
-    var url_short = url.length > 20  ? url.substring(0,20)+'...' : (url.length > 0 ? url : '/');
+    var label_short = label.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, "");
+    label_short = label_short.length > 28 ? label_short.substring(0,28)+'...' : label_short;
+    var url_short = url.length > 40  ? url.substring(0,40)+'...' : (url.length > 0 ? url : '/');
     // Hide results
     $('#valet-results').hide();
     // Update display
     Drupal.behaviors.valet.valetSelector.addClass('loading');
-    $('#valet-loading-info').text(label.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""));
+    $('#valet-loading-info').text(label_short);
     $('#valet-loading-value span').text(url_short);
     window.location = Drupal.settings.basePath+url;
   },
