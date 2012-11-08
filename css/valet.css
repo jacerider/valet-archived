@@ -87,16 +87,21 @@
 	text-indent: 200px;
 }
 
+#valet-results{
+	overflow: hidden;
+}
+
 #valet-results .ui-autocomplete {
 	position: static;
 	border:none;
 	width: 100% !important;
 	margin:0;
-	padding:10px 0;
+	padding:10px 0 0;
 	pointer-events:none;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+	overflow: hidden;
 
 }
 
@@ -153,9 +158,24 @@
 	width: 48px;
 	height:48px;
 	position: absolute;
-	right:14px;
+	right:0px;
 	top:0px;
 	background-repeat: none;
+}
+
+.valet-icon-ctrl{
+	background-image: url(../images/ctrl.png);
+	right: 40px;
+}
+
+.valet-icon-alt{
+	background-image: url(../images/alt.png);
+	right: 40px;
+}
+
+.valet-icon-shift{
+	background-image: url(../images/shift.png);
+	right: 40px;
 }
 
 .valet-icon-return{
@@ -172,6 +192,28 @@
 
 .valet-icon-3{
 	background-image: url(../images/3.png);
+}
+
+.valet-child{
+	overflow:hidden;
+	background:#3F4143;
+}
+
+.valet-child a{
+	color:#fff;
+	font-size: 13px;
+}
+
+.valet-child.first{
+/*	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;*/
+}
+
+.valet-child.last{
+/*	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;*/
 }
 
 /* Loading */

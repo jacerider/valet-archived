@@ -1,19 +1,22 @@
 <?php
 
 function valet_admin_form($form, &$form_state){
-
-	if(module_exists('menu')){
-		$options = array();
-		$result = db_query("SELECT * FROM {menu_custom} ORDER BY title", array(), array('fetch' => PDO::FETCH_ASSOC));
-	  foreach ($result as $menu) {
-	  	$options[$menu['menu_name']] = $menu['title'];
-	  }
-		$form['valet_index_menus'] = array(
+	// Load all plugins type "operation".
+  ctools_include('plugins');
+  $operations = ctools_get_plugins('valet', 'links');
+  $options = array();
+  foreach($operations as $name => $plugin){
+  	$handler = _valet_get_handler('links', $name);
+  	$options += $handler->options_load();
+  }
+  
+	if(!empty($options)){
+		$form['valet_index_types'] = array(
 			'#type' => 'checkboxes',
 			'#title' => t('Menu Index'),
-			'#description' => t('The menu items you would like to make available to Valet.'),
+			'#description' => t('The items you would like to make available to Valet.'),
 			'#options' => $options,
-			'#default_value' => variable_get('valet_index_menus', array()),
+			'#default_value' => variable_get('valet_index_types', array()),
 		);
 	}
 
@@ -44,7 +47,6 @@ function valet_admin_form($form, &$form_state){
 	$form['#submit'][] = 'valet_admin_form_submit';
 
   return system_settings_form($form);
-	
 }
 
 function valet_admin_form_submit($form, &$form_state){

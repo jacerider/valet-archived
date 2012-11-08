@@ -1,6 +1,51 @@
 <?php
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function valet_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'valet') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_type().
+ *
+ * Has plenty options. See ctools/help/plugins-creating.html
+ */
+function valet_ctools_plugin_type() {
+  return array(
+    'links' => array(
+      'classes' => array('class'),
+    ),
+    'entity' => array(
+      'classes' => array('class'),
+    ),
+  );
+}
+
+/**
+ * Get the links handlers.
+ *
+ * @param $handler
+ *   The links handler name.
+ */
+function _valet_get_handler($type, $name) {
+  $object_cache = drupal_static(__FUNCTION__);
+  if (!isset($object_cache[$name])) {
+    ctools_include('plugins');
+    $class = ctools_plugin_load_class('valet', $type, $name, 'class');
+    $class = class_exists($class) ? $class : 'Valet_'.ucfirst($type).'Handler_Broken';
+    $all_args = func_get_args();
+    $args = array_slice($all_args, 2);
+    $object_cache[$name] = new $class($name, $args);
+  }
+
+  return $object_cache[$name];
+}
+
+/**
  * Implements hook_permission().
  */
 function valet_permission() {
@@ -34,6 +79,20 @@ function valet_menu() {
     'access arguments' => array('administer valet'),
     'file' => 'valet.admin.inc',
   );
+
+  $cache_types = array('menu', 'theme-registry', 'css-js', 'block', 'module-list', 'theme-list', 'registry');
+  foreach($cache_types as $type){
+    $name = ucwords(str_replace('-', ' ', $type));
+    $items['valet/cache/clear/'.$type] = array(
+      'title' => 'Empty '.$name.' cache',
+      'page callback' => 'valet_cache_clear',
+      'page arguments' => array(3),
+      'description' => 'Clear the CSS cache and all database cache tables which store page, node, theme and variable caches.',
+      'access arguments' => array('access devel information'),
+      'file' => 'valet.pages.inc',
+      'menu_name' => 'devel',
+    );
+  }
 
   return $items;
 }
@@ -82,7 +141,8 @@ function valet_preprocess_html(&$vars) {
     $settings = array('valet' => array());
     // Rebuild links if cache has been cleared
     $settings['valet']['purge'] = cache_get('valet_lookup') ? FALSE : TRUE;
-    $settings['valet']['hotkey'] = variable_get('valet_key_modifier', 'Alt').'+'.variable_get('valet_key', 'space');
+    $settings['valet']['modifier'] = variable_get('valet_key_modifier', 'Alt');
+    $settings['valet']['key'] = variable_get('valet_key', 'space');
     drupal_add_js($settings, 'setting');
 
     // Include jquery.hotkeys library.
@@ -122,29 +182,42 @@ function valet_lookup(){
   if ($cache = cache_get('valet_lookup')) {
     $links = $cache->data;
   }else{
+    $options = variable_get('valet_index_types', array());
+    $settings = array();
+    foreach($options as $key => $setting){
+      if(empty($setting)) continue;
+      $value = explode(':',$key);
+      $settings = array_merge_recursive($settings, valet_make_array($key, end($value)));
+    }
 
-    // Menu cache
-    $menus = variable_get('valet_index_menus', array());
-    foreach($menus as $key => $mid) if(empty($mid)) unset($menus[$key]);
-    if(!empty($menus)){
-      $result = db_select('menu_links', 'm')
-        ->fields('m', array('link_title', 'link_path'))
-        ->condition('menu_name', $menus,'IN')
-        ->condition('link_title', '','<>')
-        ->condition('link_path', '%\%%','NOT LIKE')
-        ->execute()
-        ->fetchAll();
-
-      $links = array();
-      foreach($result as $link){
-        $links[$link->link_title] = array(
-          'label' => $link->link_title,
-          'value' => $link->link_path,
-        );
-      }
+    ctools_include('plugins');
+    $operations = ctools_get_plugins('valet', 'links');
+    $links = array();
+    $links['/'] = array(
+      'label' => t('Home'),
+      'value' => '',
+    );
+    foreach($operations as $name => $plugin){
+      if(empty($settings[$name])) continue;
+      $handler = _valet_get_handler('links', $name);
+      $links += $handler->links_load($settings[$name]);
     }
     $links = array_values($links);
     cache_set('valet_lookup', $links, 'cache');
   }
+  //return '';
   drupal_json_output(array('key' => 'links', 'items' => $links));
+}
+
+/**
+ * fun with recursion
+ */
+function valet_make_array($keys, $value){
+   $keyParts = explode(':', $keys);
+   $nextKey = array_pop($keyParts);
+   if(count($keyParts)){
+      $temp = array($nextKey => $value);
+      return valet_make_array(implode(':', $keyParts), $temp);
+   }
+   return array($nextKey => $value);
 }
