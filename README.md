@@ -17,3 +17,7 @@ Navigate to administer >> build >> modules. Enable Valet.
 You can then visit admin/config/user-interface/valet to configure Valet.
 
 ## Enjoy!
+
+### Credits:
+
+Icons - Oliver Twardowski - http://www.addictedtocoffee.de/
