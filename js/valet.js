@@ -140,14 +140,14 @@ Drupal.behaviors.valet = {
 
   // Select action
   go: function(label, url){
+    // Save for weight
+    Drupal.behaviors.valet.goSave(url);
+
     // Support for cache clear redirect
     if(url == 'devel/cache/clear') url = 'devel/cache/clear?destination='+(window.location.pathname.substring(1));
     if(url == 'devel/ambit/clear') url = 'devel/ambit/clear?destination='+(window.location.pathname.substring(1));
     if(url.indexOf("valet/cache/clear") != -1) url += '?destination='+(window.location.pathname.substring(1));
     var url_short = url.length > 20  ? url.substring(0,20)+'...' : (url.length > 0 ? url : '/');
-
-    // Save for weight
-    Drupal.behaviors.valet.goSave(url);
     // Hide results
     $('#valet-results').hide();
     // Update display
@@ -178,18 +178,14 @@ Drupal.behaviors.valet = {
   // Show valet
   show: function(){
     Drupal.behaviors.valet.open = true;
-    Drupal.behaviors.valet.valetSelector.css({display:'block',opacity:0,marginTop:-20}).animate({opacity:1,marginTop:0}, 300, function(){
-      Drupal.behaviors.valet.valetSearchSelector.focus();
-    });
+    Drupal.behaviors.valet.valetSelector.fadeIn('normal');
+    Drupal.behaviors.valet.valetSearchSelector.focus();
   },
 
   // hide valet
   hide: function(){
     Drupal.behaviors.valet.open = false;
-    Drupal.behaviors.valet.valetSelector.animate({opacity:0,marginTop:-20}, 300, function(){
-      $(this).hide();
-      Drupal.behaviors.valet.valetSearchSelector.val('').blur();
-    });
+    Drupal.behaviors.valet.valetSelector.fadeOut('fast');
     // Unbind shortcuts
     Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', '1');
     Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', '2');
