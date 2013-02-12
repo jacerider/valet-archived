@@ -65,7 +65,7 @@ function valet_permission() {
  * Implements hook_menu().
  */
 function valet_menu() {
-  $items['valet/lookup'] = array(
+  $items['admin/valet/lookup'] = array(
     'page callback' => 'valet_lookup',
     'page arguments' => array(2),
     'access arguments' => array('use valet'),
@@ -114,6 +114,10 @@ function valet_theme($existing, $type, $theme, $path) {
  */
 function valet_preprocess_html(&$vars) {
   if (user_access('use valet')) {
+
+    global $theme_key;
+    if(variable_get('valet_admin') && $theme_key != variable_get('admin_theme')) return;
+
     $form = drupal_get_form('valet_search_form');
     $content = array(
       'form' => render($form),
