@@ -5,7 +5,7 @@ Drupal.behaviors.valet = {
   once: false,
 
   open: false,
-  
+
   links: false,
 
   results: false,
@@ -47,7 +47,7 @@ Drupal.behaviors.valet = {
     // generate the list via ajax
     if(!Drupal.behaviors.valet.links){
       $.ajax({
-        url: Drupal.settings.basePath+'valet/lookup',
+        url: Drupal.settings.basePath+'admin/valet/lookup',
         dataType: 'json',
         success: function(data) {
           Lawnchair({name:'valet'}, function() {
@@ -55,10 +55,14 @@ Drupal.behaviors.valet = {
             this.save(data);
             Drupal.behaviors.valet.links = data;
           })
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alert(xhr.status);
+          alert(thrownError);
         }
       });
     }
-    
+
     // Jquery UI autocomplete field awesomeness
     Drupal.behaviors.valet.valetSearchSelector.autocomplete({
       minLength: 2,
@@ -123,6 +127,10 @@ Drupal.behaviors.valet = {
   // Sort by weighted fields
   resultsFilter: function(requestTerm){
     Drupal.behaviors.valet.requestTerm = requestTerm;
+    if(!Drupal.behaviors.valet.links){
+      console.log('Valet Links Not Found!');
+      return;
+    }
     var results = $.ui.autocomplete.filter(Drupal.behaviors.valet.links.items, Drupal.behaviors.valet.requestTerm);
     Drupal.behaviors.valet.results = results.slice(0, 4);
     if(Drupal.behaviors.valet.weights && Drupal.behaviors.valet.weights[Drupal.behaviors.valet.requestTerm]){
