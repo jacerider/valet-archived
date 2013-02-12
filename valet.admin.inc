@@ -9,7 +9,7 @@ function valet_admin_form($form, &$form_state){
   	$handler = _valet_get_handler('links', $name);
   	$options += $handler->options_load();
   }
-  
+
 	if(!empty($options)){
 		$form['valet_index_types'] = array(
 			'#type' => 'checkboxes',
@@ -42,6 +42,12 @@ function valet_admin_form($form, &$form_state){
 		'#default_value' => variable_get('valet_key', 'space'),
 		'#required' => TRUE,
 		'#description' => t('Take a look at !url for more information.', array('!url' => l('jquery.hotkeys', 'https://github.com/jeresig/jquery.hotkeys'))),
+	);
+
+	$form['valet_admin'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Show only on admin'),
+		'#default_value' => variable_get('valet_admin', 'Alt'),
 	);
 
 	$form['#submit'][] = 'valet_admin_form_submit';
