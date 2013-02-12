@@ -4,9 +4,8 @@ version     = VERSION
 core 				= 7.x
 
 dependencies[] = menu
+dependencies[] = ctools
 dependencies[] = libraries
-dependencies[] = jquery_update
-
 
 ; Our plugins interfaces and abstract implementations.
 files[] = plugins/links/abstract.inc
