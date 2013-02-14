@@ -107,6 +107,7 @@
 
 #valet-results .ui-autocomplete li{
 	border-bottom:1px solid #e4e4e4;
+	display:block;
 }
 
 #valet-results .ui-autocomplete li:last-child{
@@ -118,6 +119,7 @@
 	padding:8px 8px;
 	line-height: 17px;
 	position: relative;
+	display:block;
 }
 
 #valet-results .ui-autocomplete li a strong{
