@@ -83,6 +83,13 @@ Drupal.behaviors.valet = {
           Drupal.behaviors.valet.go(ui.item.label, ui.item.value);
           return false;
         }
+      },
+      open: function(event, ui){
+        var autocomplete = $( this ).data( "autocomplete" );
+        menu = autocomplete.menu;
+        menu.activate( $.Event({
+            type: "mouseenter"
+        }), menu.element.children().first());
       }
     })
     // Add some magical style to our results
