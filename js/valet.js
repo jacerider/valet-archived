@@ -20,32 +20,36 @@ Drupal.behaviors.valet = {
 
   valetSearchSelector: '',
 
+  shifted: false,
+
   attach: function(context, settings) {
 
-    if(Drupal.behaviors.valet.once) return;
-    Drupal.behaviors.valet.once = true;
+    var me = this;
 
-    Drupal.behaviors.valet.valetSelector = $('#valet');
-    Drupal.behaviors.valet.valetSearchSelector = $('#valet-search');
+    if(me.once) return;
+    me.once = true;
+
+    me.valetSelector = $('#valet');
+    me.valetSearchSelector = $('#valet-search');
 
     // Hide valet immediately
-    Drupal.behaviors.valet.valetSelector.hide();
+    me.valetSelector.hide();
 
     // Get locally stored links object
     if(!Drupal.settings.valet.purge){
       Lawnchair({name:'valet'}, function(){
         this.get('links', function(links) {
-          Drupal.behaviors.valet.links = links != 'undefined' ? links : false;
+          me.links = links != 'undefined' ? links : false;
         });
         this.get('weight', function(weight) {
-          Drupal.behaviors.valet.weights = weight != 'undefined' ? weight : false;
+          me.weights = weight != 'undefined' ? weight : false;
         });
       })
     }
 
     // If we don't have a locall stored links object
     // generate the list via ajax
-    if(!Drupal.behaviors.valet.links){
+    if(!me.links){
       $.ajax({
         url: Drupal.settings.basePath+'admin/valet/lookup',
         dataType: 'json',
@@ -53,7 +57,7 @@ Drupal.behaviors.valet = {
           Lawnchair({name:'valet'}, function() {
             this.remove('links');
             this.save(data);
-            Drupal.behaviors.valet.links = data;
+            me.links = data;
           })
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -64,23 +68,23 @@ Drupal.behaviors.valet = {
     }
 
     // Jquery UI autocomplete field awesomeness
-    Drupal.behaviors.valet.valetSearchSelector.autocomplete({
+    me.valetSearchSelector.autocomplete({
       minLength: 2,
       delay: 0,
       autoFocus: true,
       appendTo: '#valet-results',
       source: function(request, response) {
-        Drupal.behaviors.valet.resultsFilter(request.term);
-        response(Drupal.behaviors.valet.results);
+        me.resultsFilter(request.term);
+        response(me.results);
       },
       focus: function( event, ui ) {
-        Drupal.behaviors.valet.selected = ui.item;
-        Drupal.behaviors.valet.childrenCheck();
+        me.selected = ui.item;
+        me.childrenCheck();
         return false;
       },
       select: function( event, ui ) {
         if(ui.item){
-          Drupal.behaviors.valet.go(ui.item.label, ui.item.value);
+          me.go(ui.item.label, ui.item.value);
           return false;
         }
       },
@@ -90,12 +94,21 @@ Drupal.behaviors.valet = {
         menu.activate( $.Event({
             type: "mouseenter"
         }), menu.element.children().first());
+        // Use shift to open new tab
+        if(!this.shiftSet){
+          this.shiftSet = true;
+          $(this).bind('keydown', 'shift', function() {
+            me.shifted = true;
+          }).bind('keyup', 'shift', function(){
+            me.shifted = false;
+          });
+        }
       }
     })
     // Add some magical style to our results
     .data( "autocomplete" )._renderItem = function( ui, item ) {
-      var icon = Drupal.behaviors.valet.shortcut(item.value);
-      var children = Drupal.behaviors.valet.children(item);
+      var icon = me.shortcut(item.value);
+      var children = me.children(item);
       var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
       return $( "<li></li>" )
         .data( "item.autocomplete", item )
@@ -105,24 +118,24 @@ Drupal.behaviors.valet = {
 
     // Bind hotkeys.
     $(document).bind('keydown', Drupal.settings.valet.modifier+'+'+Drupal.settings.valet.key, function() {
-      Drupal.behaviors.valet.show();
+      me.show();
       return false;
     });
     $(document).bind('keydown', 'esc', function() {
-      Drupal.behaviors.valet.hide();
+      me.hide();
     });
-    Drupal.behaviors.valet.valetSearchSelector.bind('keydown', 'esc', function() {
-      Drupal.behaviors.valet.hide();
+    me.valetSearchSelector.bind('keydown', 'esc', function() {
+      me.hide();
     });
     // Hotkey for children
-    Drupal.behaviors.valet.valetSearchSelector.bind('keydown', Drupal.settings.valet.modifier, function() {
-      Drupal.behaviors.valet.childrenCreate();
+    me.valetSearchSelector.bind('keydown', Drupal.settings.valet.modifier, function() {
+      me.childrenCreate();
       return false;
     });
 
     // Click anywhere else to close.
     $(document).click(function() {
-      Drupal.behaviors.valet.hide();
+      me.hide();
     });
 
     // Disable form submit
@@ -133,49 +146,63 @@ Drupal.behaviors.valet = {
 
   // Sort by weighted fields
   resultsFilter: function(requestTerm){
-    Drupal.behaviors.valet.requestTerm = requestTerm;
-    if(!Drupal.behaviors.valet.links){
+    var me = this;
+
+    me.requestTerm = requestTerm;
+    if(!me.links){
       console.log('Valet Links Not Found!');
       return;
     }
-    var results = $.ui.autocomplete.filter(Drupal.behaviors.valet.links.items, Drupal.behaviors.valet.requestTerm);
-    Drupal.behaviors.valet.results = results.slice(0, 4);
-    if(Drupal.behaviors.valet.weights && Drupal.behaviors.valet.weights[Drupal.behaviors.valet.requestTerm]){
-      var weight = Drupal.behaviors.valet.weights[Drupal.behaviors.valet.requestTerm];
-      for (var i=0;i<Drupal.behaviors.valet.results.length;i++){
-        if(weight[Drupal.behaviors.valet.results[i].value]){
-          Drupal.behaviors.valet.results[i].weight = weight[Drupal.behaviors.valet.results[i].value];
+    var results = $.ui.autocomplete.filter(me.links.items, me.requestTerm);
+    me.results = results.slice(0, 4);
+    if(me.weights && me.weights[me.requestTerm]){
+      var weight = me.weights[me.requestTerm];
+      for (var i=0;i<me.results.length;i++){
+        if(weight[me.results[i].value]){
+          me.results[i].weight = weight[me.results[i].value];
         }else{
-          Drupal.behaviors.valet.results[i].weight = 0;
+          me.results[i].weight = 0;
         }
       }
     }
-    Drupal.behaviors.valet.results.sort(Drupal.behaviors.valet.weightSort);
+    me.results.sort(me.weightSort);
   },
 
   // Select action
   go: function(label, url){
+    var me = this;
+
     // Save for weight
-    Drupal.behaviors.valet.goSave(url);
+    me.goSave(url);
 
     // Support for cache clear redirect
     if(url == 'devel/cache/clear') url = 'devel/cache/clear?destination='+(window.location.pathname.substring(1));
     if(url == 'devel/ambit/clear') url = 'devel/ambit/clear?destination='+(window.location.pathname.substring(1));
     if(url.indexOf("valet/cache/clear") != -1) url += '?destination='+(window.location.pathname.substring(1));
+
     var label_short = label.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, "");
     label_short = label_short.length > 28 ? label_short.substring(0,28)+'...' : label_short;
     var url_short = url.length > 40  ? url.substring(0,40)+'...' : (url.length > 0 ? url : '/');
+
     // Hide results
     $('#valet-results').hide();
     // Update display
-    Drupal.behaviors.valet.valetSelector.addClass('loading');
+    me.valetSelector.addClass('loading');
     $('#valet-loading-info').text(label_short);
     $('#valet-loading-value span').text(url_short);
-    window.location = Drupal.settings.basePath+url;
+
+    if(me.shifted){
+      me.hide();
+      window.open(Drupal.settings.basePath+url);
+    }else{
+      window.location = Drupal.settings.basePath+url;
+    }
   },
 
   // Save weight per search term and path
   goSave: function(url){
+    var me = this;
+
     Lawnchair({name:'valet'}, function(){
       var me = this;
       //this.remove('weight');
@@ -183,10 +210,10 @@ Drupal.behaviors.valet = {
         if(!weight){
           weight = {key:'weight'};
         }
-        if(!weight[Drupal.behaviors.valet.requestTerm]){
-          weight[Drupal.behaviors.valet.requestTerm] = {};
+        if(!weight[me.requestTerm]){
+          weight[me.requestTerm] = {};
         };
-        weight[Drupal.behaviors.valet.requestTerm][url] = weight[Drupal.behaviors.valet.requestTerm][url] ? weight[Drupal.behaviors.valet.requestTerm][url]+1 : 1;
+        weight[me.requestTerm][url] = weight[me.requestTerm][url] ? weight[me.requestTerm][url]+1 : 1;
         this.save(weight);
       });
     })
@@ -194,22 +221,32 @@ Drupal.behaviors.valet = {
 
   // Show valet
   show: function(){
-    Drupal.behaviors.valet.open = true;
-    Drupal.behaviors.valet.valetSelector.fadeIn('normal');
-    Drupal.behaviors.valet.valetSearchSelector.focus();
+    var me = this;
+    me.open = true;
+    me.valetSelector.fadeIn('normal');
+    me.valetSearchSelector.focus().data("autocomplete")._trigger("change");
   },
 
   // hide valet
   hide: function(){
-    Drupal.behaviors.valet.open = false;
-    Drupal.behaviors.valet.valetSelector.fadeOut('fast');
+    var me = this;
+    me.open = false;
+    me.valetSelector.fadeOut('fast');
     // Unbind shortcuts
-    Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', '1');
-    Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', '2');
-    Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', '3');
+    me.valetSearchSelector.unbind('keydown', '1');
+    me.valetSearchSelector.unbind('keydown', '2');
+    me.valetSearchSelector.unbind('keydown', '3');
+
+    // Reset results
+    $('#valet-results').show();
+    // Reset display
+    me.valetSelector.removeClass('loading');
+    $('#valet-loading-info').text('');
+    $('#valet-loading-value span').text('');
   },
 
   children: function(item){
+    var me = this;
     if(item.children){
       return '<span class="valet-icon valet-icon-'+Drupal.settings.valet.modifier.toLowerCase()+'"></span>';
     }
@@ -217,12 +254,14 @@ Drupal.behaviors.valet = {
   },
 
   childrenCheck: function(item){
-    var item = Drupal.behaviors.valet.selected;
-    Drupal.behaviors.valet.childrenRemove();
+    var me = this;
+    var item = me.selected;
+    me.childrenRemove();
   },
 
   childrenCreate: function(){
-    var item = Drupal.behaviors.valet.selected;
+    var me = this;
+    var item = me.selected;
     if(item.children && !item.child){
       if($('.valet-child').length) return;
       var placeAfter = $('#ui-active-menuitem').parent();
@@ -246,7 +285,8 @@ Drupal.behaviors.valet = {
   },
 
   childrenRemove: function(){
-    var item = Drupal.behaviors.valet.selected;
+    var me = this;
+    var item = me.selected;
     var children = $('.valet-child');
     if(!item.child && children.length){
       children.animate({height:0}, 300, function(){
@@ -257,32 +297,34 @@ Drupal.behaviors.valet = {
 
   // Bind shortcuts for each result
   shortcut: function(url){
+    var me = this;
     var key = '';
     switch(url){
-      case Drupal.behaviors.valet.results[0]['value']:
+      case me.results[0]['value']:
         key = 'return';
         break;
-      case Drupal.behaviors.valet.results[1]['value']:
+      case me.results[1]['value']:
         key = '1';
         break;
-      case Drupal.behaviors.valet.results[2]['value']:
+      case me.results[2]['value']:
         key = '2';
         break;
-      case Drupal.behaviors.valet.results[3]['value']:
+      case me.results[3]['value']:
         key = '3';
         break;
     }
     var key_int = parseInt(key);
     if(key_int){
-      Drupal.behaviors.valet.valetSearchSelector.unbind('keydown', key);
-      Drupal.behaviors.valet.valetSearchSelector.bind('keydown', key, function() {
-        Drupal.behaviors.valet.go(Drupal.behaviors.valet.results[key_int]['label'], Drupal.behaviors.valet.results[key_int]['value']);
+      me.valetSearchSelector.unbind('keydown', key);
+      me.valetSearchSelector.bind('keydown', key, function() {
+        me.go(me.results[key_int]['label'], me.results[key_int]['value']);
       });
     }
     return key ? '<span class="valet-icon valet-icon-'+key+'"><span>' : '';
   },
 
   weightSort: function compare(a,b) {
+    var me = this;
     if (a.weight > b.weight)
        return -1;
     if (a.weight < b.weight)
