@@ -153,10 +153,11 @@ function valet_preprocess_html(&$vars) {
     if (module_exists('libraries')) {
 
       $path = libraries_get_path('jquery.hotkeys');
-      if ($path) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
+      if ($path && file_exists($path . '/jquery.hotkeys.js')) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
 
       $path = libraries_get_path('lawnchair');
-      if ($path) drupal_add_js($path . '/lawnchair.min.js', array('group' => JS_LIBRARY));
+      if ($path && file_exists($path . '/lawnchair.min.js')) drupal_add_js($path . '/lawnchair.min.js', array('group' => JS_LIBRARY));
+      if ($path && file_exists($path . '/lawnchair-0.6.1.min.js')) drupal_add_js($path . '/lawnchair-0.6.1.min.js', array('group' => JS_LIBRARY));
 
     }
 
