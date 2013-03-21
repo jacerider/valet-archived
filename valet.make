@@ -10,4 +10,4 @@ libraries[lawnchair][download][url] = "http://brian.io/lawnchair/downloads/lawnc
 ; Jquery Hotkeys
 libraries[jquery.hotkeys][type] = "libraries"
 libraries[jquery.hotkeys][download][type] = "file"
-libraries[jquery.hotkeys][download][url] = "https://raw.github.com/jeresig/jquery.hotkeys/master/hotkeys.jquery.json"
+libraries[jquery.hotkeys][download][url] = "https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js"
