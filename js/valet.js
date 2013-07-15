@@ -30,6 +30,7 @@ Drupal.behaviors.valet = {
     me.once = true;
 
     me.valetSelector = $('#valet');
+    if(!me.valetSelector.length) return;
     me.valetSearchSelector = $('#valet-search');
 
     // Hide valet immediately
