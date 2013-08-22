@@ -38,7 +38,7 @@
 	font-size:30px;
 	line-height:50px;
 	height:50px;
-	width:470px;
+	width:450px;
 	padding:10px;
 	background-color:#e4e4e4;
 	border: 1px solid #cccccc;
@@ -55,6 +55,9 @@
   -o-transition: border linear 0.2s, box-shadow linear 0.2s;
   transition: border linear 0.2s, box-shadow linear 0.2s;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
 }
 
 #valet-search:focus{
