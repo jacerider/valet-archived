@@ -2,6 +2,10 @@
 
 Drupal.behaviors.valet = {
 
+  dataLabel: parseFloat($.ui.version) == 1.8 ? 'autocomplete' : 'ui-Autocomplete',
+
+  dataItemLabel: parseFloat($.ui.version) == 1.8 ? 'item.autocomplete' : 'ui-autocomplete-item',
+
   once: false,
 
   open: false,
@@ -90,11 +94,13 @@ Drupal.behaviors.valet = {
         }
       },
       open: function(event, ui){
-        var autocomplete = $( this ).data( "autocomplete" );
+        var autocomplete = $( this ).data( Drupal.behaviors.valet.dataLabel );
         menu = autocomplete.menu;
-        menu.activate( $.Event({
-            type: "mouseenter"
-        }), menu.element.children().first());
+        if(menu.activate){
+          menu.activate( $.Event({
+              type: "mouseenter"
+          }), menu.element.children().first());
+        }
         // Use shift to open new tab
         if(!this.shiftSet){
           this.shiftSet = true;
@@ -107,12 +113,12 @@ Drupal.behaviors.valet = {
       }
     })
     // Add some magical style to our results
-    .data( "autocomplete" )._renderItem = function( ui, item ) {
+    .data( Drupal.behaviors.valet.dataLabel )._renderItem = function( ui, item ) {
       var icon = me.shortcut(item.value);
       var children = me.children(item);
       var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
       return $( "<li></li>" )
-        .data( "item.autocomplete", item )
+        .data( Drupal.behaviors.valet.dataItemLabel, item )
         .append( "<a><strong>" + item.label + "</strong><br><em>" + value + "</em>" + children + icon + "</a>" )
         .appendTo( ui );
     };
@@ -225,7 +231,7 @@ Drupal.behaviors.valet = {
     var me = this;
     me.open = true;
     me.valetSelector.fadeIn('normal');
-    me.valetSearchSelector.focus().data("autocomplete")._trigger("change");
+    me.valetSearchSelector.focus().data( Drupal.behaviors.valet.dataLabel )._trigger("change");
   },
 
   // hide valet
