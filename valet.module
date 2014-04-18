@@ -80,6 +80,14 @@ function valet_menu() {
     'file' => 'valet.admin.inc',
   );
 
+  $items['valet/cache/clear'] = array(
+    'title' => 'Empty cache',
+    'page callback' => 'valet_cache_clear',
+    'access arguments' => array('access devel information'),
+    'file' => 'valet.pages.inc',
+    'menu_name' => 'devel',
+  );
+
   $cache_types = array('menu', 'theme-registry', 'css-js', 'block', 'module-list', 'theme-list', 'registry');
   foreach($cache_types as $type){
     $name = ucwords(str_replace('-', ' ', $type));
@@ -87,7 +95,6 @@ function valet_menu() {
       'title' => 'Empty '.$name.' cache',
       'page callback' => 'valet_cache_clear',
       'page arguments' => array(3),
-      'description' => 'Clear the CSS cache and all database cache tables which store page, node, theme and variable caches.',
       'access arguments' => array('access devel information'),
       'file' => 'valet.pages.inc',
       'menu_name' => 'devel',
