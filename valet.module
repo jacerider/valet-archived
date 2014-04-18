@@ -139,15 +139,15 @@ function valet_preprocess_html(&$vars) {
       '#markup' => $valet_markup,
     );
 
-    drupal_add_css(drupal_get_path('module', 'valet') . '/css/valet.css');
-    switch(variable_get('valet_compression', 0)){
-      case 1:
-        drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.js');
-        break;
-      default:
-        drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.min.js');
-        break;
-    }
+    // drupal_add_css(drupal_get_path('module', 'valet') . '/css/valet.css');
+    // switch(variable_get('valet_compression', 0)){
+    //   case 1:
+    //     drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.js');
+    //     break;
+    //   default:
+    //     drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.min.js');
+    //     break;
+    // }
 
     $settings = array('valet' => array());
     // Rebuild links if cache has been cleared
@@ -156,20 +156,65 @@ function valet_preprocess_html(&$vars) {
     $settings['valet']['key'] = variable_get('valet_key', 'space');
     drupal_add_js($settings, 'setting');
 
-    // Include jquery.hotkeys library.
-    if (module_exists('libraries')) {
+    // // Include jquery.hotkeys library.
+    // if (module_exists('libraries')) {
 
-      $path = libraries_get_path('jquery.hotkeys');
-      if ($path && file_exists($path . '/jquery.hotkeys.js')) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
+    //   $path = libraries_get_path('jquery.hotkeys');
+    //   if ($path && file_exists($path . '/jquery.hotkeys.js')) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
 
-      $path = libraries_get_path('lawnchair');
-      if ($path && file_exists($path . '/lawnchair.min.js')) drupal_add_js($path . '/lawnchair.min.js', array('group' => JS_LIBRARY));
-      if ($path && file_exists($path . '/lawnchair-0.6.1.min.js')) drupal_add_js($path . '/lawnchair-0.6.1.min.js', array('group' => JS_LIBRARY));
+    //   $path = libraries_get_path('lawnchair');
+    //   if ($path && file_exists($path . '/lawnchair.min.js')) drupal_add_js($path . '/lawnchair.min.js', array('weight'=>-100, 'group' => JS_LIBRARY));
+    //   if ($path && file_exists($path . '/lawnchair-0.6.1.min.js')) drupal_add_js($path . '/lawnchair-0.6.1.min.js', array('weight'=>-100, 'group' => JS_LIBRARY));
 
-    }
+    // }
 
-    drupal_add_library('system', 'ui.autocomplete');
+    // drupal_add_library('system', 'ui.autocomplete');
+    drupal_add_library('valet', 'valet');
   }
+}
+
+/**
+ * Implements hook_library().
+ */
+function valet_library() {
+  $libraries['valet'] = array(
+    'title' => 'Valet',
+    'website' => 'http://www.ashenrayne.com',
+    'version' => '3.1-beta1',
+    'js' => array(
+      drupal_get_path('module', 'valet') . '/js/valet.min.js' => array('group' => JS_LIBRARY),
+    ),
+    'css' => array(
+      drupal_get_path('module', 'valet') . '/css/valet.css' => array(
+        'type' => 'file',
+        'media' => 'screen',
+      ),
+    ),
+    'dependencies' => array(
+      array('system', 'ui.autocomplete'),
+      array('valet', 'hotkeys'),
+      array('valet', 'lawnchair'),
+    ),
+  );
+  // Library Two.
+  $libraries['hotkeys'] = array(
+    'title' => 'Library Two',
+    'website' => 'http://example.com/library-2',
+    'version' => '3.1-beta1',
+    'js' => array(
+      libraries_get_path('jquery.hotkeys') . '/jquery.hotkeys.js' => array('group' => JS_LIBRARY),
+    ),
+  );
+  // Library One.
+  $libraries['lawnchair'] = array(
+    'title' => 'Lawnchair',
+    'website' => 'http://brian.io/lawnchair/',
+    'version' => '0.6.1',
+    'js' => array(
+      libraries_get_path('lawnchair') . '/lawnchair-0.6.1.min.js' => array('group' => JS_LIBRARY),
+    ),
+  );
+  return $libraries;
 }
 
 /**
