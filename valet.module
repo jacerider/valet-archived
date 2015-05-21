@@ -1,280 +1,41 @@
 <?php
 
 /**
- * Implements hook_ctools_plugin_directory().
- */
-function valet_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'valet') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Implements hook_ctools_plugin_type().
+ * Implements hook_page_button();
  *
- * Has plenty options. See ctools/help/plugins-creating.html
+ * Add valet markup to the bottom of the page automatically.
  */
-function valet_ctools_plugin_type() {
-  return array(
-    'links' => array(
-      'classes' => array('class'),
-    ),
-    'entity' => array(
-      'classes' => array('class'),
-    ),
+function valet_page_bottom(array &$page_bottom) {
+  $page_bottom['valet'] = array(
+    '#type' => 'valet',
+    '#access' => \Drupal::currentUser()->hasPermission('access valet'),
   );
-}
-
-/**
- * Get the links handlers.
- *
- * @param $handler
- *   The links handler name.
- */
-function _valet_get_handler($type, $name) {
-  $object_cache = drupal_static(__FUNCTION__);
-  if (!isset($object_cache[$name])) {
-    ctools_include('plugins');
-    $class = ctools_plugin_load_class('valet', $type, $name, 'class');
-    $class = class_exists($class) ? $class : 'Valet_'.ucfirst($type).'Handler_Broken';
-    $all_args = func_get_args();
-    $args = array_slice($all_args, 2);
-    $object_cache[$name] = new $class($name, $args);
-  }
-
-  return $object_cache[$name];
-}
-
-/**
- * Implements hook_permission().
- */
-function valet_permission() {
-  return array(
-    'administer valet' => array(
-      'title' => t('Administer Valet'),
-      'description' => t('Administer Valet.'),
-    ),
-    'use valet' => array(
-      'title' => t('Use Valet'),
-      'description' => t('Use Valet.'),
-    ),
-  );
-}
-
-/**
- * Implements hook_menu().
- */
-function valet_menu() {
-  $items['admin/valet/lookup'] = array(
-    'page callback' => 'valet_lookup',
-    'page arguments' => array(2),
-    'access arguments' => array('use valet'),
-    'type' => MENU_CALLBACK,
-  );
-  $items['admin/config/user-interface/valet'] = array(
-    'title' => 'Valet',
-    'description' => 'Configure Valet.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('valet_admin_form'),
-    'access arguments' => array('administer valet'),
-    'file' => 'valet.admin.inc',
-  );
-
-  $items['valet/cache/clear'] = array(
-    'title' => 'Empty cache',
-    'page callback' => 'valet_cache_clear',
-    'access arguments' => array('access devel information'),
-    'file' => 'valet.pages.inc',
-    'menu_name' => 'devel',
-  );
-
-  $cache_types = array('menu', 'theme-registry', 'css-js', 'block', 'module-list', 'theme-list', 'registry');
-  foreach($cache_types as $type){
-    $name = ucwords(str_replace('-', ' ', $type));
-    $items['valet/cache/clear/'.$type] = array(
-      'title' => 'Empty '.$name.' cache',
-      'page callback' => 'valet_cache_clear',
-      'page arguments' => array(3),
-      'access arguments' => array('access devel information'),
-      'file' => 'valet.pages.inc',
-      'menu_name' => 'devel',
-    );
-  }
-
-  return $items;
 }
 
 /**
  * Implements hook_theme().
  */
-function valet_theme($existing, $type, $theme, $path) {
+function valet_theme() {
   return array(
     'valet' => array(
-      'render element' => 'content',
-      'template' => 'theme/valet',
-    )
+      'render element' => 'element',
+    ),
   );
 }
 
 /**
- * Implements hook_preprocess_html().
+ * Prepares variables for administration toolbar templates.
+ *
+ * Default template: toolbar.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties and children of
+ *     the tray. Properties used: #children, #attributes and #bar.
  */
-function valet_preprocess_html(&$vars) {
-  if (user_access('use valet')) {
+function template_preprocess_valet(&$variables) {
+  $element = $variables['element'];
 
-    global $theme_key;
-    if(variable_get('valet_admin') && $theme_key != variable_get('admin_theme')) return;
-
-    $form = drupal_get_form('valet_search_form');
-    $content = array(
-      'form' => render($form),
-    );
-
-    $valet_markup = theme('valet', $content);
-    if (!isset($vars['page']['page_bottom'])) {
-      $vars['page']['page_bottom'] = array();
-    }
-    $vars['page']['page_bottom']['valet'] = array(
-      '#type' => 'markup',
-      '#markup' => $valet_markup,
-    );
-
-    // drupal_add_css(drupal_get_path('module', 'valet') . '/css/valet.css');
-    // switch(variable_get('valet_compression', 0)){
-    //   case 1:
-    //     drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.js');
-    //     break;
-    //   default:
-    //     drupal_add_js(drupal_get_path('module', 'valet') . '/js/valet.min.js');
-    //     break;
-    // }
-
-    $settings = array('valet' => array());
-    // Rebuild links if cache has been cleared
-    $settings['valet']['purge'] = cache_get('valet_lookup') ? FALSE : TRUE;
-    $settings['valet']['modifier'] = variable_get('valet_key_modifier', 'Alt');
-    $settings['valet']['key'] = variable_get('valet_key', 'space');
-    drupal_add_js($settings, 'setting');
-
-    // // Include jquery.hotkeys library.
-    // if (module_exists('libraries')) {
-
-    //   $path = libraries_get_path('jquery.hotkeys');
-    //   if ($path && file_exists($path . '/jquery.hotkeys.js')) drupal_add_js($path . '/jquery.hotkeys.js', array('group' => JS_LIBRARY));
-
-    //   $path = libraries_get_path('lawnchair');
-    //   if ($path && file_exists($path . '/lawnchair.min.js')) drupal_add_js($path . '/lawnchair.min.js', array('weight'=>-100, 'group' => JS_LIBRARY));
-    //   if ($path && file_exists($path . '/lawnchair-0.6.1.min.js')) drupal_add_js($path . '/lawnchair-0.6.1.min.js', array('weight'=>-100, 'group' => JS_LIBRARY));
-
-    // }
-
-    // drupal_add_library('system', 'ui.autocomplete');
-    drupal_add_library('valet', 'valet');
-  }
-}
-
-/**
- * Implements hook_library().
- */
-function valet_library() {
-  $libraries['valet'] = array(
-    'title' => 'Valet',
-    'website' => 'http://www.ashenrayne.com',
-    'version' => '3.1-beta1',
-    'js' => array(
-      drupal_get_path('module', 'valet') . '/js/valet.min.js' => array('group' => JS_LIBRARY),
-    ),
-    'css' => array(
-      drupal_get_path('module', 'valet') . '/css/valet.css' => array(
-        'type' => 'file',
-        'media' => 'screen',
-      ),
-    ),
-    'dependencies' => array(
-      array('system', 'ui.autocomplete'),
-      array('valet', 'hotkeys'),
-      array('valet', 'lawnchair'),
-    ),
-  );
-  // Library Two.
-  $libraries['hotkeys'] = array(
-    'title' => 'Library Two',
-    'website' => 'http://example.com/library-2',
-    'version' => '3.1-beta1',
-    'js' => array(
-      libraries_get_path('jquery.hotkeys') . '/jquery.hotkeys.js' => array('group' => JS_LIBRARY),
-    ),
-  );
-  // Library One.
-  $libraries['lawnchair'] = array(
-    'title' => 'Lawnchair',
-    'website' => 'http://brian.io/lawnchair/',
-    'version' => '0.6.1',
-    'js' => array(
-      libraries_get_path('lawnchair') . '/lawnchair-0.6.1.min.js' => array('group' => JS_LIBRARY),
-    ),
-  );
-  return $libraries;
-}
-
-/**
- * Popup search box form.
- */
-function valet_search_form($form, &$form_state) {
-  $form['query'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Jump to'),
-    '#size' => 30,
-    '#maxlength' => 60,
-    '#id' => 'valet-search',
-  );
-
-  return $form;
-}
-
-/**
- * Item bulk results
- */
-function valet_lookup(){
-  if ($cache = cache_get('valet_lookup')) {
-    $links = $cache->data;
-  }else{
-    $options = variable_get('valet_index_types', array());
-    $settings = array();
-    foreach($options as $key => $setting){
-      if(empty($setting)) continue;
-      $value = explode(':',$key);
-      $settings = array_merge_recursive($settings, valet_make_array($key, end($value)));
-    }
-
-    ctools_include('plugins');
-    $operations = ctools_get_plugins('valet', 'links');
-    $links = array();
-    $links['/'] = array(
-      'label' => t('Home'),
-      'value' => '',
-    );
-    foreach($operations as $name => $plugin){
-      if(empty($settings[$name])) continue;
-      $handler = _valet_get_handler('links', $name);
-      $links += $handler->links_load($settings[$name]);
-    }
-    $links = array_values($links);
-    cache_set('valet_lookup', $links, 'cache');
-  }
-  //return '';
-  drupal_json_output(array('key' => 'links', 'items' => $links));
-}
-
-/**
- * fun with recursion
- */
-function valet_make_array($keys, $value){
-   $keyParts = explode(':', $keys);
-   $nextKey = array_pop($keyParts);
-   if(count($keyParts)){
-      $temp = array($nextKey => $value);
-      return valet_make_array(implode(':', $keyParts), $temp);
-   }
-   return array($nextKey => $value);
+  // Prepare valet attributes.
+  $variables['attributes'] = $element['#attributes'];
 }

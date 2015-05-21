@@ -1,0 +1,7 @@
+valet.data:
+  path: '/api/valet'
+  defaults:
+    _controller: '\Drupal\valet\Controller\ValetController::data'
+    _title: 'Valet'
+  requirements:
+    _permission: 'access content'
