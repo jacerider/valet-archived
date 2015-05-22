@@ -1,26 +1,53 @@
-#valet{
+#valet.open ~ div,
+#valet.open ~ section,
+#valet.open ~ header,
+#valet.open ~ footer {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
+
+#valet {
   width: 0px;
   min-height: 0px;
-  background: #f1f1f1;
+  background: rgba(255,255,255,0);
   position: absolute;
   z-index: 10000;
   top: 0px;
-  right: 0px;
-  -webkit-transform-origin: 100% 0;
-  transform-origin: 100% 0;
-  -webkit-transition-property: min-height, width, top, right;
-  transition-property: min-height, width, top, right;
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.4s;
-  -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-  transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+  padding: 4% 0;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 200;
+  box-sizing: border-box;
+  -webkit-transition: background 0.3s, opacity 0.3s;
+  transition: background 0.3s, opacity 0.3s;
+  opacity: 0;
 }
 
 #valet.open {
   width: 100%;
   min-height: 100%;
   top: 0px;
-  right: 0px;
+  background: rgba(30,30,30,0.6);
+  opacity: 1;
+}
+
+.valet-inner {
+  background: #fff none repeat scroll 0 0;
+  border-bottom: medium none;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 1% 4%;
+  margin: 0 4%;
+  opacity: 0;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  -webkit-transition-delay: 0.2s; /* Safari */
+  transition-delay: 0.2s;
+}
+#valet.open .valet-inner {
+  opacity: 1;
 }
 
 .valet-form {
@@ -28,39 +55,33 @@
   height: 0px;
   margin: 0 auto;
   position: relative;
-  -webkit-transition-property: width, height, -webkit-transform;
-  transition-property: width, height, transform;
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.4s;
-  -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-  transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+  opacity: 0;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
 }
 
 #valet.open .valet-form {
-  width: 80%;
-  height: 110px;
-  -webkit-transform: translate3d(0,3em,0);
-  transform: translate3d(0,3em,0);
+  height: 8rem;
+  width: 100%;
+  opacity: 1;
 }
 
 .valet-input {
   width: 100%;
   height: 100%;
-  font-weight: 700;
+  font-weight: 400;
   padding: 0;
   border: none;
   background: transparent;
   font-size: 0.8em;
   color: #0080D1;
   background: transparent url(../images/magnifier.svg) no-repeat center right;
-  /*background-size: 100%;*/
-  -webkit-transition: font-size 0.4s cubic-bezier(0.7,0,0.3,1);
-  transition: font-size 0.4s cubic-bezier(0.7,0,0.3,1);
+  background-size: 64px;
 }
 
 .valet-input:disabled{
   font-weight:100;
-  color:#DDDDDD;
+  color:#aaaaaa;
   letter-spacing:-4px;
 }
 
@@ -75,25 +96,22 @@
 }
 
 #valet.open .valet-input {
-  font-size: 7em;
-  line-height: 7em;
+  font-size: 5em;
+  line-height: 5em;
 }
 
 /* placeholder */
 .valet-input::-webkit-input-placeholder {
-  color: #c2c2c2;
+  color: #666;
 }
-
 .valet-input:-moz-placeholder {
-  color: #c2c2c2;
+  color: #666;
 }
-
 .valet-input::-moz-placeholder {
-  color: #c2c2c2;
+  color: #666;
 }
-
 .valet-input:-ms-input-placeholder {
-  color: #c2c2c2;
+  color: #666;
 }
 
 /* hide placeholder when active in Chrome */
@@ -151,19 +169,27 @@ input[type="search"] { /* reset normalize */
   cursor: pointer;
   pointer-events: none;
   opacity: 0;
-  -webkit-transform: scale3d(0,0,1);
-  transform: scale3d(0,0,1);
 }
 
 #valet.open .valet-close {
+  background-color: #fff;
+  cursor: pointer;
+  height: 80px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 7%;
+  text-indent: 100%;
+  top: 8%;
+  width: 100px;
+  opacity: 0;
+  z-index: 1;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+#valet.open .valet-inner:hover .valet-close {
   opacity: 1;
-  pointer-events: auto;
-  -webkit-transform: scale3d(1,1,1);
-  transform: scale3d(1,1,1);
-  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-  transition: opacity 0.3s, transform 0.3s;
-  -webkit-transition-delay: 0.4s;
-  transition-delay: 0.4s;
 }
 
 .valet-close::before,
@@ -195,20 +221,26 @@ input[type="search"] { /* reset normalize */
 }
 
 #valet .ui-autocomplete{
-  margin:0;
-  padding:0;
-  border:none;
-  background:transparent;
-  top: 180px !important;
+  background: transparent none repeat scroll 0 0;
+  border: medium none;
+  left: 0 !important;
+  margin: 0;
+  padding: 0;
   pointer-events: none;
+  position: relative;
+  top: 2rem !important;
+  width: 100% !important;
 }
 
 #valet .ui-autocomplete .ui-menu-item{
-  margin:0 0 10px;
-  background:#EBEBEC;
-  border-radius:4px;
-  padding:10px;
-  border:none;
+  background: #fff none repeat scroll 0 0;
+  border-bottom: 1px solid #aaa;
+  border-radius: 0;
+  display: block;
+  float: left;
+  margin: 1%;
+  padding: 10px;
+  width: 28.66%;
   -webkit-transition: background 0.3s;
   transition: background 0.3s;
 }
@@ -233,9 +265,7 @@ input[type="search"] { /* reset normalize */
 }
 
 #valet .ui-autocomplete .ui-state-focus{
-  background:none;
-  border:none;
-  margin-left:0;
+  background:#7F7F7F;
 }
 
 #valet .ui-autocomplete .ui-state-focus a strong{
