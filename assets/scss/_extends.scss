@@ -1,0 +1,29 @@
+//@extend-elements
+//original selectors
+//#valet.open ~ div, #valet.open ~ section, #valet.open ~ header, #valet.open ~ footer
+%extend_1 {
+  //vendor-prefix found
+  //-webkit-filter: blur(4px)
+  //vendor-prefix found
+  //-moz-filter: blur(4px)
+  //vendor-prefix found
+  //-o-filter: blur(4px)
+  //vendor-prefix found
+  //-ms-filter: blur(4px)
+  filter: blur(4px);
+}
+
+//original selectors
+//.valet-close::before, .valet-close::after
+%extend_2 {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  //Instead of the line below you could use @includeborder-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  opacity: 0.2;
+  background: $black;
+}

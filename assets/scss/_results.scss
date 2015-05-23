@@ -1,0 +1,105 @@
+#valet-results {
+  display: block;
+  position: relative;
+  margin: 0 1%;
+  max-width: 100%;
+  
+  .ui-autocomplete {
+    background: transparent none repeat scroll 0 0;
+    border: medium none;
+    left: 0 !important;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    position: relative;
+    top: 2rem !important;
+    width: 100% !important;
+
+    .ui-menu-item {
+      background: $white none repeat scroll 0 0;
+      //Instead of the line below you could use @includebox-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+      box-shadow: 0 1px 3px $black_20;
+      //Instead of the line below you could use @includeborder-radius($radius, $vertical-radius)
+      border-radius: 3px;
+      display: block;
+      float: left;
+      margin: 1%;
+      padding: 0;
+      width: 31.33%;
+      overflow: hidden;
+      //vendor-prefix found
+      //-moz-box-sizing: border-box
+      //vendor-prefix found
+      //-webkit-sizing: border-box
+      sizing: border-box;
+      //vendor-prefix found
+      //-webkit-transition: all 0.4s
+      //Instead of the line below you could use @includetransition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+      transition: all 0.4s;
+
+      &:first-child {
+        float: none;
+        margin: 0 auto 1rem;
+        clear: both;
+        width: 50%;
+      }
+
+      a {
+        border: none;
+        display: block;
+        position: relative;
+        padding: 1.25rem 1.25rem 2rem;
+      }
+
+      strong {
+        color: $color_suva_gray_approx;
+        display: block;
+        font-size: 26px;
+        font-weight: normal;
+        line-height: 28px;
+        margin: 0 0 0.5rem;
+        //vendor-prefix found
+        //-webkit-transition: all 0.2s
+        //Instead of the line below you could use @includetransition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: all 0.2s;
+      }
+
+      small {
+        font-size: 13px;
+        padding: 0.4rem 0.75rem;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        color: $color_storm_dust_approx;
+      }
+
+      em {
+        color: $color_storm_dust_approx;
+        font-size: 13px;
+        line-height: 13px;
+      }
+
+    }
+
+    .ui-state-focus {
+      border: none;
+      //Instead of the line below you could use @includebox-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+      box-shadow: 0 3px 5px $black_50;
+
+      strong {
+        font-size: 30px;
+      }
+
+      small {
+        color: $color_lochmara_approx;
+      }
+
+      em {
+        color: $color_storm_dust_approx;
+      }
+
+    }
+
+  }
+
+}

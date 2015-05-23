@@ -1,0 +1,64 @@
+.valet-close {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  overflow: hidden;
+  text-indent: 100%;
+  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+
+  &:hover {
+
+    &.valet-close::before {
+      opacity: 1;
+    }
+
+    &.valet-close::after {
+      opacity: 1;
+    }
+
+  }
+
+}
+
+.valet-close::before {
+  @extend %extend_2;
+  //vendor-prefix found
+  //-webkit-transform: rotate(45deg)
+  //Instead of the line below you could use @includetransform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+  transform: rotate(45deg);
+}
+
+.valet-close::after {
+  @extend %extend_2;
+  //vendor-prefix found
+  //-webkit-transform: rotate(-45deg)
+  //Instead of the line below you could use @includetransform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+  transform: rotate(-45deg);
+}
+
+#valet.open { 
+  .valet-close {
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+    height: 5rem;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 1.25rem;
+    text-indent: 100%;
+    top: 0.75rem;
+    width: 6rem;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+  }
+
+  &:hover .valet-close {
+    opacity: 1;
+  }
+}

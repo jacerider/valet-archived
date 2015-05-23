@@ -117,7 +117,7 @@
       .autocomplete( "instance" )._renderItem = function( ui, item ) {
         var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
         return $( "<li></li>" )
-          .append( "<a><strong>" + item.label + "</strong> <small>" + value + "</small><br><em>" + item.description + "</em></a>" )
+          .append( '<a href="#" title="Valet Result"><strong>' + item.label + '</strong> <small>' + value + '</small><em>' + item.description + '</em></a>' )
           .appendTo( ui );
       };
     },
