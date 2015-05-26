@@ -3,11 +3,12 @@
 /**
  * Implements hook_page_button();
  *
- * Add valet markup to the bottom of the page automatically.
+ * Add valet markup to the top of the page automatically.
  */
-function valet_page_bottom(array &$page_bottom) {
-  $page_bottom['valet'] = array(
+function valet_page_top(array &$page_top) {
+  $page_top['valet'] = array(
     '#type' => 'valet',
+    '#weight' => -100,
     '#access' => \Drupal::currentUser()->hasPermission('access valet'),
   );
 }

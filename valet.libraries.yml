@@ -1,10 +1,10 @@
 valet:
   version: VERSION
   js:
-    js/valet.js: {}
+    assets/js/valet.js: {}
   css:
     theme:
-      css/valet.css: {}
+      assets/css/valet.css: {}
   dependencies:
     - core/jquery.ui.autocomplete
     - core/jquery.once

@@ -1,0 +1,296 @@
+#valet.open ~ div,
+#valet.open ~ section,
+#valet.open ~ header,
+#valet.open ~ footer {
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -o-filter: blur(4px);
+  -ms-filter: blur(4px);
+  filter: blur(4px);
+}
+
+#valet {
+  width: 0px;
+  min-height: 0px;
+  background: rgba(255,255,255,0);
+  position: absolute;
+  z-index: 10000;
+  top: 0px;
+  padding: 4rem 0;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 200;
+  box-sizing: border-box;
+  -webkit-transition: background 0.3s, opacity 0.3s;
+  transition: background 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+
+#valet.open {
+  width: 100%;
+  min-height: 100%;
+  top: 0px;
+  background: none repeat scroll 0 0 rgba(220, 220, 220, 0.8);
+  opacity: 1;
+}
+
+.valet-inner {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  -webkit-transition-delay: 0.2s; /* Safari */
+  transition-delay: 0.2s;
+  padding: 1rem 0;
+  opacity: 0;
+  display: block;
+  position: relative;
+}
+
+#valet.open .valet-inner {
+  opacity: 1;
+}
+
+#valet-form {
+  width: 0px;
+  height: 0px;
+  margin: 0 auto;
+  position: relative;
+  opacity: 0;
+
+  background: #fff none repeat scroll 0 0;
+  border-bottom: medium none;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 1rem 2rem;
+  margin: 0 auto;
+  opacity: 0;
+  max-width: 80%;
+  position: relative;
+  
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+#valet.open #valet-form {
+  height:4.5rem;
+  width: 100%;
+  opacity: 1;
+}
+
+.valet-input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #0080D1;
+  background: url("../images/magnifier.svg") no-repeat scroll right center / 4rem 4rem rgba(0, 0, 0, 0);
+  font-size: 3rem;
+}
+#valet-form:hover .valet-input {
+  background-image: none;
+}
+
+.valet-input:disabled{
+  color:#aaaaaa;
+}
+
+.valet-input::-ms-clear { /* remove cross in IE */
+    display: none;
+}
+
+.valet.hideInput .valet-input {
+  color: transparent;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+#valet.open .valet-input {
+  
+}
+
+/* placeholder */
+.valet-input::-webkit-input-placeholder {
+  color: #666666;
+}
+.valet-input:-moz-placeholder {
+  color: #666666;
+}
+.valet-input::-moz-placeholder {
+  color: #666666;
+}
+.valet-input:-ms-input-placeholder {
+  color: #666666;
+}
+
+/* hide placeholder when active in Chrome */
+.gn-search:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+input[type="search"] { /* reset normalize */
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.valet-input:focus {
+  outline: none;
+}
+
+.valet-close {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  overflow: hidden;
+  text-indent: 100%;
+  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+}
+
+#valet.open .valet-close {
+  background-color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+  height: 5rem;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 1.25rem;
+  text-indent: 100%;
+  top: 0.75rem;
+  width: 6rem;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+#valet.open .valet-inner:hover .valet-close {
+  opacity: 1;
+}
+
+.valet-close::before,
+.valet-close::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  border-radius: 3px;
+  opacity: 0.2;
+  background: #000;
+}
+
+.valet-close:hover.valet-close::before,
+.valet-close:hover.valet-close::after {
+  opacity: 1;
+}
+
+.valet-close::before {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.valet-close::after {
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+#valet-results {
+  display: block;
+  position: relative;
+  margin: 0 1%;
+  max-width: 100%;
+}
+
+#valet .ui-autocomplete{
+  background: transparent none repeat scroll 0 0;
+  border: medium none;
+  left: 0 !important;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  position: relative;
+  top: 2rem !important;
+  width: 100% !important;
+}
+
+#valet .ui-autocomplete .ui-menu-item {
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  display: block;
+  float: left;
+  margin: 1%;
+  padding: 0;
+  width: 31.33%;
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-sizing: border-box;
+  sizing: border-box;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+#valet .ui-autocomplete .ui-menu-item:first-child {
+  float: none;
+  margin: 0 auto 1rem;
+  clear: both;
+  width: 50%;
+}
+/*#valet .ui-autocomplete .ui-menu-item.ui-state-focus:first-child strong,
+#valet .ui-autocomplete .ui-menu-item.ui-state-focus:first-child small,
+#valet .ui-autocomplete .ui-menu-item.ui-state-focus:first-child em {
+  color: #666;
+}*/
+
+#valet .ui-autocomplete .ui-menu-item a {
+  border:none;
+  display: block;
+  position: relative;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+#valet .ui-autocomplete .ui-menu-item strong {
+  color: #888888;
+  display: block;
+  font-size: 26px;
+  font-weight: normal;
+  line-height: 28px;
+  margin: 0 0 0.5rem;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#valet .ui-autocomplete .ui-menu-item small {
+  font-size: 13px;
+  padding: 0.4rem 0.75rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #666666;
+}
+
+#valet .ui-autocomplete .ui-menu-item em {
+  color: #666666;
+  font-size: 13px;
+  line-height: 13px;
+}
+
+#valet .ui-autocomplete .ui-state-focus {
+  border: none;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+#valet .ui-autocomplete .ui-state-focus strong {
+  font-size: 30px;
+}
+#valet .ui-autocomplete .ui-state-focus small {
+  color: #0080D1;
+}
+#valet .ui-autocomplete .ui-state-focus em  {
+  color: #666666;
+}
+
+#valet .ui-autocomplete .ui-menu-item br {
+  display: none;
+}
