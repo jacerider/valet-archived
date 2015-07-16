@@ -200,6 +200,7 @@ Drupal.behaviors.valet = {
 
     if(me.shifted){
       me.hide();
+      me.shfited = false;
       window.open(Drupal.settings.basePath+url);
     }else{
       window.location = Drupal.settings.basePath+url;
@@ -211,7 +212,6 @@ Drupal.behaviors.valet = {
     var me = this;
 
     Lawnchair({name:'valet'}, function(){
-      var me = this;
       //this.remove('weight');
       this.get('weight', function(weight) {
         if(!weight){
