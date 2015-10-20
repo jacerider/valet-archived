@@ -16,7 +16,7 @@ function valet_admin_form($form, &$form_state){
 			'#title' => t('Menu Index'),
 			'#description' => t('The items you would like to make available to Valet.'),
 			'#options' => $options,
-			'#default_value' => variable_get('valet_index_types', array()),
+			'#default_value' => variable_get('valet_index_types', array('menu:devel','menu:management')),
 		);
 	}
 
@@ -32,7 +32,7 @@ function valet_admin_form($form, &$form_state){
 		'#type' => 'select',
 		'#title' => t('Hotkey Modifier'),
 		'#options' => drupal_map_assoc(array('Alt', 'Ctrl', 'Shift')),
-		'#default_value' => variable_get('valet_key_modifier', 'Alt'),
+		'#default_value' => variable_get('valet_key_modifier', 'Shift'),
 		'#required' => TRUE,
 	);
 

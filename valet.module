@@ -152,7 +152,7 @@ function valet_preprocess_html(&$vars) {
     $settings = array('valet' => array());
     // Rebuild links if cache has been cleared
     $settings['valet']['purge'] = cache_get('valet_lookup') ? FALSE : TRUE;
-    $settings['valet']['modifier'] = variable_get('valet_key_modifier', 'Alt');
+    $settings['valet']['modifier'] = variable_get('valet_key_modifier', 'Shift');
     $settings['valet']['key'] = variable_get('valet_key', 'space');
     drupal_add_js($settings, 'setting');
 
@@ -239,7 +239,7 @@ function valet_lookup(){
   if ($cache = cache_get('valet_lookup')) {
     $links = $cache->data;
   }else{
-    $options = variable_get('valet_index_types', array());
+    $options = variable_get('valet_index_types', array('menu:devel','menu:management'));
     $settings = array();
     foreach($options as $key => $setting){
       if(empty($setting)) continue;
