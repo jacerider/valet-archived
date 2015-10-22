@@ -8,21 +8,11 @@
   "use strict";
 
   /**
-   * Registers tabs with the toolbar.
-   *
-   * The Drupal toolbar allows modules to register top-level tabs. These may
-   * point directly to a resource or toggle the visibility of a tray.
-   *
-   * Modules register tabs with hook_toolbar().
+   * Set up and bind Valet.
    */
-  Drupal.behaviors.toolbar = {
+  Drupal.behaviors.valet = {
 
     attach: function (context) {
-      // Verify that the user agent understands media queries. Complex admin
-      // toolbar layouts require media query support.
-      if (!window.matchMedia('only screen').matches) {
-        return;
-      }
       // Process the administrative toolbar.
       $('body').once('valet').each(function () {
         var model = new Drupal.valet.models.ValetModel();
@@ -30,11 +20,6 @@
           el: $(context).find('#valet'),
           model: model
         });
-        // console.log(this);
-        // var self = this;
-        // setTimeout(function(){
-        //   $(self).addClass('open');
-        // }, 500);
       });
     }
   };
@@ -72,7 +57,7 @@
       var self = this;
       if (this.model.get('isOpen')) {
         $(this.$el.removeClass('open'));
-        this.model.set({isOpen: false});
+        this.model.set('isOpen', false);
         // trick to hide input text once the search overlay closes
         // todo: hardcoded times, should be done after transition ends
         if( this.$input[0].value !== '' ) {
@@ -90,7 +75,7 @@
         this.$input[0].value = '';
         this.getData(this.autoComplete.bind(this));
         $(this.$el.addClass('open'));
-        this.model.set({isOpen: true});
+        this.model.set('isOpen', true);
         this.$input[0].focus();
       }
     },
@@ -167,7 +152,7 @@
     },
 
     keyUp: function(e) {
-      if (this.down[32] && this.down[18]) {
+      if (this.down[drupalSettings.valet.hotkey] && this.down[drupalSettings.valet.modifier]) {
         this.toggle();
       }
       this.down[e.keyCode] = false;

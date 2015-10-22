@@ -9,6 +9,9 @@ namespace Drupal\valet\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Routing\RouteProvider;
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
 
 class ValetController {
 
@@ -19,15 +22,15 @@ class ValetController {
     // Devel Routes
     $module_exists = \Drupal::moduleHandler()->moduleExists('devel');
     if ($module_exists) {
-      $parameters = new \Drupal\Core\Menu\MenuTreeParameters();
+      $parameters = new MenuTreeParameters();
       $parameters->onlyEnabledLinks();
       $tree += $menu_tree->load('devel', $parameters);
     }
 
     // Admin Routes
-    $parameters = new \Drupal\Core\Menu\MenuTreeParameters();
-    $parameters->setRoot('system.admin')->excludeRoot()->setMaxDepth(3);
-    $tree += $menu_tree->load(NULL, $parameters);
+    $parameters = new MenuTreeParameters();
+    $parameters->setMaxDepth(3)->onlyEnabledLinks();
+    $tree += $menu_tree->load('admin', $parameters);
 
     $manipulators = array(
       array('callable' => 'menu.default_tree_manipulators:checkAccess'),
@@ -48,9 +51,19 @@ class ValetController {
       if (!$link->isEnabled()) {
         continue;
       }
+
+      // @todo This is just an ugly workaround for Drupal 8's inability to
+      // process URL CSRFs without a render array.
+      $urlBubbleable = $link->getUrlObject()->toString(TRUE);
+      $urlRender = array(
+        '#markup' => $urlBubbleable->getGeneratedUrl(),
+      );
+      BubbleableMetadata::createFromRenderArray($urlRender)
+        ->merge($urlBubbleable)->applyTo($urlRender);
+
       $routes[$link->getPluginId()] = array(
         'label' => $link->getTitle(),
-        'value' => $link->getUrlObject()->toString(),
+        'value' => \Drupal::service('renderer')->renderPlain($urlRender),
         'description' => $link->getDescription(),
       );
       if($data->subtree){

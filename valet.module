@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Implements hook_page_button();
+ * Implements hook_page_buttom();
  *
  * Add valet markup to the bottom of the page automatically.
  */
@@ -9,6 +9,10 @@ function valet_page_bottom(array &$page_bottom) {
   $page_bottom['valet'] = array(
     '#type' => 'valet',
     '#access' => \Drupal::currentUser()->hasPermission('access valet'),
+    '#cache' => [
+      'keys' => ['valet'],
+      'contexts' => ['user.permissions'],
+    ],
   );
 }
 
@@ -26,16 +30,15 @@ function valet_theme() {
 /**
  * Prepares variables for administration toolbar templates.
  *
- * Default template: toolbar.html.twig.
+ * Default template: valet.html.twig.
  *
- * @param array $variables
+ * @param array $vars
  *   An associative array containing:
  *   - element: An associative array containing the properties and children of
  *     the tray. Properties used: #children, #attributes and #bar.
  */
-function template_preprocess_valet(&$variables) {
-  $element = $variables['element'];
-
+function template_preprocess_valet(&$vars) {
+  $element = $vars['element'];
   // Prepare valet attributes.
-  $variables['attributes'] = $element['#attributes'];
+  $vars['attributes'] = $element['#attributes'];
 }

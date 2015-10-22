@@ -4,4 +4,12 @@ valet.data:
     _controller: '\Drupal\valet\Controller\ValetController::data'
     _title: 'Valet'
   requirements:
-    _permission: 'access content'
+    _permission: 'access valet'
+valet.valet_admin_form:
+  path: '/admin/config/user-interface/valet'
+  defaults:
+    _form: '\Drupal\valet\Form\ValetAdminForm'
+    _title: 'Valet'
+  requirements:
+    _permission: 'administer valet'
+

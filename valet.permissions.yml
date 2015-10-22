@@ -1,2 +1,4 @@
 access valet:
   title: 'Use Valet'
+administer valet:
+  title: 'Administer Valet'
