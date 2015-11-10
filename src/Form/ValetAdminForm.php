@@ -57,6 +57,38 @@ class ValetAdminForm extends ConfigFormBase {
       ),
     );
 
+    $form['plugin_settings'] = array(
+      '#type' => 'vertical_tabs',
+      // '#default_tab' => 'edit-publication',
+    );
+
+    $form['plugins'] = array(
+      '#type' => 'container',
+      '#tree' => TRUE,
+    );
+
+    $manager = \Drupal::service('plugin.manager.valet');
+    $plugins = $manager->getDefinitions();
+    foreach($plugins as $id => $plugin){
+      $instance = $manager->createInstance($id);
+      // $options[$id] = $plugin['label'];
+      $form['plugins'][$id] = array(
+        '#type' => 'details',
+        '#title' => $plugin['label'] . ' ' . $this->t('Plugin'),
+        '#group' => 'plugin_settings',
+      );
+
+      $form['plugins'][$id]['enabled'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Enabled'),
+        '#default_value' => $config->get('plugins.'.$id.'.enabled'),
+      );
+
+      if($plugin_form = $instance->buildForm(array(), $form_state, $config)){
+        $form['plugins'][$id]['settings'] = $plugin_form;
+      }
+    }
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -76,6 +108,7 @@ class ValetAdminForm extends ConfigFormBase {
     $this->config('valet.admin')
       ->set('modifier', $form_state->getValue('modifier'))
       ->set('hotkey', $form_state->getValue('hotkey'))
+      ->set('plugins', $form_state->getValue('plugins'))
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -16,60 +16,18 @@ use Drupal\Core\Url;
 class ValetController {
 
   public function data() {
-    $tree = array();
-    $menu_tree = \Drupal::menuTree();
-
-    // Devel Routes
-    $module_exists = \Drupal::moduleHandler()->moduleExists('devel');
-    if ($module_exists) {
-      $parameters = new MenuTreeParameters();
-      $parameters->onlyEnabledLinks();
-      $tree += $menu_tree->load('devel', $parameters);
-    }
-
-    // Admin Routes
-    $parameters = new MenuTreeParameters();
-    $parameters->setMaxDepth(3)->onlyEnabledLinks();
-    $tree += $menu_tree->load('admin', $parameters);
-
-    $manipulators = array(
-      array('callable' => 'menu.default_tree_manipulators:checkAccess'),
-      array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
-    );
-    $tree = $menu_tree->transform($tree, $manipulators);
-
-    $routes = $this->build($tree);
-
-    return new JsonResponse(array_values($routes));
-  }
-
-  protected function build($tree){
     $routes = array();
-    foreach ($tree as $data) {
-      $link = $data->link;
-      // Generally we only deal with visible links, but just in case.
-      if (!$link->isEnabled()) {
-        continue;
-      }
-
-      // @todo This is just an ugly workaround for Drupal 8's inability to
-      // process URL CSRFs without a render array.
-      $urlBubbleable = $link->getUrlObject()->toString(TRUE);
-      $urlRender = array(
-        '#markup' => $urlBubbleable->getGeneratedUrl(),
-      );
-      BubbleableMetadata::createFromRenderArray($urlRender)
-        ->merge($urlBubbleable)->applyTo($urlRender);
-
-      $routes[$link->getPluginId()] = array(
-        'label' => $link->getTitle(),
-        'value' => \Drupal::service('renderer')->renderPlain($urlRender),
-        'description' => $link->getDescription(),
-      );
-      if($data->subtree){
-        $routes += $this->build($data->subtree);
+    $config = \Drupal::config('valet.admin');
+    $manager = \Drupal::service('plugin.manager.valet');
+    foreach($config->get('plugins') as $id => $plugin){
+      if(!empty($plugin['enabled'])){
+        $instance = $manager->createInstance($id);
+        $plugin_results = $instance->getResults($config);
+        if(is_array($plugin_results)){
+          $routes += $plugin_results;
+        }
       }
     }
-    return $routes;
+    return new JsonResponse(array_values($routes));
   }
 }

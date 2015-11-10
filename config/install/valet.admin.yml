@@ -1,2 +1,9 @@
 modifier: "16"
 hotkey: "32"
+plugins:
+  menu:
+    enabled: 1
+    settings:
+      menus:
+        - admin
+        - devel

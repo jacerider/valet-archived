@@ -1,0 +1,4 @@
+services:
+  plugin.manager.valet:
+    class: Drupal\valet\ValetManager
+    parent: default_plugin_manager

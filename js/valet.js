@@ -108,7 +108,9 @@
     },
 
     go: function (label, value) {
-      if(value == '/devel/cache/clear') value = value + '?destination='+(window.location.pathname.substring(1));
+      if(value.indexOf('token=') >= 0){
+        value = value + '&destination='+(window.location.pathname.substring(1));
+      }
 
       if (this.down[16]) {
         this.down[16] = false;
