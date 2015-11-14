@@ -69,6 +69,7 @@ class ValetAdminForm extends ConfigFormBase {
 
     $manager = \Drupal::service('plugin.manager.valet');
     $plugins = $manager->getDefinitions();
+    uasort($plugins, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
     foreach($plugins as $id => $plugin){
       $instance = $manager->createInstance($id);
       // $options[$id] = $plugin['label'];
@@ -84,7 +85,7 @@ class ValetAdminForm extends ConfigFormBase {
         '#default_value' => $config->get('plugins.'.$id.'.enabled'),
       );
 
-      if($plugin_form = $instance->buildForm(array(), $form_state, $config)){
+      if($plugin_form = $instance->buildForm(array(), $form_state)){
         $form['plugins'][$id]['settings'] = $plugin_form;
       }
     }

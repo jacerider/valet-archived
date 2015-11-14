@@ -27,13 +27,24 @@ interface ValetInterface extends PluginInspectionInterface {
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $config);
+  public function buildForm(array $form, FormStateInterface $form_state);
 
   /**
    * Return the results of the plugin.
    *
-   * @return string
+   * Example return:
+   * @code
+   *   return array(
+   *     'uniqueId' => array(
+   *       'label' => '',
+   *       'value' => '',
+   *       'description' => '',
+   *     ),
+   *   );
+   *
+   * @return array
+   *   The array of results, keyed by unique id.
    */
-  public function getResults($config);
+  public function getResults();
 
 }

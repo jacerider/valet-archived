@@ -18,26 +18,33 @@ use Drupal\valet\ValetBase;
  *
  * @Valet(
  *   id = "menu",
- *   label = @Translation("Menu")
+ *   label = @Translation("Menu"),
+ *   weight = -1
  * )
  */
 class Menu extends ValetBase {
 
-  public function buildForm(array $form, FormStateInterface $form_state, $config) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
 
     $form['menus'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Available menus'),
       '#options' => menu_ui_get_menus(),
-      '#default_value' => $config->get('plugins.menu.settings.menus'),
+      '#default_value' => $this->config->get('plugins.menu.settings.menus'),
     );
 
     return $form;
   }
 
-  public function getResults($config) {
+  /**
+   * {@inheritdoc}
+   */
+  public function getResults() {
     $menus = menu_ui_get_menus();
-    $enabled = array_filter($config->get('plugins.menu.settings.menus'));
+    $enabled = array_filter($this->config->get('plugins.menu.settings.menus'));
 
     $menu_tree = \Drupal::menuTree();
     $tree = array();
@@ -54,9 +61,22 @@ class Menu extends ValetBase {
       array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
     );
     $tree = $menu_tree->transform($tree, $manipulators);
+    if(!empty($tree)){
+      // Clear Valet cache with route operations.
+      // @see \Drupal\Core\EventSubscriber\MenuRouterRebuildSubscriber
+      $this->addCacheTags(array('local_task'));
+    }
     return $this->resultsBuild($tree);
   }
 
+  /**
+   * Given a tree of menu items, prepare for delivery to Valet.
+   *
+   * @param array $tree
+   *   An array of menu items.
+   *
+   * @return array
+   */
   protected function resultsBuild($tree){
     $routes = array();
     foreach ($tree as $data) {
@@ -75,9 +95,6 @@ class Menu extends ValetBase {
       BubbleableMetadata::createFromRenderArray($urlRender)
         ->merge($urlBubbleable)->applyTo($urlRender);
       $url = \Drupal::service('renderer')->renderPlain($urlRender);
-      // if(strpos($url, 'token=')){
-      //   $url .= '&destination=' . \Drupal::request()->getRequestUri();
-      // }
 
       $routes[$link->getPluginId()] = array(
         'label' => $link->getTitle(),
