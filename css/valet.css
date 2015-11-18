@@ -2,7 +2,7 @@
   /*width: 100%;*/
   /*min-height: 0px;*/
   background: #f1f1f1;
-  position: absolute;
+  position: fixed;
   z-index: 10000;
   top: 0;
   right: 20px;

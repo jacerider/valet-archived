@@ -151,12 +151,14 @@
         return;
       }
       this.down[e.keyCode] = true;
+
+      if (this.down[drupalSettings.valet.hotkey] && this.down[drupalSettings.valet.modifier]) {
+        e.preventDefault();
+        this.toggle();
+      }
     },
 
     keyUp: function(e) {
-      if (this.down[drupalSettings.valet.hotkey] && this.down[drupalSettings.valet.modifier]) {
-        this.toggle();
-      }
       this.down[e.keyCode] = false;
     }
 
