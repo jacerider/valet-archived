@@ -152,7 +152,7 @@
       }
       this.down[e.keyCode] = true;
 
-      if (this.down[drupalSettings.valet.hotkey] && this.down[drupalSettings.valet.modifier]) {
+      if (this.down[drupalSettings.valet.hotkey] && this.down[drupalSettings.valet.modifier] && !$(e.target).is(':focus')) {
         e.preventDefault();
         this.toggle();
       }
