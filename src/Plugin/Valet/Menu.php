@@ -11,6 +11,7 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
+use Drupal\Core\Extension\ModuleHandler;
 
 /**
  * Expose a Menu plugin.
@@ -29,12 +30,14 @@ class Menu extends ValetBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $form['menus'] = array(
-      '#type' => 'checkboxes',
-      '#title' => t('Available menus'),
-      '#options' => menu_ui_get_menus(),
-      '#default_value' => $this->config->get('plugins.menu.settings.menus'),
-    );
+    if(\Drupal::moduleHandler()->moduleExists('menu_ui')){
+      $form['menus'] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Available menus'),
+        '#options' => menu_ui_get_menus(),
+        '#default_value' => $this->config->get('plugins.menu.settings.menus'),
+      );
+    }
 
     return $form;
   }
@@ -43,17 +46,23 @@ class Menu extends ValetBase {
    * {@inheritdoc}
    */
   public function getResults() {
-    $menus = menu_ui_get_menus();
-    $enabled = array_filter($this->config->get('plugins.menu.settings.menus'));
-
     $menu_tree = \Drupal::menuTree();
-    $tree = array();
-    foreach($enabled as $mid){
-      if(isset($menus[$mid])){
-        $parameters = new MenuTreeParameters();
-        $parameters->excludeRoot()->setMaxDepth(4)->onlyEnabledLinks();
-        $tree += $menu_tree->load($mid, $parameters);
+    if(\Drupal::moduleHandler()->moduleExists('menu_ui')){
+      $tree = array();
+      $enabled = array_filter($this->config->get('plugins.menu.settings.menus'));
+      $menus = menu_ui_get_menus();
+      foreach($enabled as $mid){
+        if(isset($menus[$mid])){
+          $parameters = new MenuTreeParameters();
+          $parameters->excludeRoot()->setMaxDepth(4)->onlyEnabledLinks();
+          $tree += $menu_tree->load($mid, $parameters);
+        }
       }
+    }
+    else{
+      $parameters = new MenuTreeParameters();
+      $parameters->setRoot('system.admin')->excludeRoot()->setMaxDepth(4)->onlyEnabledLinks();
+      $tree = $menu_tree->load(NULL, $parameters);
     }
 
     $manipulators = array(
