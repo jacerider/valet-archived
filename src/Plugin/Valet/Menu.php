@@ -60,9 +60,18 @@ class Menu extends ValetBase {
       }
     }
     else{
-      $parameters = new MenuTreeParameters();
-      $parameters->setRoot('system.admin')->excludeRoot()->setMaxDepth(4)->onlyEnabledLinks();
-      $tree = $menu_tree->load(NULL, $parameters);
+      $tree = array();
+      $roots = ['system.admin'];
+      foreach($roots as $root){
+        $parameters = new MenuTreeParameters();
+        $parameters->setRoot($root)->setMaxDepth(4)->onlyEnabledLinks();
+        $tree += $menu_tree->load(NULL, $parameters);
+      }
+      if(\Drupal::moduleHandler()->moduleExists('devel')){
+        $parameters = new MenuTreeParameters();
+        $parameters->setMaxDepth(4)->onlyEnabledLinks();
+        $tree += $menu_tree->load('devel', $parameters);
+      }
     }
 
     $manipulators = array(
