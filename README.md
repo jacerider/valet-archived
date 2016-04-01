@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project provides Quicksiver/Alfred menu lookup functionality for your Drupal install. It should work with all major browsers but has only been fully tested on Firefox, Safari and Chrome. RIP IE.
+This project provides Quicksiver/Alfred menu lookup functionality for your **Drupal** install. It should work with all major browsers but has only been fully tested on Firefox, Safari and Chrome. RIP IE.
 
 ## Install
 
@@ -12,14 +12,14 @@ Create a folder called "lawnchair" in sites/all/libraries. Download the lawnchai
 
 Create a folder called "jquery.hotkeys" in sites/all/libraries. Download the jquery.hotkeys plugin from https://github.com/jeresig/jquery.hotkeys and place it in your jquery.hotkeys folder so that jquery.hotkeys.js is accessible from sites/all/libraries/jquery.hotkeys/jquery.hotkeys.js. This module was build with jquery.hotkeys 0.8.
 
-#### Enable
+## Enable
 Navigate to administer >> build >> modules. Enable Valet.
 
-#### Configure
+## Configure
 Visit admin/config/user-interface/valet to configure Valet. **You MUST select menu items and save your configuration before Valet will work.**
 
 ## Enjoy!
 
-### Credits:
+#### Credits:
 
 Icons - Oliver Twardowski - http://www.addictedtocoffee.de/
