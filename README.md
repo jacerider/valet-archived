@@ -12,9 +12,11 @@ Create a folder called "lawnchair" in sites/all/libraries. Download the lawnchai
 
 Create a folder called "jquery.hotkeys" in sites/all/libraries. Download the jquery.hotkeys plugin from https://github.com/jeresig/jquery.hotkeys and place it in your jquery.hotkeys folder so that jquery.hotkeys.js is accessible from sites/all/libraries/jquery.hotkeys/jquery.hotkeys.js. This module was build with jquery.hotkeys 0.8.
 
+#### Enable
 Navigate to administer >> build >> modules. Enable Valet.
 
-You can then visit admin/config/user-interface/valet to configure Valet.
+#### Configure
+Visit admin/config/user-interface/valet to configure Valet. **You MUST select menu items and save your configuration before Valet will work.**
 
 ## Enjoy!
 
