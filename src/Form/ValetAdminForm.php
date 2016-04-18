@@ -38,6 +38,7 @@ class ValetAdminForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('valet.admin');
+
     $form['modifier'] = array(
       '#type' => 'select',
       '#title' => $this->t('Hotkey Modifier'),
@@ -103,7 +104,6 @@ class ValetAdminForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
 
     $this->config('valet.admin')
       ->set('modifier', $form_state->getValue('modifier'))
