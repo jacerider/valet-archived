@@ -113,10 +113,11 @@ class Menu extends ValetBase {
       BubbleableMetadata::createFromRenderArray($urlRender)
         ->merge($urlBubbleable)->applyTo($urlRender);
       $url = \Drupal::service('renderer')->renderPlain($urlRender);
+      $url = str_replace('/api/valet', 'RETURN_URL', $url);
 
       $routes[$link->getPluginId()] = array(
         'label' => $link->getTitle(),
-        'value' => $url,
+        'value' => htmlspecialchars_decode($url),
         'description' => $link->getDescription(),
       );
       if($data->subtree){
