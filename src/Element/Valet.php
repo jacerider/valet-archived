@@ -23,23 +23,24 @@ class Valet extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    $info = array(
+
+    $info = [
       '#theme' => 'valet',
-      '#attached' => array(
-        'library' => array(
+      '#attached' => [
+        'library' => [
           'valet/valet',
-        ),
-      ),
-      '#pre_render' => array(
+        ]
+      ],
+      '#pre_render' => [
         array($class, 'preRenderValet'),
-      ),
+      ],
       // Metadata for the valet wrapping element.
-      '#attributes' => array(
+      '#attributes' => [
         'id' => 'valet',
         'role' => 'group',
         'aria-label' => $this->t('Valet quick navigation'),
-      ),
-    );
+      ],
+    ];
     return $info;
   }
 
@@ -49,10 +50,12 @@ class Valet extends RenderElement {
   public static function preRenderValet($element) {
     $renderer = \Drupal::service('renderer');
     $config = \Drupal::config('valet.admin');
-    $element['#attached']['drupalSettings']['valet'] = array(
+    $cache_timestamp = \Drupal::cache()->get('valet.cache');
+    $element['#attached']['drupalSettings']['valet'] = [
       'modifier' => $config->get('modifier'),
       'hotkey' => $config->get('hotkey'),
-    );
+      'cache' => $cache_timestamp ? $cache_timestamp->data : NULL,
+    ];
     $renderer->addCacheableDependency($element, $config);
     return $element;
   }

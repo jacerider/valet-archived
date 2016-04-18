@@ -108,9 +108,11 @@
     },
 
     go: function (label, value) {
-      if(value.indexOf('token=') >= 0){
-        value = value + '&destination='+(window.location.pathname.substring(1));
-      }
+      // if(value.indexOf('token=') >= 0){
+      //   value = value + '&destination='+(window.location.pathname.substring(1));
+      // }
+
+      value = value.replace('RETURN_URL', window.location.pathname.substring(1));
 
       if (this.down[16]) {
         this.down[16] = false;
@@ -124,16 +126,20 @@
     },
 
     getData: function(cb) {
-      var data;
-      // if(data = localStorage.getItem('valet') && 1 === 2){
-      //   return cb(JSON.parse(data));
-      // }
-      // else{
+      var data = localStorage ? JSON.parse(localStorage.getItem('valet')) : null;
+      if( data && drupalSettings.valet.cache && data.timestamp >= drupalSettings.valet.cache ){
+        console.log('cache');
+        return cb(data.data);
+      }
+      else{
         $.ajax({
           url: drupalSettings.path.baseUrl+'api/valet',
           dataType: 'json',
           success: function(data) {
-            // localStorage.setItem('valet', JSON.stringify(data));
+            if (localStorage) {
+              var time = Math.floor(new Date().getTime() / 1000);
+              localStorage.setItem('valet', JSON.stringify({timestamp: time, data: data}));
+            }
             return cb(data);
           },
           error: function (xhr, ajaxOptions, thrownError) {
@@ -142,7 +148,7 @@
             return cb(null);
           }
         });
-      // }
+      }
     },
 
     keyDown: function(e) {

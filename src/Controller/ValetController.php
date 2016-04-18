@@ -25,7 +25,7 @@ class ValetController {
   public function data() {
     $cid = 'valet';
     $data = array();
-    if ($cache = \Drupal::cache()->get($cid) && false) {
+    if ($cache = \Drupal::cache()->get($cid)) {
       $data = $cache->data;
     }
     else {
@@ -48,6 +48,8 @@ class ValetController {
       }
       $data = array_values($routes);
       \Drupal::cache()->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $tags);
+      // Cache time of rebuild.
+      \Drupal::cache()->set($cid . '.cache', time(), CacheBackendInterface::CACHE_PERMANENT, $tags);
     }
     return new JsonResponse($data);
   }
