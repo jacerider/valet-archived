@@ -5,7 +5,7 @@
  */
 (function ($, Drupal, drupalSettings) {
 
-  "use strict";
+  'use strict';
 
   /**
    * Set up and bind Valet.
@@ -48,8 +48,8 @@
       this.$input = this.$el.find('.valet-input');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
-      _.bindAll(this, "keyDown");
-      _.bindAll(this, "keyUp");
+      _.bindAll(this, 'keyDown');
+      _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
     },
 
@@ -72,18 +72,18 @@
         this.$input[0].blur();
       }
       else{
-        this.$input[0].value = '';
+        this.$input.val('').attr('disabled', false);
         this.getData(this.autoComplete.bind(this));
         $(this.$el.addClass('open'));
         this.model.set('isOpen', true);
-        this.$input[0].focus();
+        this.$input.focus();
       }
     },
 
     autoComplete: function ( data ) {
       var self = this;
       this.$input.once('valet').autocomplete({
-        appendTo: "#valet-results",
+        appendTo: '#valet-results',
         minLength: 1,
         delay: 0,
         autoFocus: true,
@@ -99,19 +99,15 @@
         },
       })
       // Add some magical style to our results
-      .autocomplete( "instance" )._renderItem = function( ui, item ) {
+      .autocomplete( 'instance' )._renderItem = function( ui, item ) {
         var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
-        return $( "<li></li>" )
-          .append( "<a><strong>" + item.label + "</strong> <small>" + value + "</small><br><em>" + item.description + "</em></a>" )
+        return $( '<li></li>' )
+          .append( '<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
           .appendTo( ui );
       };
     },
 
     go: function (label, value) {
-      // if(value.indexOf('token=') >= 0){
-      //   value = value + '&destination='+(window.location.pathname.substring(1));
-      // }
-
       value = value.replace('RETURN_URL', window.location.pathname.substring(1));
 
       if (this.down[16]) {
@@ -120,22 +116,24 @@
         window.open(value);
       }
       else{
-        this.$input.val( 'Loading...' ).attr("disabled", "true");
+        this.$input.val( 'Loading...' ).attr('disabled', true);
         window.location = value;
       }
     },
 
     getData: function(cb) {
+      var self = this;
       var data = localStorage ? JSON.parse(localStorage.getItem('valet')) : null;
       if( data && drupalSettings.valet.cache && data.timestamp >= drupalSettings.valet.cache ){
-        console.log('cache');
         return cb(data.data);
       }
       else{
+        self.$input.val( 'Loading data...' ).attr('disabled', true);
         $.ajax({
           url: drupalSettings.path.baseUrl+'api/valet',
           dataType: 'json',
           success: function(data) {
+            self.$input.val('').attr('disabled', false).focus();
             if (localStorage) {
               var time = Math.floor(new Date().getTime() / 1000);
               localStorage.setItem('valet', JSON.stringify({timestamp: time, data: data}));
