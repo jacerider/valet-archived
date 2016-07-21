@@ -7,3 +7,7 @@ plugins:
       menus:
         - admin
         - devel
+  user:
+    enabled: 0
+    settings:
+      roles: []
