@@ -91,7 +91,6 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
     $uids = $query->execute();
     $users = $this->userStorage->loadMultiple($uids);
 
-
     if(!empty($users)){
       foreach($users as $user){
         $results['user.' . $user->id()] = array(

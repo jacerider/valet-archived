@@ -37,6 +37,7 @@ class Valet extends RenderElement {
       // Metadata for the valet wrapping element.
       '#attributes' => [
         'id' => 'valet',
+        'class' => ['valet'],
         'role' => 'group',
         'aria-label' => $this->t('Valet quick navigation'),
       ],
@@ -50,7 +51,9 @@ class Valet extends RenderElement {
   public static function preRenderValet($element) {
     $renderer = \Drupal::service('renderer');
     $config = \Drupal::config('valet.admin');
-    $cache_timestamp = \Drupal::cache()->get('valet.cache');
+    $csrfToken = \Drupal::service('csrf_token');
+    $cid = 'valet:' . $csrfToken->get('/api/valet') . ':timestamp';
+    $cache_timestamp = \Drupal::cache()->get($cid);
     $element['#attached']['drupalSettings']['valet'] = [
       'modifier' => $config->get('modifier'),
       'hotkey' => $config->get('hotkey'),

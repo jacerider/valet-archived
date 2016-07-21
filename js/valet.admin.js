@@ -1,22 +1,2 @@
-/**
- * @file toolbar.js
- *
- * Defines the behavior of the Drupal administration toolbar.
- */
-(function ($, Drupal, drupalSettings) {
-
-  "use strict";
-
-  /**
-   * Valet admin page bindings.
-   */
-  Drupal.behaviors.valetAdmin = {
-
-    attach: function (context) {
-      $('#edit-hotkey').bind('keyup', function(e){
-        $(this).val(e.keyCode);
-      });
-    }
-  };
-
-}(jQuery, Drupal, drupalSettings));
+!function(t,e,i){"use strict";e.behaviors.valetAdmin={attach:function(e){t("#edit-hotkey").bind("keyup",function(e){t(this).val(e.keyCode)})}}}(jQuery,Drupal,drupalSettings);
+//# sourceMappingURL=valet.admin.js.map

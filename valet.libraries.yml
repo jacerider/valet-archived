@@ -3,7 +3,7 @@ valet:
   js:
     js/valet.js: {}
   css:
-    theme:
+    component:
       css/valet.css: {}
   dependencies:
     - core/jquery
