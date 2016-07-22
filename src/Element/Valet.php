@@ -54,6 +54,7 @@ class Valet extends RenderElement {
     $csrfToken = \Drupal::service('csrf_token');
     $cid = 'valet:' . $csrfToken->get('/api/valet') . ':timestamp';
     $cache_timestamp = \Drupal::cache()->get($cid);
+    $element['#attributes']['class'][] = $config->get('position');
     $element['#attached']['drupalSettings']['valet'] = [
       'modifier' => $config->get('modifier'),
       'hotkey' => $config->get('hotkey'),

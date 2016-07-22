@@ -1,0 +1,41 @@
+.valet{
+.valet-form {
+  width: 80%;
+  height: 110px;
+  margin: 0 auto;
+  position: relative;
+  transform: translate3d(0, 3em, 0);
+}
+
+.valet-input {
+  width: 100%;
+  height: 100%;
+  font-weight: 700;
+  padding: 0;
+  border: 0;
+  color: $primary-color;
+  background: transparent url('../images/magnifier.svg') no-repeat center right;
+  font-size: 90px;
+  line-height: 100px;
+  box-shadow: none;
+
+  &::placeholder {
+    color: $grey-color;
+  }
+
+  &:disabled {
+    font-weight: 100;
+    color: $disabled-color;
+    letter-spacing: -4px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  // remove cross in IE
+  &::-ms-clear {
+    display: none;
+  }
+}
+}

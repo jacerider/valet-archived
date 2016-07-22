@@ -7,7 +7,6 @@
     "url": "git+https://github.com/jacerider/valet.git"
   },
   "scripts": {
-    "postinstall": "node_modules/.bin/rimraf node_modules/**/*.info && gulp sass && gulp compress",
     "start": "gulp"
   },
   "author": "JaceRider",

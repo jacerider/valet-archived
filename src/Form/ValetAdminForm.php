@@ -42,12 +42,14 @@ class ValetAdminForm extends ConfigFormBase {
     $form['modifier'] = array(
       '#type' => 'select',
       '#title' => $this->t('Hotkey Modifier'),
+      '#required' => TRUE,
       '#options' => array(18 => $this->t('Alt'), 17 => $this->t('Ctrl'), 16 => $this->t('Shift')),
       '#default_value' => $config->get('modifier'),
     );
     $form['hotkey'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Hotkey'),
+      '#required' => TRUE,
       '#description' => $this->t('The value entered in this field will automatically be translated into the javascript keycode used to trigger Valet.'),
       '#maxlength' => 32,
       '#default_value' => $config->get('hotkey'),
@@ -56,6 +58,18 @@ class ValetAdminForm extends ConfigFormBase {
           'valet/valet.admin',
         ),
       ),
+    );
+
+    $form['position'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Position'),
+      '#required' => TRUE,
+      '#options' => array(
+        'left' => $this->t('Left'),
+        'right' => $this->t('Right'),
+        'overlay' => $this->t('Overlay'),
+      ),
+      '#default_value' => $config->get('position'),
     );
 
     $form['plugin_settings'] = array(
@@ -108,6 +122,7 @@ class ValetAdminForm extends ConfigFormBase {
     $this->config('valet.admin')
       ->set('modifier', $form_state->getValue('modifier'))
       ->set('hotkey', $form_state->getValue('hotkey'))
+      ->set('position', $form_state->getValue('position'))
       ->set('plugins', $form_state->getValue('plugins'))
       ->save();
 

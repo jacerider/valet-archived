@@ -45,9 +45,15 @@
      * Implements Backbone Views' initialize().
      */
     initialize: function () {
+      var self = this;
       this.$input = this.$el.find('.valet-input');
+      this.$window = $(window);
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
+      this.$el.find('.valet-open').once().click(function(e){
+        e.preventDefault();
+        self.toggle();
+      });
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
@@ -56,7 +62,7 @@
     toggle: function () {
       var self = this;
       if (this.model.get('isOpen')) {
-        $(this.$el.removeClass('open'));
+        this.$el.removeClass('open');
         this.model.set('isOpen', false);
         // trick to hide input text once the search overlay closes
         // todo: hardcoded times, should be done after transition ends
@@ -70,13 +76,22 @@
           }, 500);
         }
         this.$input[0].blur();
+        this.$window.off('click.valet-link');
       }
       else{
         this.$input.val('').attr('disabled', false);
         this.getData(this.autoComplete.bind(this));
-        $(this.$el.addClass('open'));
+        this.$el.addClass('open');
         this.model.set('isOpen', true);
         this.$input.focus();
+        // delay binding of window click.
+        setTimeout(function() {
+          self.$window.on('click.valet-link', function(e){
+            if(!$(e.target).closest('.valet-inner').length){
+              self.toggle();
+            }
+          });
+        }, 300 );
       }
     },
 

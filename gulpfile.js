@@ -1,12 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Variables
-////////////////////////////////////////////////////////////////////////////////
-
-var compileScss = true;
-var compileJs = true;
-var liveReload = true;
-
-////////////////////////////////////////////////////////////////////////////////
 // Tasks
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,13 +11,11 @@ var fs = require('fs');
 var config = {
   compileScss: true,
   compileJs: true,
-  liveReload: true,
   browserSync: {
+    enable: false,
     hostname: null,
-    port: null,
-    openAutomatically: null,
-    reloadDelay: null,
-    injectChanges: null
+    port: 8080,
+    openAutomatically: false
   }
 };
 
@@ -73,7 +63,7 @@ gulp.task('sass', function (){
     .pipe(clean())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./css'))
-    .pipe(config.liveReload ? browserSync.stream({match: '**/*.css'}) : gutil.noop())
+    .pipe(config.browserSync.enable ? browserSync.stream({match: '**/*.css'}) : gutil.noop())
     .pipe(notify({
       title: "SASS Compiled",
       message: "All SASS files have been recompiled to CSS.",
@@ -91,6 +81,7 @@ gulp.task('js', function (){
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./js'))
+    .pipe(config.browserSync.enable ? browserSync.stream() : gutil.noop())
     .pipe(notify({
       title: "JS Minified",
       message: "All JS files have been minified.",
@@ -111,24 +102,26 @@ gulp.task('browser-sync', function() {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-// Default Task
+// Watch Task
 ////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('default', function(){
+gulp.task('watch', function(){
 
   if (config !== null) {
-    if (config.liveReload) {
+    if (config.browserSync.enable) {
       gulp.start(['browser-sync']);
     }
 
     if (config.compileScss) {
-      gulp.start('sass');
+      // gulp.start('sass');
       gulp.watch(['./dev/scss/*.scss', './dev/scss/**/*.scss'], ['sass']);
     }
 
     if (config.compileJs) {
-      gulp.start('js');
+      // gulp.start('js');
       gulp.watch(['./dev/js/*.js', './dev/js/**/*.js'], ['js']);
     }
   }
 });
+
+gulp.task('default', ['watch']);

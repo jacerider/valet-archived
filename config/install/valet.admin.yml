@@ -1,5 +1,6 @@
 modifier: "16"
 hotkey: "32"
+position: "overlay"
 plugins:
   menu:
     enabled: 1

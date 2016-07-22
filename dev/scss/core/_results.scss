@@ -1,0 +1,52 @@
+.valet {
+.valet-results{
+  position: relative;
+  transform: translate3d(0, -6em, 0);
+
+  .ui-autocomplete {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    top: 180px;
+    pointer-events: none;
+
+    .ui-state-focus {
+      background: $bg-color;
+      border: 0;
+      margin-left: 0;
+
+      strong {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .ui-menu-item {
+    margin: 0 0 10px;
+    background: lighten($grey-color, 15%);
+    border-radius: 4px;
+    padding: 10px;
+    border: 0;
+    transition: background .3s;
+
+    a {
+      color: darken($grey-color, 20%);
+      border: 0;
+    }
+
+    strong {
+      font-size: 22px;
+      line-height: 22px;
+      color: darken($grey-color, 30%);
+      transition: color .3s;
+    }
+
+    em {
+      font-size: 12px;
+      line-height: 12px;
+      color: darken($grey-color, 10%);
+    }
+  }
+}
+}
