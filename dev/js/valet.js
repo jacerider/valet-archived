@@ -48,6 +48,7 @@
       var self = this;
       this.$input = this.$el.find('.valet-input');
       this.$window = $(window);
+      this.$body = $('body');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
       this.$el.find('.valet-open').once().click(function(e){
@@ -63,6 +64,7 @@
       var self = this;
       if (this.model.get('isOpen')) {
         this.$el.removeClass('open');
+        this.$body.removeClass('valet-open');
         this.model.set('isOpen', false);
         // trick to hide input text once the search overlay closes
         // todo: hardcoded times, should be done after transition ends
@@ -82,6 +84,7 @@
         this.$input.val('').attr('disabled', false);
         this.getData(this.autoComplete.bind(this));
         this.$el.addClass('open');
+        this.$body.addClass('valet-open');
         this.model.set('isOpen', true);
         this.$input.focus();
         // delay binding of window click.

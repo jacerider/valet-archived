@@ -1,34 +1,48 @@
+///////////////////////////
+/// Valet results specific styling
+///////////////////////////
 .valet {
 .valet-results{
   position: relative;
-  transform: translate3d(0, -6em, 0);
 
   .ui-autocomplete {
-    margin: 0;
+    width: 100% !important;
+    margin: $valet-margin 0;
     padding: 0;
     border: 0;
     background: transparent;
-    top: 180px;
+    top: 0 !important;
+    left: 0 !important;
     pointer-events: none;
 
     .ui-state-focus {
       background: $bg-color;
       border: 0;
-      margin-left: 0;
+      box-shadow: 0 2px 4px rgba($black-color,0.33);
+      width: 100%;
+      margin: 0 auto $valet-margin; 
 
       strong {
         color: $primary-color;
+      }
+
+      em {
+        color: darken($grey-color, 25%);
       }
     }
   }
 
   .ui-menu-item {
-    margin: 0 0 10px;
-    background: lighten($grey-color, 15%);
+    margin: 0 auto $valet-margin;
+    background: darken($bg-color, 5%);
     border-radius: 4px;
-    padding: 10px;
+    padding: $valet-padding;
     border: 0;
-    transition: background .3s;
+    width: 95%; 
+    display: block;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba($black-color,0.15);
+    transition: background 200ms, width 200ms;
 
     a {
       color: darken($grey-color, 20%);
@@ -36,16 +50,47 @@
     }
 
     strong {
-      font-size: 22px;
-      line-height: 22px;
+      font-size: $font-size-inner*1.33;
+      line-height: $font-size-inner*1.33;
       color: darken($grey-color, 30%);
-      transition: color .3s;
+      font-weight: 500;
+    }
+
+    small{
+      padding: $valet-padding/3 $valet-padding*2 $valet-padding/3 $valet-padding;
+      position: absolute;
+      top: $valet-padding;
+      right: 0;
+      line-height: $valet-padding*2;
+      font-size: $font-size-inner*0.8;
+      border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
+      background-color: darken($bg-color, 5%);
+      max-width: 50%;
+      overflow: hidden;
+      white-space: nowrap;
+
+      &:after{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        content: "";
+        background-color: #000;
+        width: 15%;
+        height: 100%;
+        background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, darken($bg-color, 5%) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,darken($bg-color, 5%) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right,  rgba(255,255,255,0) 0%,darken($bg-color, 5%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      }
     }
 
     em {
-      font-size: 12px;
-      line-height: 12px;
+      font-size: $font-size-inner*0.8;
+      line-height: $font-size-inner*1.5;
+      margin-top: $valet-padding*0.75;
       color: darken($grey-color, 10%);
+      display: block;
     }
   }
 }

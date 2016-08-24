@@ -1,0 +1,108 @@
+.valet {
+
+  // Close Valet link
+  .valet-close {
+    width: $font-size-inner*3.5;
+    height: $font-size-inner*3.5;
+    position: absolute;
+    right: 0;
+    top: $valet-margin;
+    padding: $valet-padding;
+    overflow: hidden;
+    text-indent: 100%;
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+    background-color: $primary-color;
+    transition: opacity 200ms, right 300ms, left 300ms, background-color 200ms;
+    transition-delay: 0;
+    z-index: 1;
+
+    &:hover {
+      background-color: lighten($primary-color, 5%);
+
+      &:before,
+      &:after {
+        opacity: 1;
+      }
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: $valet-margin*2;
+      top: $valet-margin*0.75;
+      left: 50%;
+      border-radius: 3px;
+      opacity: 1;
+      background: lighten($primary-color, 33%);
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  // Open Valet link
+  .valet-open{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: $valet-padding;
+    color: $white-color;
+    background-color: $primary-color;
+    border-top-left-radius: $border-radius;
+    display: none;
+
+    @include small-device-size{
+      display: block;
+    }
+  }
+
+  &.open{
+
+    .valet-close {
+      opacity: 1;
+      pointer-events: auto;
+      right: -$valet-margin*3.5;
+      transition-delay: 100ms;
+    }
+  }
+
+  // left specific styling
+  &.overlay{
+
+    .valet-close {
+      border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+    }
+  }
+
+  &.left{
+
+    .valet-close {
+      border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+      top: $valet-margin*2;
+    }
+  }
+
+  // right specific styling
+  &.right{
+
+    .valet-close {
+      border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
+      right: auto;
+      left: -$valet-margin*3.5;
+      top: $valet-margin*2;
+    }
+  }
+
+}
