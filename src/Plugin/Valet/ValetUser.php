@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 0
  * )
  */
-class User extends ValetBase implements ContainerFactoryPluginInterface {
+class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
 
   /**
    * The user storage.
@@ -33,7 +33,7 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
   protected $userStorage;
 
   /**
-   * Constructs a new UserDevelGenerate object.
+   * Constructs a new ValetUser object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -43,8 +43,6 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
    *   The user storage.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
-   *   The date formatter service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -66,11 +64,13 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
+    $form['description']['#markup'] = $this->t('Expose users to Valet.');
+    $form['shortcut']['#markup'] = '<br><code>' . $this->t('<strong>SHORTCUT</strong> :user') . '</code>';
     $form['roles'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Available roles'),
       '#options' => user_role_names(TRUE),
-      '#default_value' => $this->config->get('plugins.user.settings.roles'),
+      '#default_value' => $this->settings['roles'],
     );
 
     return $form;
@@ -79,9 +79,8 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public function getResults() {
-    $results = array();
-    $allowed = array_filter($this->config->get('plugins.user.settings.roles'));
+  public function prepareResults() {
+    $allowed = array_filter($this->settings['roles']);
 
     $query = $this->userStorage->getQuery()
       ->condition('uid', 0, '>');
@@ -93,15 +92,15 @@ class User extends ValetBase implements ContainerFactoryPluginInterface {
 
     if(!empty($users)){
       foreach($users as $user){
-        $results['user.' . $user->id()] = array(
+        $this->addResult('user.' . $user->id(), [
           'label' => $user->getDisplayName(),
           'value' => '/user/' . $user->id(),
-          'description' => $this->t('View this user.'),
-        );
+          'description' => 'View this user.',
+          'command' => ':user',
+        ]);
       }
       // Clear Valet cache with user operations.
       $this->addCacheTags(array('user'));
     }
-    return $results;
   }
 }

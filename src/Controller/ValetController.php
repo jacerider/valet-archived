@@ -54,7 +54,6 @@ class ValetController extends ControllerBase {
     $data = array();
     if ($cache = \Drupal::cache()->get($cid)) {
       $data = $cache->data;
-      // dsm($this->csrfToken->get('/api/valet'));
     }
     else {
       $routes = array();

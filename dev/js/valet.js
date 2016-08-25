@@ -7,6 +7,31 @@
 
   'use strict';
 
+  // Remap the filter functions for autocomplete to recognise the
+  // extra value "command". Borrowed from the wonderful coffee project.
+  var proto = $.ui.autocomplete.prototype,
+    initSource = proto._initSource;
+
+  function filter(array, term) {
+    var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
+    return $.grep(array, function (value) {
+      return matcher.test(value.command) || matcher.test(value.label) || matcher.test(value.value);
+    });
+  }
+
+  $.extend(proto, {
+    _initSource: function () {
+      if ($.isArray(this.options.source)) {
+        this.source = function (request, response) {
+          response(filter(this.options.source, request.term));
+        };
+      }
+      else {
+        initSource.call(this);
+      }
+    }
+  });
+
   /**
    * Set up and bind Valet.
    */
@@ -58,6 +83,10 @@
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
+      $('.toolbar-icon-valet').click(function(e) {
+        e.preventDefault();
+        self.toggle();
+      });
     },
 
     toggle: function () {
@@ -100,7 +129,7 @@
 
     autoComplete: function ( data ) {
       var self = this;
-      this.$input.once('valet').autocomplete({
+      this.$input.autocomplete({
         appendTo: '#valet-results',
         minLength: 1,
         delay: 0,
@@ -115,13 +144,21 @@
             return false;
           }
         },
-      })
+      });
       // Add some magical style to our results
-      .autocomplete( 'instance' )._renderItem = function( ui, item ) {
+      this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
         var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
-        return $( '<li></li>' )
-          .append( '<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
-          .appendTo( ui );
+        return $('<li></li>')
+          .append('<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
+          .appendTo( ul );
+      };
+      // Limit the max results
+      this.$input.autocomplete('instance')._renderMenu = function( ul, items ) {
+        var self = this;
+        items = items.slice(0, 6);
+        $.each(items, function (index, item) {
+          self._renderItemData(ul, item);
+        });
       };
     },
 

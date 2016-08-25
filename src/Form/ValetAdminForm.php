@@ -74,7 +74,6 @@ class ValetAdminForm extends ConfigFormBase {
 
     $form['plugin_settings'] = array(
       '#type' => 'vertical_tabs',
-      // '#default_tab' => 'edit-publication',
     );
 
     $form['plugins'] = array(
@@ -100,7 +99,12 @@ class ValetAdminForm extends ConfigFormBase {
       );
 
       if($plugin_form = $instance->buildForm(array(), $form_state)){
-        $form['plugins'][$id]['settings'] = $plugin_form;
+        $form['plugins'][$id]['settings'] = $plugin_form + [
+          '#type' => 'container',
+          '#states' => array(
+            'disabled' => array('input[name="plugins['.$id.'][enabled]"]' => array('checked' => FALSE)),
+          ),
+        ];
       }
     }
 
