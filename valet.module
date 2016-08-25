@@ -1,19 +1,22 @@
 <?php
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_page_buttom();
  *
  * Add valet markup to the bottom of the page automatically.
  */
 function valet_page_bottom(array &$page_bottom) {
-  $page_bottom['valet'] = array(
-    '#type' => 'valet',
-    '#access' => \Drupal::currentUser()->hasPermission('access valet'),
-    '#cache' => [
-      'keys' => ['valet'],
-      'contexts' => ['user.permissions'],
-    ],
-  );
+  if (\Drupal::currentUser()->hasPermission('access valet')) {
+    $page_bottom['valet'] = array(
+      '#type' => 'valet',
+      '#cache' => [
+        'keys' => ['valet'],
+        'contexts' => ['user.permissions'],
+      ],
+    );
+  }
 }
 
 /**
@@ -58,4 +61,36 @@ function valet_css_alter(&$css) {
       // }
     }
   }
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function valet_toolbar() {
+  $items['valet'] = [
+    '#cache' => [
+      'contexts' => ['user.permissions'],
+    ],
+  ];
+
+  if (\Drupal::currentUser()->hasPermission('access valet')) {
+    $items['valet'] += [
+      '#weight' => 999,
+      '#type' => 'toolbar_item',
+      'tab' => [
+        '#type' => 'link',
+        '#title' => t('Go to'),
+        '#url' => Url::fromRoute('<none>'),
+        '#attributes' => [
+          'title' => t('Use alt+d to start Coffee and search for a page to go to '),
+          'class' => ['toolbar-icon', 'toolbar-icon-valet'],
+        ],
+      ],
+      '#attached' => [
+        'library' => ['valet/valet'],
+      ],
+    ];
+  }
+
+  return $items;
 }
