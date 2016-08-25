@@ -8,6 +8,12 @@ plugins:
       menus:
         - admin
         - devel
+  node:
+    enabled: 0
+  node_add:
+    enabled: 1
+  node_type:
+    enabled: 1
   user:
     enabled: 0
     settings:
