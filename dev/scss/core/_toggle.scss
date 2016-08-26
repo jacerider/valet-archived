@@ -2,8 +2,8 @@
 
   // Close Valet link
   .valet-close {
-    width: $font-size-inner*3.5;
-    height: $font-size-inner*3.5;
+    width: $font-size-inner * 3.5;
+    height: $font-size-inner * 3.5;
     position: absolute;
     right: 0;
     top: $valet-margin;
@@ -21,36 +21,36 @@
     &:hover {
       background-color: lighten($primary-color, 5%);
 
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         opacity: 1;
       }
     }
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       width: 3px;
-      height: $valet-margin*2;
-      top: $valet-margin*0.75;
+      height: $valet-margin * 2;
+      top: $valet-margin * 0.75;
       left: 50%;
       border-radius: 3px;
       opacity: 1;
       background: lighten($primary-color, 33%);
     }
 
-    &:before {
+    &::before {
       transform: rotate(45deg);
     }
 
-    &:after {
+    &::after {
       transform: rotate(-45deg);
     }
   }
 
   // Open Valet link
-  .valet-open{
+  .valet-open {
     position: absolute;
     left: 0;
     bottom: 0;
@@ -60,23 +60,23 @@
     border-top-left-radius: $border-radius;
     display: none;
 
-    @include small-device-size{
+    @include small-device-siz {
       display: block;
     }
   }
 
-  &.open{
+  &.open {
 
     .valet-close {
       opacity: 1;
       pointer-events: auto;
-      right: -$valet-margin*3.5;
+      right: -$valet-margin * 3.5;
       transition-delay: 100ms;
     }
   }
 
   // left specific styling
-  &.overlay{
+  &.overlay {
 
     .valet-close {
       border-bottom-right-radius: $border-radius;
@@ -84,24 +84,24 @@
     }
   }
 
-  &.left{
+  &.left {
 
     .valet-close {
       border-bottom-right-radius: $border-radius;
       border-top-right-radius: $border-radius;
-      top: $valet-margin*2;
+      top: $valet-margin * 2;
     }
   }
 
   // right specific styling
-  &.right{
+  &.right {
 
     .valet-close {
       border-bottom-left-radius: $border-radius;
       border-top-left-radius: $border-radius;
       right: auto;
-      left: -$valet-margin*3.5;
-      top: $valet-margin*2;
+      left: -$valet-margin * 3.5;
+      top: $valet-margin * 2;
     }
   }
 
