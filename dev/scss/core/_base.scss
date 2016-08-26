@@ -32,7 +32,7 @@
     .valet-inner {
       opacity: 1;
       width: 100%;
-      box-shadow: 0 0 12px rgba($black, 0.33);
+      box-shadow: 0 2px 12px rgba($black, 0.4);
 
       @include medium-device-size {
         width: 50%;
@@ -84,6 +84,14 @@
   }
 }
 
+//increases blur performance but affects non-valet wrappers
+body > :not(#valet) {
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0), translateZ(0);
+}
+
+//blur background when open
 .valet-open {
 
   > :not(#valet) {

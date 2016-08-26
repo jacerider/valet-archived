@@ -25,7 +25,7 @@
     border: 0;
     border-radius: 0;
     background: transparent url('../images/magnifier.svg') no-repeat center right;
-    background-size: $font-size-inner $font-size-inner;
+    background-size: $valet-padding $valet-padding;
 
     &::placeholder {
       color: $grey;

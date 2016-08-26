@@ -15,12 +15,13 @@
     pointer-events: none;
 
     .ui-state-focus {
-      background: $bg-color;
       border: 0;
-      box-shadow: 0 2px 4px rgba($black, 0.33);
+      box-shadow: 0 2px 5px rgba($black, 0.4);
       width: 100%;
-      margin: 0 auto $valet-margin;
       opacity: 1 !important;
+      //use important to override jquery+seven theme defaults
+      background: $bg-color !important;
+      margin: 0 auto $valet-margin !important;
 
       strong {
         color: $primary-color;
@@ -34,6 +35,37 @@
         max-height: $font-size-inner * 3;
         margin-top: $valet-padding * 0.75;
         padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
+      }
+    }
+  }
+
+  //prevent active flicker of first result while search
+  &.searching {
+
+    .ui-autocomplete {
+
+      .ui-menu-item {
+        border: 0;
+        box-shadow: 0 2px 5px rgba($black, 0.4);
+        width: 100%;
+        opacity: 1 !important;
+        //use important to override jquery+seven theme defaults
+        background: $bg-color !important;
+        margin: 0 auto $valet-margin !important;
+
+        strong {
+          color: $primary-color;
+        }
+
+        em {
+          color: darken($grey, 25%);
+        }
+
+        small {
+          max-height: $font-size-inner * 3;
+          margin-top: $valet-padding * 0.75;
+          padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
+        }
       }
     }
   }
@@ -93,6 +125,7 @@
       max-height: 0;
       margin-top: 0;
       display: block;
+      color: darken($grey, 30%);
       transition: max-height 200ms, padding 200ms, margin 200ms;
     }
 
