@@ -31,7 +31,7 @@
 
     .valet-inner {
       opacity: 1;
-      width: 100%;
+      width: 90%;
       box-shadow: 0 2px 12px rgba($black, 0.4);
 
       @include medium-device-size {
@@ -39,38 +39,12 @@
       }
 
       @include large-device-size {
-        width: 33%;
+        width: 40%;
       }
 
       @include xlarge-device-size {
-        width: 25%;
+        width: 30%;
       }
-    }
-  }
-
-  // both panels
-  &.left,
-  &.right {
-
-    .valet-inner {
-      height: 100vh;
-      background: darken($bg-color, 5%);
-    }
-  }
-
-  // left specific styling
-  &.left {
-
-    .valet-inner {
-      float: left;
-    }
-  }
-
-  // right specific styling
-  &.right {
-
-    .valet-inner {
-      float: right;
     }
   }
 

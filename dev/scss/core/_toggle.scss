@@ -5,8 +5,6 @@
     width: $font-size-inner * 4;
     height: $font-size-inner * 4;
     position: absolute;
-    right: 0;
-    top: $valet-margin * 1.25;
     padding: $valet-padding;
     overflow: hidden;
     text-indent: 100%;
@@ -14,9 +12,14 @@
     pointer-events: none;
     opacity: 0;
     background-color: $primary-color;
-    transition: opacity 200ms, right 300ms, left 300ms, background-color 200ms;
+    transition: opacity 200ms, right 300ms, left 300ms, top 300ms, background-color 200ms;
     transition-delay: 0;
     z-index: 1;
+    top: $valet-margin * 1.25;
+
+    @include medium-device-size {
+      right: 0;
+    }
 
     &:hover {
 
@@ -72,8 +75,14 @@
     .valet-close {
       opacity: 1;
       pointer-events: auto;
-      right: -$valet-margin * 4;
+      right: 0;
       transition-delay: 200ms;
+      top: -$valet-margin * 4;
+
+      @include medium-device-size {
+        right: -$valet-margin * 4;
+        top: $valet-margin * 1.25;
+      }
     }
   }
 

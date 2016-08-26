@@ -74,12 +74,14 @@
       this.$input = this.$el.find('.valet-input');
       this.$window = $(window);
       this.$body = $('body');
+      this.$results = $('#valet-results');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
       this.$el.find('.valet-open').click(function(e){
         e.preventDefault();
         self.toggle();
       });
+      this.timeout = null;
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
@@ -89,10 +91,19 @@
       });
       // Autocomplete setup
       this.$input.autocomplete({
-        appendTo: '#valet-results',
+        appendTo: this.$results,
         minLength: 1,
         delay: 0,
         autoFocus: true,
+        search: function( event, ui ) {
+          self.$results.addClass('searching');
+        },
+        response: function( event, ui ) {
+          clearTimeout(self.timeout);
+          self.timeout = setTimeout(function(){
+            self.$results.removeClass('searching');
+          }, 10);
+        },
         // source: data,
         focus: function( event, ui ) {
           return false;

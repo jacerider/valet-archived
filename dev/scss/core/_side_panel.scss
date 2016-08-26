@@ -1,16 +1,14 @@
-///////////////////////////
-/// Valet form specific styling
-///////////////////////////
-.valet {
+.valet.left,
+.valet.right {
+
+  .valet-inner {
+    height: 100vh;
+    background: darken($bg-color, 5%);
+  }
 
   .valet-form {
-    margin: 0 auto;
-    position: relative;
-    padding: $valet-padding * 1.75;
-    background: $bg-color;
-    border-radius: $border-radius;
-    z-index: 2;
-    // transform: translate3d(0, 3em, 0);
+    margin: $valet-margin;
+    box-shadow: 0 2px 4px rgba($black, 0.33);
   }
 
   .valet-input[type=search] {
@@ -43,10 +41,21 @@
       box-shadow: none;
       background-color: transparent;
     }
+  }
+}
 
-    // remove cross in IE
-    &::-ms-clear {
-      display: none;
-    }
+// left specific styling
+.valet.left {
+
+  .valet-inner {
+    float: left;
+  }
+}
+
+// right specific styling
+.valet.right {
+
+  .valet-inner {
+    float: right;
   }
 }
