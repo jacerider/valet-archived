@@ -54,21 +54,21 @@
     }
   }
 
-  // Open Valet link
-  .valet-open {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    padding: $valet-padding;
-    color: $white;
-    background-color: $primary-color;
-    border-top-left-radius: $border-radius;
-    display: none;
+  // Open Valet link - Not sure if this is needed anymore since we integrate with default toolbar
+  // .valet-open {
+  //   position: absolute;
+  //   left: 0;
+  //   bottom: 0;
+  //   padding: $valet-padding;
+  //   color: $white;
+  //   background-color: $primary-color;
+  //   border-top-left-radius: $border-radius;
+  //   display: none;
 
-    @include small-device-size {
-      display: block;
-    }
-  }
+  //   @include small-device-size {
+  //     display: block;
+  //   }
+  // }
 
   &.open {
 
@@ -77,7 +77,7 @@
       pointer-events: auto;
       right: 0;
       transition-delay: 200ms;
-      top: -$valet-margin * 4;
+      top: -$valet-margin * 4.5;
 
       @include medium-device-size {
         right: -$valet-margin * 4;
@@ -90,8 +90,14 @@
   &.overlay {
 
     .valet-close {
-      border-bottom-right-radius: $border-radius;
-      border-top-right-radius: $border-radius;
+      border-radius: $border-radius;
+
+      @include medium-device-size {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+      }
     }
   }
 
