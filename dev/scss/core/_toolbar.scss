@@ -3,4 +3,5 @@
 .toolbar .toolbar-bar .toolbar-icon-valet.active::before {
   opacity: 0.8;
   background-image: url('../images/magnifier.svg');
+  background-size: ($font-size-inner * 1.5) ($font-size-inner * 1.5) !important;
 }

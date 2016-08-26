@@ -2,11 +2,11 @@
 
   // Close Valet link
   .valet-close {
-    width: $font-size-inner * 3.5;
-    height: $font-size-inner * 3.5;
+    width: $font-size-inner * 4;
+    height: $font-size-inner * 4;
     position: absolute;
     right: 0;
-    top: $valet-margin;
+    top: $valet-margin * 1.25;
     padding: $valet-padding;
     overflow: hidden;
     text-indent: 100%;
@@ -33,7 +33,7 @@
       position: absolute;
       width: 3px;
       height: $valet-margin * 2;
-      top: $valet-margin * 0.75;
+      top: $valet-margin;
       left: 50%;
       border-radius: 3px;
       opacity: 1;
@@ -70,8 +70,8 @@
     .valet-close {
       opacity: 1;
       pointer-events: auto;
-      right: -$valet-margin * 3.5;
-      transition-delay: 100ms;
+      right: -$valet-margin * 4;
+      transition-delay: 200ms;
     }
   }
 
