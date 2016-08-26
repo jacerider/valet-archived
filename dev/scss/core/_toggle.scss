@@ -55,12 +55,12 @@
     left: 0;
     bottom: 0;
     padding: $valet-padding;
-    color: $white-color;
+    color: $white;
     background-color: $primary-color;
     border-top-left-radius: $border-radius;
     display: none;
 
-    @include small-device-siz {
+    @include small-device-size {
       display: block;
     }
   }

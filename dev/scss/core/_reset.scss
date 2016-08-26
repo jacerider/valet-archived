@@ -16,119 +16,46 @@
     list-style: none;
   }
 
-  blockquote, q {
-    quotes: none;
+  input {
+    margin: 0;
   }
 
-  blockquote {
-    &::before, &::after {
-      content: '';
-      content: none;
-    }
-  }
+  fieldset {
+    margin-bottom: $valet-padding;
 
-  q {
-    &::before, &::after {
-      content: '';
-      content: none;
-    }
-  }
-
-  .tabledrag-toggle-weight-wrapper{
-    float:right;
-    font-size:8px;
-    text-transform: uppercase;
-  }
-
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    border:none;
-    background:none;
-    width:100%;
-
-    thead{
-      background:none;
-    }
-
-    th,
-    td{
-      border:none;
-      padding:5px;
-      background:none;
-
-      &.active{
-        background:none;
-        padding:5px;
-
-        img{
-          position:static;
-        }
-      }
-
-      a{
-        padding:0;
-      }
-    }
-
-    tr,
-    tr.odd,
-    tr.even{
-      border:none;
-      background: none;
-
-      td.active{
-        background:none;
-      }
-
-      td:last-child,
-      td.menu-operations{
-        border:none;
-        text-align: right;
-      }
-    }
-
-    input{
-      margin:0;
-    }
-  }
-
-  fieldset{
-    margin-bottom:10px;
-
-    .fieldset-legend{
+    .fieldset-legend {
       // position: relative;
-      margin:0;
-      padding:0;
+      margin: 0;
+      padding: 0;
     }
 
-    .fieldset-wrapper{
-      padding:20px 0 0 0;
+    .fieldset-wrapper {
+      padding: ($valet-padding * 2) 0 0;
     }
   }
 
-  a{
+  a {
     text-decoration: none;
-    text-shadow:none;
+    text-shadow: none;
 
-    &:hover{
+    &:hover {
       text-decoration: none;
-      text-shadow:none;
+      text-shadow: none;
     }
 
-    &:focus{
+    &:focus {
       outline: none;
     }
   }
 
-  ul{
-    margin:0;
-    padding:0;
+  ul {
+    margin: 0;
+    padding: 0;
   }
 
-  li{
-    margin:0;
-    padding:0;
+  li {
+    margin: 0;
+    padding: 0;
   }
 
 }

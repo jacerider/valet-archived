@@ -1,7 +1,6 @@
 ///////////////////////////
 /// Valet results specific styling
 ///////////////////////////
-.valet {
 .valet-results {
   position: relative;
 
@@ -18,7 +17,7 @@
     .ui-state-focus {
       background: $bg-color;
       border: 0;
-      box-shadow: 0 2px 4px rgba($black-color,0.33);
+      box-shadow: 0 2px 4px rgba($black, 0.33);
       width: 100%;
       margin: 0 auto $valet-margin;
 
@@ -27,7 +26,7 @@
       }
 
       em {
-        color: darken($grey-color, 25%);
+        color: darken($grey, 25%);
       }
     }
   }
@@ -41,23 +40,23 @@
     width: 95%;
     display: block;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba($black-color,0.15);
+    box-shadow: 0 1px 2px rgba($black, 0.15);
     transition: background 200ms, width 200ms;
 
     a {
-      color: darken($grey-color, 20%);
+      color: darken($grey, 20%);
       border: 0;
     }
 
     strong {
-      font-size: $font-size-inner*1.33;
-      line-height: $font-size-inner*1.33;
-      color: darken($grey-color, 30%);
+      font-size: $font-size-inner * 1.33;
+      line-height: $font-size-inner * 1.33;
+      color: darken($grey, 30%);
       font-weight: 500;
     }
 
     small {
-      padding: $valet-padding / 3 $valet-padding * 2 $valet-padding / 3 $valet-padding;
+      padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
       position: absolute;
       top: $valet-padding;
       right: 0;
@@ -79,7 +78,7 @@
         background-color: $bg-color;
         width: 15%;
         height: 100%;
-        background: linear-gradient(to right, rgba($white-color, 0) 0%, darken($bg-color, 5%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: linear-gradient(to right, rgba($white, 0) 0%, darken($bg-color, 5%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       }
     }
 
@@ -87,9 +86,8 @@
       font-size: $font-size-inner * 0.8;
       line-height: $font-size-inner * 1.5;
       margin-top: $valet-padding * 0.75;
-      color: darken($grey-color, 10%);
+      color: darken($grey, 10%);
       display: block;
     }
   }
-}
 }
