@@ -76,7 +76,7 @@
       this.$body = $('body');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
-      this.$el.find('.valet-open').once().click(function(e){
+      this.$el.find('.valet-open').click(function(e){
         e.preventDefault();
         self.toggle();
       });
@@ -87,6 +87,38 @@
         e.preventDefault();
         self.toggle();
       });
+      // Autocomplete setup
+      this.$input.autocomplete({
+        appendTo: '#valet-results',
+        minLength: 1,
+        delay: 0,
+        autoFocus: true,
+        // source: data,
+        focus: function( event, ui ) {
+          return false;
+        },
+        select: function( event, ui ) {
+          if(ui.item){
+            self.go(ui.item.label, ui.item.value);
+            return false;
+          }
+        },
+      });
+      // Add some magical style to our results
+      this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
+        var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
+        return $('<li></li>')
+          .append('<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
+          .appendTo( ul );
+      };
+      // Limit the max results
+      this.$input.autocomplete('instance')._renderMenu = function( ul, items ) {
+        var self = this;
+        items = items.slice(0, 6);
+        $.each(items, function (index, item) {
+          self._renderItemData(ul, item);
+        });
+      };
     },
 
     toggle: function () {
@@ -129,37 +161,7 @@
 
     autoComplete: function ( data ) {
       var self = this;
-      this.$input.autocomplete({
-        appendTo: '#valet-results',
-        minLength: 1,
-        delay: 0,
-        autoFocus: true,
-        source: data,
-        focus: function( event, ui ) {
-          return false;
-        },
-        select: function( event, ui ) {
-          if(ui.item){
-            self.go(ui.item.label, ui.item.value);
-            return false;
-          }
-        },
-      });
-      // Add some magical style to our results
-      this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
-        var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
-        return $('<li></li>')
-          .append('<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
-          .appendTo( ul );
-      };
-      // Limit the max results
-      this.$input.autocomplete('instance')._renderMenu = function( ul, items ) {
-        var self = this;
-        items = items.slice(0, 6);
-        $.each(items, function (index, item) {
-          self._renderItemData(ul, item);
-        });
-      };
+      this.$input.autocomplete('option', { source: data });
     },
 
     go: function (label, value) {
