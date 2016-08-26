@@ -55,7 +55,7 @@
   }
 
   // Open Valet link - Not sure if this is needed anymore since we integrate with default toolbar
-  // .valet-open {
+  .valet-open {
   //   position: absolute;
   //   left: 0;
   //   bottom: 0;
@@ -63,12 +63,12 @@
   //   color: $white;
   //   background-color: $primary-color;
   //   border-top-left-radius: $border-radius;
-  //   display: none;
+    display: none;
 
   //   @include small-device-size {
   //     display: block;
   //   }
-  // }
+  }
 
   &.open {
 
@@ -106,7 +106,7 @@
     .valet-close {
       border-bottom-right-radius: $border-radius;
       border-top-right-radius: $border-radius;
-      top: $valet-margin * 2;
+      top: $valet-margin * 1.5;
     }
   }
 
@@ -117,9 +117,8 @@
       border-bottom-left-radius: $border-radius;
       border-top-left-radius: $border-radius;
       right: auto;
-      left: -$valet-margin * 3.5;
-      top: $valet-margin * 2;
+      left: -$valet-margin * 4;
+      top: $valet-margin * 1.5;
     }
   }
-
 }

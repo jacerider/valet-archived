@@ -7,39 +7,36 @@
   }
 
   .valet-form {
-    margin: $valet-margin;
-    box-shadow: 0 2px 4px rgba($black, 0.33);
+    margin: 0;
+    box-shadow: none;
   }
 
   .valet-input[type=search] {
-    @include valet-font;
-    font-size: $font-size-inner * 3;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    color: $primary-color;
-    box-shadow: none;
-    border: 0;
     border-radius: 0;
-    background: transparent url('../images/magnifier.svg') no-repeat center right;
-    background-size: $valet-padding $valet-padding;
+  }
 
-    &::placeholder {
-      color: $grey;
-    }
+  .valet-results {
 
-    &:disabled {
-      font-weight: 100;
-      color: $disabled-color;
-      letter-spacing: -4px;
-    }
-
-    &:focus {
-      outline: none;
-      border: 0;
+    .ui-menu-item {
+      width: 90%;
       box-shadow: none;
-      background-color: transparent;
+      border-bottom: 1px solid $grey;
+      border-radius: 0;
+
+      &.ui-state-focus {
+        width: 100%;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    //prevent active flicker of first result while search
+    &.searching {
+      .ui-menu-item:first-child {
+        width: 100%;
+      }
     }
   }
 }
