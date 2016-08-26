@@ -108,7 +108,7 @@
       this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
         var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
         return $('<li></li>')
-          .append('<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
+          .append('<a><strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>' )
           .appendTo( ul );
       };
       // Limit the max results

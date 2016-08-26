@@ -29,6 +29,12 @@
       em {
         color: darken($grey, 25%);
       }
+
+      small {
+        max-height: $font-size-inner * 3;
+        margin-top: $valet-padding * 0.75;
+        padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
+      }
     }
   }
 
@@ -57,10 +63,10 @@
     }
 
     &:nth-child(7) {
-      opacity: 0.4;
+      opacity: 0.2;
     }
 
-    &:nth-child(7 + 1) {
+    &:nth-child(8 + 1) {
       opacity: 0;
     }
 
@@ -77,36 +83,22 @@
     }
 
     small {
-      padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
-      position: absolute;
-      top: $valet-padding;
-      right: 0;
+      padding: 0;
       line-height: $valet-padding * 2;
       font-size: $font-size-inner * 0.8;
-      border-bottom-left-radius: $border-radius;
-      border-top-left-radius: $border-radius;
+      border-radius: $border-radius;
       background-color: darken($bg-color, 5%);
-      max-width: 50%;
       overflow: hidden;
       white-space: nowrap;
-
-      &::after {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        content: '';
-        background-color: $bg-color;
-        width: 15%;
-        height: 100%;
-        background: linear-gradient(to right, rgba($white, 0) 0%, darken($bg-color, 5%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      }
+      max-height: 0;
+      margin-top: 0;
+      display: block;
+      transition: max-height 200ms, padding 200ms, margin 200ms;
     }
 
     em {
       font-size: $font-size-inner * 0.8;
       line-height: $font-size-inner * 1.5;
-      margin-top: $valet-padding * 0.75;
       color: darken($grey, 10%);
       display: block;
     }

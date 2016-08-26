@@ -19,11 +19,11 @@
     z-index: 1;
 
     &:hover {
-      background-color: lighten($primary-color, 5%);
 
       &::before,
       &::after {
         opacity: 1;
+        background-color: lighten($primary-color, 50%);
       }
     }
 
@@ -38,6 +38,8 @@
       border-radius: 3px;
       opacity: 1;
       background: lighten($primary-color, 33%);
+      transition: background-color 200ms;
+      transition-delay: 0;
     }
 
     &::before {
