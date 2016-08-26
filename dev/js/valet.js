@@ -74,6 +74,7 @@
       this.$input = this.$el.find('.valet-input');
       this.$window = $(window);
       this.$body = $('body');
+      this.$results = $('#valet-results');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
       this.$el.find('.valet-open').click(function(e){
@@ -89,10 +90,16 @@
       });
       // Autocomplete setup
       this.$input.autocomplete({
-        appendTo: '#valet-results',
+        appendTo: this.$results,
         minLength: 1,
         delay: 0,
         autoFocus: true,
+        search: function( event, ui ) {
+          self.$results.addClass('searching');
+        },
+        response: function( event, ui ) {
+          self.$results.removeClass('searching');
+        },
         // source: data,
         focus: function( event, ui ) {
           return false;
