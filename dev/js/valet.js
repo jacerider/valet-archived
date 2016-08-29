@@ -81,6 +81,7 @@
         e.preventDefault();
         self.toggle();
       });
+      this.timeout = null;
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
@@ -98,7 +99,10 @@
           self.$results.addClass('searching');
         },
         response: function( event, ui ) {
-          self.$results.removeClass('searching');
+          clearTimeout(self.timeout);
+          self.timeout = setTimeout(function(){
+            self.$results.removeClass('searching');
+          }, 10);
         },
         // source: data,
         focus: function( event, ui ) {
@@ -115,7 +119,7 @@
       this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
         var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
         return $('<li></li>')
-          .append('<a><strong>' + item.label + '</strong> <small>' + value + '</small><br><em>' + item.description + '</em></a>' )
+          .append('<a><strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>' )
           .appendTo( ul );
       };
       // Limit the max results

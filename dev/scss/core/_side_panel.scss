@@ -1,0 +1,58 @@
+.valet.left,
+.valet.right {
+
+  .valet-inner {
+    height: 100vh;
+    background: darken($bg-color, 5%);
+  }
+
+  .valet-form {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .valet-input[type=search] {
+    border-radius: 0;
+  }
+
+  .valet-results {
+
+    .ui-menu-item {
+      width: 90%;
+      box-shadow: none;
+      border-bottom: 1px solid $grey;
+      border-radius: 0;
+
+      &.ui-state-focus {
+        width: 100%;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    //prevent active flicker of first result while search
+    &.searching {
+      .ui-menu-item:first-child {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// left specific styling
+.valet.left {
+
+  .valet-inner {
+    float: left;
+  }
+}
+
+// right specific styling
+.valet.right {
+
+  .valet-inner {
+    float: right;
+  }
+}

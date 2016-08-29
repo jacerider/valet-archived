@@ -3,21 +3,22 @@
 //////////////////////////////////
 
 //Font(s)
-$font-family: 'Open Sans', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif !default;
+$font-family: Arial, sans-serif !default;
 $font-size: 15px; // it's all relative
-$font-size-inner: 1em !default;
+$font-size-inner: 1rem !default;
+$font-weight: 300;
 
 //Color Variables
-$bg-color: #f1f1f1;
 $primary-color: #0080d1;
 $disabled-color: #ddd;
-$grey-color: #c2c2c2;
-$white-color: #fafafa;
-$black-color: #0a0a0a;
+$grey: #c2c2c2;
+$white: #fafafa;
+$black: #0a0a0a;
+$bg-color: $white;
 
 //Spacing Variables
 $valet-padding: 1em;
 $valet-margin: 1em;
 
 //Design Styles
-$border-radius: 3px;
+$border-radius: 4px;

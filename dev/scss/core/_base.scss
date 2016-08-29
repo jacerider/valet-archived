@@ -1,90 +1,74 @@
 .valet {
+  @include valet-font;
   z-index: 9999;
-  font-size: $font-size;
   position: fixed;
   overflow: hidden;
   top: 0;
   left: 0;
   width: 0;
-  height: 100%;
   height: 100vh;
-  box-shadow: 0 0 0 rgba(0,0,0,0);
-  background-color: rgba($black-color, 0.33);
+  box-shadow: 0 0 0 rgba($black, 0);
+  background-color: rgba($black, 0.4);
 
   * {
     box-sizing: border-box;
   }
 
-  // when Valet is active
-  &.open {
-    width: 100%;
-
-    .valet-inner{
-      opacity: 1;
-      width: 100%;
-      box-shadow: 0 0 12px rgba(0,0,0,0.33);
-
-      @include medium-device-size{
-        width: 50%;
-      }
-
-      @include large-device-size{
-        width: 33%;
-      }
-
-      @include xlarge-device-size{
-        width: 25%;
-      }
-    }
-  }
-
-  // both panels
-  &.left,
-  &.right{
-
-    .valet-inner{
-      height: 100%;
-      height: 100vh;
-      background: darken($bg-color, 5%);
-    }
-  }
-
-  // left specific styling
-  &.left{
-
-    .valet-inner{
-      float: left;
-    }
-  }
-
-  // right specific styling
-  &.right{
-
-    .valet-inner{
-      float: right;
-    }
-  }
-
-  // overlay specific styling
-  &.overlay{
-
-    .valet-inner{
-      float: none;
-      margin: $valet-margin*4 auto;
-    }
-  }
-
-  .valet-inner{
+  .valet-inner {
     position: relative;
     background: transparent;
+    font-size: $font-size-inner;
     opacity: 0;
     width: 0;
     margin: 0;
     padding: 0;
     transition: opacity 300ms, width 200ms;
   }
+
+  // when Valet is active
+  &.open {
+    width: 100%;
+
+    .valet-inner {
+      opacity: 1;
+      width: 90%;
+      box-shadow: 0 2px 12px rgba($black, 0.4);
+
+      @include medium-device-size {
+        width: 50%;
+      }
+
+      @include large-device-size {
+        width: 40%;
+      }
+
+      @include xlarge-device-size {
+        width: 30%;
+      }
+    }
+  }
+
+  // overlay specific styling
+  &.overlay {
+
+    .valet-inner {
+      float: none;
+      margin: ($valet-margin * 5) auto;
+    }
+  }
 }
 
-body.valet-open > :not(#valet){
-  filter: blur(3px);
+//increases blur performance but affects non-valet wrappers
+body > :not(#valet) {
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0), translateZ(0);
+}
+
+//blur background when open
+.valet-open {
+
+  > :not(#valet) {
+    filter: blur(3px);
+  }
 }
