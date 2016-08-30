@@ -94,15 +94,15 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
     if (!is_array($data)) {
       return;
     }
-    $data += ['label' => '', 'value' => '', 'description' => '', 'command' => ''];
+    $data += ['label' => '', 'value' => '', 'description' => '', 'command' => '', 'icon' => ''];
     if (isset($results[$id]) || empty($data['label']) || empty($data['value'])) {
       return;
     }
-    if (!empty($data['command'])) {
-      $data['command'] = $data['command'] . ' ' . $data['label'];
+    if (!empty($data['label']) && is_string($data['label'])) {
+      $data['label'] = $this->t($data['label']);
     }
-    if (!empty($data['description'])) {
-      // $data['description'] = $this->t($data['description']);
+    if (!empty($data['description']) && is_string($data['description'])) {
+      $data['description'] = $this->t($data['description']);
     }
     $results[$id] = $data;
   }

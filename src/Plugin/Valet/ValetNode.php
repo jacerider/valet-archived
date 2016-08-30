@@ -80,7 +80,7 @@ class ValetNode extends ValetBase implements ContainerFactoryPluginInterface {
         'label' => $node->label(),
         'value' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(),
         'description' => 'View this content.',
-        'command' => ':node',
+        'command' => 'node',
       ]);
     }
     // Clear Valet cache with node operations.

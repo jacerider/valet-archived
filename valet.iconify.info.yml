@@ -1,0 +1,14 @@
+# Iconify icon definitions.
+# Plugin property $defaults are defined in IconifyInfoManager.
+valet.front:
+  text: valet:front
+  icon: fa-home
+valet.user:
+  text: valet:user
+  icon: fa-user
+valet.add:
+  text: valet:add
+  icon: fa-plus
+valet.type:
+  text: valet:type
+  icon: fa-cube

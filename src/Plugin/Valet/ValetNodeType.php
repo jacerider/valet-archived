@@ -95,7 +95,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
           'label' => $entity->label() . ': ' . $operation['title'],
           'value' => $operation['url']->toString(),
           'description' => $operation['title'],
-          'command' => ':type',
+          'command' => 'type',
         ]);
       }
     }

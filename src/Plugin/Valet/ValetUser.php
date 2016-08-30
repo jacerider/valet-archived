@@ -96,7 +96,7 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
           'label' => $user->getDisplayName(),
           'value' => '/user/' . $user->id(),
           'description' => 'View this user.',
-          'command' => ':user',
+          'command' => 'user',
         ]);
       }
       // Clear Valet cache with user operations.

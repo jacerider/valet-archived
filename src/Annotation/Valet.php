@@ -35,4 +35,12 @@ class Valet extends Plugin {
    */
   public $label;
 
+  /**
+   * An integer to determine the weight of this plugin relative to other
+   * plugins in the Valet UI.
+   *
+   * @var int optional
+   */
+  public $weight = NULL;
+
 }

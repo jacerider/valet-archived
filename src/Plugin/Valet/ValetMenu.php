@@ -106,7 +106,7 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
       'label' => 'Front Page',
       'value' => Url::fromRoute('<front>')->toString(),
       'description' => 'Go to front page',
-      'command' => ':front',
+      'command' => 'front',
     ]);
 
     foreach($enabled as $mid){

@@ -30,6 +30,19 @@ function valet_theme() {
   );
 }
 
+
+/**
+ * Implements hook_hook_info().
+ */
+function valet_hook_info() {
+  $hooks = array(
+    'valet_results_alter' => array(
+      'group' => 'valet',
+    ),
+  );
+  return $hooks;
+}
+
 /**
  * Prepares variables for administration toolbar templates.
  *

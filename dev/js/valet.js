@@ -117,9 +117,10 @@
       });
       // Add some magical style to our results
       this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
-        var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/')
+        var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/');
+        var icon = item.icon ? '<i class="' + item.icon + '"></i>' : '';
         return $('<li></li>')
-          .append('<a><strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>' )
+          .append('<a>' + icon + '<strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>' )
           .appendTo( ul );
       };
       // Limit the max results

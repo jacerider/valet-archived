@@ -81,7 +81,7 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
           'label' => $entity->label() . ': Add',
           'value' => Url::fromRoute('node.add', ['node_type' => $entity->id()])->toString(),
           'description' => 'Add a new ' . $entity->label() . '.',
-          'command' => ':add',
+          'command' => 'add',
         ]);
 
       }
