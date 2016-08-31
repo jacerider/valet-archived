@@ -1,5 +1,5 @@
 name: Valet
-description: A site navigation tool similar to Alfred for OSX.
+description: An Alfred-inspired navigation system for Drupal.
 package: JaceRider
 type: module
 version: 8.x-1.x-dev

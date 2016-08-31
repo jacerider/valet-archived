@@ -1,0 +1,14 @@
+{
+  "name": "drupal/valet",
+  "type": "drupal-module",
+  "description": "An Alfred-inspired navigation system for Drupal 8.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/valet",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/valet",
+    "source": "http://cgit.drupalcode.org/valet"
+  },
+  "require": { }
+}
