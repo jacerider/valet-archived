@@ -9,8 +9,8 @@
 
   // Remap the filter functions for autocomplete to recognise the
   // extra value "command". Borrowed from the wonderful coffee project.
-  var proto = $.ui.autocomplete.prototype,
-    initSource = proto._initSource;
+  var proto = $.ui.autocomplete.prototype;
+  var initSource = proto._initSource;
 
   function filter(array, term) {
     var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
@@ -77,7 +77,7 @@
       this.$results = $('#valet-results');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
-      this.$el.find('.valet-open').click(function(e){
+      this.$el.find('.valet-open').click(function (e) {
         e.preventDefault();
         self.toggle();
       });
@@ -85,7 +85,7 @@
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
-      $('.toolbar-icon-valet').click(function(e) {
+      $('.toolbar-icon-valet').click(function (e) {
         e.preventDefault();
         self.toggle();
       });
@@ -95,36 +95,37 @@
         minLength: 1,
         delay: 0,
         autoFocus: true,
-        search: function( event, ui ) {
+        search: function (event, ui) {
           self.$results.addClass('searching');
         },
-        response: function( event, ui ) {
+        response: function (event, ui) {
           clearTimeout(self.timeout);
-          self.timeout = setTimeout(function(){
+          self.timeout = setTimeout(function () {
             self.$results.removeClass('searching');
           }, 10);
         },
         // source: data,
-        focus: function( event, ui ) {
+        focus: function (event, ui) {
           return false;
         },
-        select: function( event, ui ) {
-          if(ui.item){
+        select: function (event, ui) {
+          if (ui.item) {
             self.go(ui.item.label, ui.item.value);
             return false;
           }
-        },
+        }
       });
       // Add some magical style to our results
-      this.$input.autocomplete('instance')._renderItem = function( ul, item ) {
-        var value = item.value.length > 85  ? item.value.substring(0,85)+'...' : (item.value.length > 0 ? item.value : '/');
+      this.$input.autocomplete('instance')._renderItem = function (ul, item) {
+        var value = item.value.length > 0 ? item.value : '/';
+        value = item.value.length > 85 ? item.value.substring(0, 85) + '...' : value;
         var icon = item.icon ? '<i class="' + item.icon + '"></i>' : '';
         return $('<li></li>')
-          .append('<a>' + icon + '<strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>' )
-          .appendTo( ul );
+          .append('<a>' + icon + '<strong>' + item.label + '</strong><em>' + item.description + '</em><small>' + value + '</small></a>')
+          .appendTo(ul);
       };
       // Limit the max results
-      this.$input.autocomplete('instance')._renderMenu = function( ul, items ) {
+      this.$input.autocomplete('instance')._renderMenu = function (ul, items) {
         var self = this;
         items = items.slice(0, 6);
         $.each(items, function (index, item) {
@@ -141,19 +142,19 @@
         this.model.set('isOpen', false);
         // trick to hide input text once the search overlay closes
         // todo: hardcoded times, should be done after transition ends
-        if( this.$input[0].value !== '' ) {
-          setTimeout(function() {
+        if (this.$input[0].value !== '') {
+          setTimeout(function () {
             self.$el.addClass('hideInput');
-            setTimeout(function() {
+            setTimeout(function () {
               self.$el.removeClass('hideInput');
               self.$input[0].value = '';
-            }, 300 );
+            }, 300);
           }, 500);
         }
         this.$input[0].blur();
         this.$window.off('click.valet-link');
       }
-      else{
+      else {
         this.$input.val('').attr('disabled', false);
         this.getData(this.autoComplete.bind(this));
         this.$el.addClass('open');
@@ -161,19 +162,18 @@
         this.model.set('isOpen', true);
         this.$input.focus();
         // delay binding of window click.
-        setTimeout(function() {
-          self.$window.on('click.valet-link', function(e){
-            if(!$(e.target).closest('.valet-inner').length){
+        setTimeout(function () {
+          self.$window.on('click.valet-link', function (e) {
+            if (!$(e.target).closest('.valet-inner').length) {
               self.toggle();
             }
           });
-        }, 300 );
+        }, 300);
       }
     },
 
-    autoComplete: function ( data ) {
-      var self = this;
-      this.$input.autocomplete('option', { source: data });
+    autoComplete: function (data) {
+      this.$input.autocomplete('option', {source: data});
     },
 
     go: function (label, value) {
@@ -184,24 +184,24 @@
         this.toggle();
         window.open(value);
       }
-      else{
-        this.$input.val( 'Loading...' ).attr('disabled', true);
+      else {
+        this.$input.val('Loading...').attr('disabled', true);
         window.location = value;
       }
     },
 
-    getData: function(cb) {
+    getData: function (cb) {
       var self = this;
       var data = localStorage ? JSON.parse(localStorage.getItem('valet')) : null;
-      if( data && drupalSettings.valet.cache && data.timestamp >= drupalSettings.valet.cache ){
+      if (data && drupalSettings.valet.cache && data.timestamp >= drupalSettings.valet.cache) {
         return cb(data.data);
       }
-      else{
-        self.$input.val( 'Loading data...' ).attr('disabled', true);
+      else {
+        self.$input.val('Loading data...').attr('disabled', true);
         $.ajax({
-          url: drupalSettings.path.baseUrl+'api/valet',
+          url: drupalSettings.path.baseUrl + 'api/valet',
           dataType: 'json',
-          success: function(data) {
+          success: function (data) {
             self.$input.val('').attr('disabled', false).focus();
             if (localStorage) {
               var time = Math.floor(new Date().getTime() / 1000);
@@ -218,8 +218,8 @@
       }
     },
 
-    keyDown: function(e) {
-      if(this.model.get('isOpen') && e.keyCode === 27){
+    keyDown: function (e) {
+      if (this.model.get('isOpen') && e.keyCode === 27) {
         this.toggle();
         return;
       }
@@ -231,7 +231,7 @@
       }
     },
 
-    keyUp: function(e) {
+    keyUp: function (e) {
       this.down[e.keyCode] = false;
     }
 

@@ -5,7 +5,7 @@
  */
 (function ($, Drupal, drupalSettings) {
 
-  "use strict";
+  'use strict';
 
   /**
    * Valet admin page bindings.
@@ -13,7 +13,7 @@
   Drupal.behaviors.valetAdmin = {
 
     attach: function (context) {
-      $('#edit-hotkey').bind('keyup', function(e){
+      $('#edit-hotkey').bind('keyup', function (e) {
         $(this).val(e.keyCode);
       });
     }
