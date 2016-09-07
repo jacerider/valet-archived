@@ -12,4 +12,3 @@ valet.valet_admin_form:
     _title: 'Valet'
   requirements:
     _permission: 'administer valet'
-

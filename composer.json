@@ -1,14 +1,20 @@
 {
-  "name": "drupal/valet",
+  "name": "jacerider/valet",
+  "description": "An Alfred-inspired navigation system for Drupal.",
   "type": "drupal-module",
-  "description": "An Alfred-inspired navigation system for Drupal 8.",
-  "keywords": ["Drupal"],
   "license": "GPL-2.0+",
-  "homepage": "https://www.drupal.org/project/valet",
-  "minimum-stability": "dev",
+  "homepage": "https://github.com/jacerider/valet",
+  "authors": [
+    {
+      "name": "Cyle Carlson (JaceRider)",
+      "email": "jacerider@gmail.com",
+      "role": "Maintainer"
+    }
+  ],
   "support": {
-    "issues": "https://www.drupal.org/project/issues/valet",
-    "source": "http://cgit.drupalcode.org/valet"
+    "issues": "https://github.com/jacerider/valet/issues",
+    "source": "https://github.com/jacerider/valet"
   },
+  "minimum-stability": "dev",
   "require": { }
 }

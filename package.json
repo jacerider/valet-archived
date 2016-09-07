@@ -1,20 +1,20 @@
 {
   "name": "valet",
   "version": "1.0.0",
-  "description": "A site navigation tool similar to Alfred for OSX.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jacerider/valet.git"
+  "description": "An Alfred-inspired navigation system for Drupal.",
+  "license": "GPL-2.0+",
+  "repository": "jacerider/valet",
+  "homepage": "https://github.com/jacerider/valet#readme",
+  "author": {
+    "name": "Cyle Carlson",
+    "email": "jacerider@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/jacerider/valet/issues"
   },
   "scripts": {
     "start": "gulp"
   },
-  "author": "JaceRider",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jacerider/valet/issues"
-  },
-  "homepage": "https://github.com/jacerider/valet#readme",
   "devDependencies": {
     "browser-sync": "^2.13.0",
     "fs": "0.0.2",
