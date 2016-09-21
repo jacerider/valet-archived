@@ -1,7 +1,7 @@
 valet:
   version: 8.x-1.x-dev
   js:
-    js/valet.js: {}
+    js/valet.js: { minified: true }
   css:
     component:
       css/valet.css: {}
@@ -15,7 +15,7 @@ valet:
 valet.admin:
   version: 8.x-1.x-dev
   js:
-    js/valet.admin.js: {}
+    js/valet.admin.js: { minified: true }
   dependencies:
     - core/jquery
     - core/drupal
