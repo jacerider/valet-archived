@@ -98,8 +98,9 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
           'command' => 'type',
         ]);
       }
+      $this->addCacheTags($entity->getCacheTags());
     }
     // Clear Valet cache with user operations.
-    $this->addCacheTags(array('node_type'));
+    $this->addCacheTags(array('config:node_type_list'));
   }
 }
