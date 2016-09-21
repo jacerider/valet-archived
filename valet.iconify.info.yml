@@ -12,3 +12,6 @@ valet.add:
 valet.type:
   text: valet:type
   icon: fa-cube
+valet.view:
+  text: valet:view
+  icon: fa-list
