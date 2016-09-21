@@ -148,18 +148,19 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
     if ($url->access()) {
 
       $urlString = $url->toString();
-      if($url->getRouteName() == 'devel.cache_clear'){
+      if (in_array($url->getRouteName(), ['devel.cache_clear', 'devel.run_cron'])){
         // @todo This is just an ugly workaround for Drupal 8's inability to
         // process URL CSRFs without a render array.
-        $urlBubbleable = $l->getUrlObject()->toString(TRUE);
+        $urlBubbleable = $url->toString(TRUE);
         $urlRender = array(
           '#markup' => $urlBubbleable->getGeneratedUrl(),
         );
         BubbleableMetadata::createFromRenderArray($urlRender)
           ->merge($urlBubbleable)->applyTo($urlRender);
         $urlString = \Drupal::service('renderer')->renderPlain($urlRender);
-        $urlString = str_replace('/api/valet', 'RETURN_URL', htmlspecialchars_decode($urlString));
       }
+      // Redirect token which is replaced via JS with actual url.
+      $urlString = str_replace('/api/valet', 'RETURN_URL', htmlspecialchars_decode($urlString));
 
       $this->addResult($url->getRouteName(), [
         'label' => $l->getTitle(),
