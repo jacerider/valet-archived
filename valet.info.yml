@@ -1,5 +1,6 @@
 name: Valet
-description: An Alfred-inspired navigation system for Drupal.
+description: 'An Alfred-inspired navigation system for Drupal.'
 package: JaceRider
 type: module
 core: 8.x
+configure: valet.valet_admin_form
