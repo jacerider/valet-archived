@@ -1,5 +1,13 @@
 .valet {
 
+  .toolbar-fixed &,
+  .toolbar-vertical & {
+
+    .valet-open {
+      display: none !important;
+    }
+  }
+
   // Close Valet link
   .valet-close {
     width: $font-size-inner * 4;
@@ -56,18 +64,29 @@
 
   // Open Valet link - Not sure if this is needed anymore since we integrate with default toolbar
   .valet-open {
-  //   position: absolute;
-  //   left: 0;
-  //   bottom: 0;
-  //   padding: $valet-padding;
-  //   color: $white;
-  //   background-color: $primary-color;
-  //   border-top-left-radius: $border-radius;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    text-align: center;
+    bottom: $valet-margin;
+    padding: $valet-padding;
+    color: $white;
+    background-color: $primary-color;
+    border-radius: $border-radius;
+    opacity: 1;
+    box-shadow: 0 2px 12px rgba($black, 0.4);
+    font-weight: bold;
+    font-size: $font-size-inner * 1.25;
+    transition: opacity 300ms, background-color 300ms;
     display: none;
 
-  //   @include small-device-size {
-  //     display: block;
-  //   }
+    @include small-device-size {
+      display: block;
+    }
+
+    &:hover {
+      background-color: lighten($primary-color, 10%);
+    }
   }
 
   &.open {
@@ -83,6 +102,10 @@
         right: -$valet-margin * 4;
         top: $valet-margin * 1.25;
       }
+    }
+
+    .valet-open {
+      opacity: 0;
     }
   }
 
