@@ -4,7 +4,7 @@
   position: fixed;
   // overflow: hidden;
   top: 0;
-  left: 0;
+  left: -1000px;
   width: 0;
   height: 100vh;
   box-shadow: 0 0 0 rgba($black, 0);
@@ -28,6 +28,7 @@
   // when Valet is active
   &.open {
     width: 100%;
+    left: 0;
 
     .valet-inner {
       opacity: 1;
@@ -63,6 +64,10 @@ body > :not(#valet) {
   backface-visibility: hidden;
   perspective: 1000;
   transform: translate3d(0, 0, 0), translateZ(0);
+
+  // @include small-device-size {
+  //   padding-bottom: $valet-margin * 3;
+  // }
 }
 
 //blur background when open

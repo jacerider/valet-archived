@@ -77,7 +77,7 @@
       this.$results = $('#valet-results');
       this.down = [];
       this.$el.find('.valet-close').click(this.toggle.bind(this));
-      this.$el.find('.valet-open').click(function (e) {
+      this.$el.find('.valet-open-link').click(function (e) {
         e.preventDefault();
         self.toggle();
       });
