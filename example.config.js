@@ -1,7 +1,6 @@
 module.exports = {
   compileScss: true,
   compileJs: true,
-  compressImages: true,
   purgeRenderCache: true,
 
   browserSync: {
