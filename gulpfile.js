@@ -144,6 +144,10 @@ gulp.task('imgmin', function () {
     .pipe(gulp.dest('./images'));
 });
 
+gulp.task('img', function(){
+  gulp.start(['svgmin','imgmin']);
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 // Browser Sync
 ////////////////////////////////////////////////////////////////////////////////
@@ -219,10 +223,6 @@ gulp.task('default', function(){
 
     if (config.compileJs) {
       gulp.watch(['./dev/js/*.js', './dev/js/**/*.js'], ['jsLint', 'js']);
-    }
-
-    if (config.compressImages) {
-      gulp.watch(['./dev/img/*', './dev/img/**/*'], ['svgmin','imgmin']);
     }
 
     if (config.purgeRenderCache) {
