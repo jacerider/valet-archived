@@ -1,6 +1,7 @@
 modifier: "16"
 hotkey: "32"
 position: "overlay"
+toolbar_disable: 0
 plugins:
   menu:
     enabled: 1

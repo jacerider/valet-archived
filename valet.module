@@ -3,7 +3,7 @@
 use Drupal\Core\Url;
 
 /**
- * Implements hook_page_buttom();
+ * Implements hook_page_bottom();
  *
  * Add valet markup to the bottom of the page automatically.
  */
@@ -16,6 +16,20 @@ function valet_page_bottom(array &$page_bottom) {
         'contexts' => ['user.permissions'],
       ],
     );
+  }
+}
+
+/**
+ * Implements hook_page_top().
+ *
+ * Add admin toolbar to the top of the page automatically.
+ */
+function valet_page_top(array &$page_top) {
+  if (\Drupal::currentUser()->id() == 1) {
+    $config = \Drupal::config('valet.admin');
+    if ($config->get('toolbar_disable')) {
+      unset($page_top['toolbar']);
+    }
   }
 }
 

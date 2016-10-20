@@ -72,6 +72,14 @@ class ValetAdminForm extends ConfigFormBase {
       '#default_value' => $config->get('position'),
     );
 
+    if (\Drupal::service('module_handler')->moduleExists('toolbar')) {
+      $form['toolbar_disable'] = array(
+        '#type' => 'checkbox',
+        '#title' => $this->t('Disable toolbar for user 1.'),
+        '#default_value' => $config->get('toolbar_disable'),
+      );
+    }
+
     $form['plugin_settings'] = array(
       '#type' => 'vertical_tabs',
     );
@@ -127,6 +135,7 @@ class ValetAdminForm extends ConfigFormBase {
       ->set('modifier', $form_state->getValue('modifier'))
       ->set('hotkey', $form_state->getValue('hotkey'))
       ->set('position', $form_state->getValue('position'))
+      ->set('toolbar_disable', $form_state->getValue('toolbar_disable'))
       ->set('plugins', $form_state->getValue('plugins'))
       ->save();
 
