@@ -145,7 +145,7 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
       return;
     }
     $url = $l->getUrlObject();
-    if ($url->access()) {
+    if ($url->isRouted() && $url->access()) {
 
       $urlString = $url->toString();
       if (in_array($url->getRouteName(), ['devel.cache_clear', 'devel.run_cron'])){
