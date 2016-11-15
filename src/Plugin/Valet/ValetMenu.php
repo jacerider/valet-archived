@@ -135,7 +135,7 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
         $link = $tree_element->link;
 
         $urlString = $link->getUrlObject()->toString();
-        if (in_array($link->getRouteName(), ['devel.cache_clear', 'devel.run_cron'])){
+        if (strpos($urlString, 'token=') !== FALSE) {
           // @todo This is just an ugly workaround for Drupal 8's inability to
           // process URL CSRFs without a render array.
           $urlBubbleable = $link->getUrlObject()->toString(TRUE);
