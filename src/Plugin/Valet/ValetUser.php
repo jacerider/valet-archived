@@ -84,7 +84,7 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
 
     $query = $this->userStorage->getQuery()
       ->condition('uid', 0, '>');
-    if(empty($allowed['authenticated'])){
+    if(!empty($allowed) && empty($allowed['authenticated'])){
       $query->condition('roles.target_id', $allowed, 'IN');
     }
     $uids = $query->execute();
