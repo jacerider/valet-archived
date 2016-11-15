@@ -14,7 +14,9 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\LocalTaskManagerInterface;
+use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 
 /**
@@ -30,11 +32,25 @@ use Drupal\Core\Render\BubbleableMetadata;
 class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
 
   /**
+   * The menu link tree service.
+   *
+   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
+   */
+  protected $menuLinkTree;
+
+  /**
    * The local task manager.
    *
    * @var \Drupal\Core\Menu\LocalTaskManagerInterface
    */
   protected $localTaskManager;
+
+  /**
+   * The access manager service.
+   *
+   * @var \Drupal\Core\Access\AccessManagerInterface
+   */
+  protected $accessManager;
 
   /**
    * Constructs a new ValetUser object.
@@ -48,9 +64,11 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
    * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
    *   The user storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LocalTaskManagerInterface $local_task_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MenuLinkTreeInterface $menu_link_tree, LocalTaskManagerInterface $local_task_manager, AccessManagerInterface $access_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->menuLinkTree = $menu_link_tree;
     $this->localTaskManager = $local_task_manager;
+    $this->accessManager = $access_manager;
   }
 
   /**
@@ -59,7 +77,9 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $container->get('plugin.manager.menu.local_task')
+      $container->get('menu.link_tree'),
+      $container->get('plugin.manager.menu.local_task'),
+      $container->get('access_manager')
     );
   }
 
@@ -100,7 +120,6 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function prepareResults() {
-    $enabled = array_filter($this->settings['menus']);
 
     $this->addResult('front', [
       'label' => 'Front Page',
@@ -109,106 +128,122 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
       'command' => 'front',
     ]);
 
-    foreach($enabled as $mid){
-      if ($mid === '0') {
-        continue;
-      }
+    foreach (array_filter($this->settings['menus']) as $menu_name) {
+      $tree = $this->getMenuTreeElements($menu_name);
 
-      $menu_tree = \Drupal::menuTree();
+      foreach ($tree as $tree_element) {
+        $link = $tree_element->link;
 
-      // Build the menu tree.
-      $menu_tree_parameters = new MenuTreeParameters();
-      $tree = $menu_tree->load($mid, $menu_tree_parameters);
+        $urlString = $link->getUrlObject()->toString();
+        if (in_array($link->getRouteName(), ['devel.cache_clear', 'devel.run_cron'])){
+          // @todo This is just an ugly workaround for Drupal 8's inability to
+          // process URL CSRFs without a render array.
+          $urlBubbleable = $link->getUrlObject()->toString(TRUE);
+          $urlRender = array(
+            '#markup' => $urlBubbleable->getGeneratedUrl(),
+          );
+          BubbleableMetadata::createFromRenderArray($urlRender)
+            ->merge($urlBubbleable)->applyTo($urlRender);
+          $urlString = \Drupal::service('renderer')->renderPlain($urlRender);
+        }
+        // Redirect token which is replaced via JS with actual url.
+        $urlString = str_replace('/api/valet', 'RETURN_URL', htmlspecialchars_decode($urlString));
 
-      $manipulators = array(
-        array('callable' => 'menu.default_tree_manipulators:checkAccess'),
-        array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
-      );
-      $tree = $menu_tree->transform($tree, $manipulators);
-
-      foreach ($tree as $key => $link) {
-        $this->getChildren($link);
-      }
-    }
-
-    // Clear Valet cache with route operations.
-    // @see \Drupal\Core\EventSubscriber\MenuRouterRebuildSubscriber
-    $this->addCacheTags(array('local_task'));
-  }
-
-  /**
-   * Helper function to traverse down through a menu structure.
-   */
-  protected function getChildren($link) {
-    $l = isset($link->link) ? $link->link : NULL;
-    if (!$l) {
-      return;
-    }
-    $url = $l->getUrlObject();
-    if ($url->isRouted() && $url->access()) {
-
-      $urlString = $url->toString();
-      if (in_array($url->getRouteName(), ['devel.cache_clear', 'devel.run_cron'])){
-        // @todo This is just an ugly workaround for Drupal 8's inability to
-        // process URL CSRFs without a render array.
-        $urlBubbleable = $url->toString(TRUE);
-        $urlRender = array(
-          '#markup' => $urlBubbleable->getGeneratedUrl(),
-        );
-        BubbleableMetadata::createFromRenderArray($urlRender)
-          ->merge($urlBubbleable)->applyTo($urlRender);
-        $urlString = \Drupal::service('renderer')->renderPlain($urlRender);
-      }
-      // Redirect token which is replaced via JS with actual url.
-      $urlString = str_replace('/api/valet', 'RETURN_URL', htmlspecialchars_decode($urlString));
-
-      $this->addResult($url->getRouteName(), [
-        'label' => $l->getTitle(),
-        'value' => $urlString,
-        'description' => $l->getDescription(),
-      ]);
-    }
-
-    if ($link->subtree) {
-      foreach ($link->subtree as $below_link) {
-        $this->getChildren($below_link);
-      }
-    }
-
-    $manager = \Drupal::service('plugin.manager.menu.local_task');
-    $tasks = $manager->getLocalTasksForRoute($l->getRouteName());
-    if ($tasks) {
-      foreach ($tasks as $key => $task) {
-        $this->getTasks($l, $task);
-      }
-    }
-  }
-
-  /**
-   * Helper function to traverse the local tasks.
-   */
-  protected function getTasks($link, $task) {
-    if (is_array($task)) {
-      foreach ($task as $key => $local_task) {
-        $this->getTasks($link, $local_task);
-      }
-    }
-    else {
-      $local_task = $task;
-    }
-
-    if (is_object($local_task)) {
-      $route_name = $local_task->getPluginDefinition()['route_name'];
-      $route_parameters = $local_task->getPluginDefinition()['route_parameters'];
-      $url = Url::fromRoute($route_name, $route_parameters);
-
-      if ($url->access()) {
-        $this->addResult($route_name, [
-          'label' => $link->getTitle() . ': ' . $local_task->getTitle(),
-          'value' => $url->toString(),
-          'description' => $local_task->getTitle(),
+        $this->addResult($link->getRouteName(), [
+          'label' => $link->getTitle(),
+          'value' => $urlString,
+          'description' => $link->getDescription(),
         ]);
+
+        $tasks = $this->getLocalTasksForRoute($link->getRouteName(), $link->getRouteParameters());
+        foreach ($tasks as $route_name => $task) {
+          $this->addResult($route_name, [
+            'label' => $link->getTitle() . ': ' . $task['title'],
+            'value' => $task['url']->toString(),
+            'description' => $task['title'],
+          ]);
+        }
       }
     }
+  }
+
+  /**
+   * Retrieves the menu tree elements for the given menu.
+   *
+   * Every element returned by this method is already access checked.
+   *
+   * @param string $menu_name
+   *   The menu name.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkTreeElement[]
+   *   A flatten array of menu link tree elements for the given menu.
+   */
+  protected function getMenuTreeElements($menu_name) {
+    $parameters = new MenuTreeParameters();
+    $tree = $this->menuLinkTree->load($menu_name, $parameters);
+
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkNodeAccess'],
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+      ['callable' => 'menu.default_tree_manipulators:flatten'],
+    ];
+    $tree = $this->menuLinkTree->transform($tree, $manipulators);
+
+    // Top-level inaccessible links are *not* removed; it is up
+    // to the code doing something with the tree to exclude inaccessible links.
+    // @see menu.default_tree_manipulators:checkAccess
+    foreach ($tree as $key => $element) {
+      if (!$element->access->isAllowed()) {
+        unset($tree[$key]);
+      }
+    }
+
+    return $tree;
+  }
+
+  /**
+   * Retrieve all the local tasks for a given route.
+   *
+   * Every element returned by this method is already access checked.
+   *
+   * @param string $route_name
+   *   The route name for which find the local tasks.
+   * @param array $route_parameters
+   *   The route parameters.
+   *
+   * @return array
+   *   A flatten array that contains the local tasks for the given route.
+   *   Each element in the array is keyed by the route name associated with
+   *   the local tasks and contains:
+   *     - title: the title of the local task.
+   *     - url: the url object for the local task.
+   *     - localized_options: the localized options for the local task.
+   */
+  protected function getLocalTasksForRoute($route_name, array $route_parameters) {
+    $links = array();
+
+    $tree = $this->localTaskManager->getLocalTasksForRoute($route_name);
+    $route_match = \Drupal::routeMatch();
+
+    foreach ($tree as $instances) {
+      /* @var $instances \Drupal\Core\Menu\LocalTaskInterface[] */
+      foreach ($instances as $child) {
+        $child_route_name = $child->getRouteName();
+        // Merges the parent's route parameter with the child ones since you
+        // calculate the local tasks outside of parent route context.
+        $child_route_parameters = $child->getRouteParameters($route_match) + $route_parameters;
+
+        if ($this->accessManager->checkNamedRoute($child_route_name, $child_route_parameters)) {
+          $links[$child_route_name] = [
+            'title' => $child->getTitle(),
+            'url' => Url::fromRoute($child_route_name, $child_route_parameters),
+            'localized_options' => $child->getOptions($route_match),
+          ];
+        }
+      }
+    }
+
+    return $links;
   }
 }
