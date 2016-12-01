@@ -86,11 +86,11 @@ class ValetController extends ControllerBase {
       }
 
       // Iconify integration
-      if (\Drupal::moduleHandler()->moduleExists('iconify')) {
+      if (\Drupal::moduleHandler()->moduleExists('micon') && function_exists('micon')) {
         foreach($data as &$item) {
           if (empty($item['icon'])) {
-            if ($iconify = iconify('valet:' . $item['command'])->getIcon()) {
-              $item['icon'] = $iconify;
+            if ($icon = micon('valet:' . $item['command'])->getIcon()) {
+              $item['icon'] = $icon->getSelector();
             }
           }
         }
