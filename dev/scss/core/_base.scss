@@ -74,6 +74,6 @@ body > :not(#valet) {
 .valet-open {
 
   > :not(#valet) {
-    filter: blur(3px);
+    // filter: blur(3px);
   }
 }
