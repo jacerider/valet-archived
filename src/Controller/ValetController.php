@@ -85,7 +85,7 @@ class ValetController extends ControllerBase {
         }
       }
 
-      // Iconify integration
+      // Micon integration
       if (\Drupal::moduleHandler()->moduleExists('micon') && function_exists('micon')) {
         foreach($data as &$item) {
           if (empty($item['icon'])) {
