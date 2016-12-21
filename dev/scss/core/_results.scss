@@ -16,7 +16,6 @@
   }
 
   .ui-menu-item {
-    margin: 0 auto;
     background: darken($bg-color, 5%);
     border-radius: 4px;
     padding: $valet-padding;
@@ -100,7 +99,7 @@
       opacity: 1 !important;
       //use important to override jquery+seven theme defaults
       background: $bg-color !important;
-      margin: -1px auto 0 !important;
+      margin: -1px auto $valet-margin;
 
       strong {
         color: $primary-color;
@@ -127,7 +126,7 @@
   .valet-results {
 
     .ui-menu-item {
-      margin: 0 auto $valet-margin;
+      margin: -1px auto $valet-margin;
 
       &:nth-child(4) {
         opacity: 0.8;
