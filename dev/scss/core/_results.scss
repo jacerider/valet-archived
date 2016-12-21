@@ -25,6 +25,7 @@
     display: block;
     overflow: hidden;
     box-shadow: 0 1px 2px rgba($black, 0.15);
+    transform: scale(1);
     transition: background 200ms, width 200ms;
 
     > a {
@@ -48,11 +49,11 @@
         background-color: darken($bg-color, 5%);
         overflow: hidden;
         white-space: nowrap;
-        max-height: 0;
+        height: 0;
         margin-top: 0;
         display: block;
         color: darken($grey, 30%);
-        transition: max-height 200ms, padding 200ms, margin 200ms;
+        transition: height 200ms, padding 200ms, margin 200ms;
       }
 
       > em {
@@ -70,7 +71,7 @@
       opacity: 1 !important;
       //use important to override jquery+seven theme defaults
       background: $bg-color !important;
-      margin: 0 auto $valet-margin;
+      margin: -1px auto $valet-margin;
       padding: $valet-padding;
 
       strong {
@@ -82,7 +83,7 @@
       }
 
       small {
-        max-height: $font-size-inner * 3;
+        height: $font-size-inner * 2.25;
         margin-top: $valet-padding * 0.75;
         padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
       }
@@ -99,7 +100,7 @@
       opacity: 1 !important;
       //use important to override jquery+seven theme defaults
       background: $bg-color !important;
-      margin: 0 auto !important;
+      margin: -1px auto 0 !important;
 
       strong {
         color: $primary-color;
@@ -110,7 +111,7 @@
       }
 
       small {
-        max-height: $font-size-inner * 3;
+        height: $font-size-inner * 2.25;
         margin-top: $valet-padding * 0.75;
         padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
       }
