@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\User.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -18,7 +13,6 @@ use Drupal\Core\Url;
 
 /**
  * Expose a User plugin.
- *
  *
  * @Valet(
  *   id = "node_add",
@@ -76,7 +70,7 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
    */
   public function prepareResults() {
     foreach ($this->entityManager->getStorage('node_type')->loadMultiple() as $entity) {
-      if ($this->entityManager->getAccessControlHandler('node')->createAccess($entity)) {
+      if ($this->entityManager->getAccessControlHandler('node')->createAccess($entity->id())) {
         $this->addResult('node.add.' . $entity->id(), [
           'label' => $entity->label() . ': Add',
           'value' => Url::fromRoute('node.add', ['node_type' => $entity->id()])->toString(),
@@ -88,4 +82,5 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
 
     }
   }
+
 }
