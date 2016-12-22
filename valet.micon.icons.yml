@@ -1,5 +1,5 @@
-# Iconify icon definitions.
-# Plugin property $defaults are defined in IconifyInfoManager.
+# Micon icon definitions.
+# Plugin property $defaults are defined in MiconDiscoveryManager.
 valet.front:
   text: valet:front
   icon: fa-home
