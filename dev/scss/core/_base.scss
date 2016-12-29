@@ -9,6 +9,7 @@
   height: 100vh;
   box-shadow: 0 0 0 rgba($black, 0);
   background-color: rgba($black, 0.6);
+  backdrop-filter: blur(4px) grayscale(100%);
 
   * {
     box-sizing: border-box;
@@ -56,24 +57,5 @@
       float: none;
       margin: ($valet-margin * 5) auto;
     }
-  }
-}
-
-//increases blur performance but affects non-valet wrappers
-body > :not(#valet) {
-  backface-visibility: hidden;
-  perspective: 1000;
-  transform: scale(1);
-
-  // @include small-device-size {
-  //   padding-bottom: $valet-margin * 3;
-  // }
-}
-
-//blur background when open
-.valet-open {
-
-  > :not(#valet) {
-    filter: blur(3px);
   }
 }
