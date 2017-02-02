@@ -11,13 +11,8 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\Core\Routing\RouteProvider;
-use Drupal\Core\Menu\MenuTreeParameters;
-use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Url;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Access\CsrfTokenGenerator;
 
 class ValetController extends ControllerBase {
@@ -77,11 +72,13 @@ class ValetController extends ControllerBase {
       foreach($config->get('plugins') as $id => $plugin){
         if(!empty($plugin['enabled'])){
           $instance = $manager->createInstance($id);
-          $plugin_results = $instance->getResults();
-          if(is_array($plugin_results)){
-            $data += $plugin_results;
+          if ($instance->access(\Drupal::currentUser())->isAllowed()) {
+            $plugin_results = $instance->getResults();
+            if(is_array($plugin_results)){
+              $data += $plugin_results;
+            }
+            $tags = Cache::mergeTags($tags, $instance->getCacheTags());
           }
-          $tags = Cache::mergeTags($tags, $instance->getCacheTags());
         }
       }
 

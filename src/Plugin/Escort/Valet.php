@@ -3,6 +3,8 @@
 namespace Drupal\valet\Plugin\Escort;
 
 use Drupal\escort\Plugin\Escort\EscortPluginBase;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Defines a link plugin.
@@ -30,6 +32,13 @@ class Valet extends EscortPluginBase {
       '#attributes' => ['class' => ['valet-trigger']],
       '#icon' => 'fa-search',
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function escortAccess(AccountInterface $account) {
+    return $account->hasPermission('access valet') ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
 }

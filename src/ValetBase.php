@@ -9,6 +9,8 @@ namespace Drupal\valet;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\RefinableCacheableDependencyTrait;
 
 /**
@@ -45,6 +47,13 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->config = \Drupal::config('valet.admin');
     $this->settings = $this->config->get('plugins.' . $this->getBaseId() . '.settings');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(AccountInterface $account) {
+    return AccessResult::allowed();
   }
 
   /**

@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Drupal\Core\Url;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Expose a User plugin.
@@ -73,6 +75,13 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
       $entity_manager,
       $list_builder
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(AccountInterface $account) {
+    return $account->hasPermission('administer views') ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
   /**
