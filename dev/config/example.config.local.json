@@ -1,0 +1,9 @@
+{
+  "browserSync": {
+    "enabled" : true,
+    "proxy" : "http://local.dev",
+    "port" : 3000,
+    "openAutomatically" : false,
+    "notify" : false
+  }
+}

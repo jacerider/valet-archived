@@ -1,0 +1,27 @@
+{
+  "name": "valet",
+  "description": "An Alfred-inspired navigation system for Drupal.",
+  "browserSync": {
+    "enabled" : true,
+    "proxy" : "http://localhost",
+    "port" : 3000,
+    "openAutomatically" : false,
+    "notify" : false
+  },
+  "css": {
+    "file" : "valet.scss",
+    "dest": "../css",
+    "src": [
+      "scss/**/*.scss"
+    ],
+    "includePaths": []
+  },
+  "js": {
+    "dest": "../js",
+    "src": [
+      "js/**/*.js"
+    ],
+    "vendorDest": "../js/vendor",
+    "vendorPaths": []
+  }
+}
