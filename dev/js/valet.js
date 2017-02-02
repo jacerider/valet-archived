@@ -85,7 +85,7 @@
       _.bindAll(this, 'keyDown');
       _.bindAll(this, 'keyUp');
       $(document).bind('keydown', this.keyDown).bind('keyup', this.keyUp);
-      $('.toolbar-icon-valet').click(function (e) {
+      $('.valet-trigger').click(function (e) {
         e.preventDefault();
         self.toggle();
       });
