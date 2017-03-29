@@ -25,13 +25,21 @@ class Valet extends EscortPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function build() {
+  public function escortPreview() {
     return [
       '#tag' => 'a',
       '#markup' => $this->t('Go to'),
-      '#attributes' => ['class' => ['valet-trigger']],
       '#icon' => 'fa-search',
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function escortBuild() {
+    $build = $this->escortPreview();
+    $build['#attributes']['class'][] = 'valet-trigger';
+    return $build;
   }
 
   /**
