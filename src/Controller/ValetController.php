@@ -71,6 +71,10 @@ class ValetController extends ControllerBase {
       $manager = \Drupal::service('plugin.manager.valet');
       foreach($config->get('plugins') as $id => $plugin){
         if(!empty($plugin['enabled'])){
+          $definition = $manager->getDefinition($id);
+          if (!$definition['class']::isApplicable()) {
+            continue;
+          }
           $instance = $manager->createInstance($id);
           if ($instance->access(\Drupal::currentUser())->isAllowed()) {
             $plugin_results = $instance->getResults();

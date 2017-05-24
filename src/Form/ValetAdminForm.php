@@ -93,6 +93,10 @@ class ValetAdminForm extends ConfigFormBase {
     $plugins = $manager->getDefinitions();
     uasort($plugins, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
     foreach($plugins as $id => $plugin){
+      $definition = $manager->getDefinition($id);
+      if (!$definition['class']::isApplicable()) {
+        continue;
+      }
       $instance = $manager->createInstance($id);
       $form['plugins'][$id] = array(
         '#type' => 'details',

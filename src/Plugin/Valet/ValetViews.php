@@ -112,4 +112,11 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
     // Clear Valet cache with user operations.
     $this->addCacheTags(array('config:view_list'));
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function isApplicable() {
+    return \Drupal::moduleHandler()->moduleExists('views');
+  }
 }

@@ -116,4 +116,12 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
     $results[$id] = $data;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function isApplicable() {
+    // By default, formatters are available for all fields.
+    return TRUE;
+  }
+
 }

@@ -47,4 +47,12 @@ interface ValetInterface extends PluginInspectionInterface {
    */
   public function getResults();
 
+  /**
+   * Returns if the plugin can be used.
+   *
+   * @return bool
+   *   TRUE if the formatter can be used, FALSE otherwise.
+   */
+  public static function isApplicable();
+
 }
