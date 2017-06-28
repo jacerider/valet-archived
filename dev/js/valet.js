@@ -39,10 +39,10 @@
 
     attach: function (context) {
       // Process the administrative toolbar.
-      $('body').once('valet').each(function () {
+      $('#valet', context).once('valet').each(function () {
         var model = new Drupal.valet.models.ValetModel();
         new Drupal.valet.views.ValetView({
-          el: $(context).find('#valet'),
+          el: $(this),
           model: model
         });
       });
