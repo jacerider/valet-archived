@@ -4,6 +4,10 @@
 .valet-results {
   position: relative;
 
+  &.valet-mouse-disabled {
+    pointer-events: none;
+  }
+
   .ui-autocomplete {
     width: 100% !important;
     margin: $valet-margin 0;

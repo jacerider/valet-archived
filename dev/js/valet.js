@@ -96,6 +96,7 @@
         delay: 0,
         autoFocus: true,
         search: function (event, ui) {
+          self.disableMouse();
           self.$results.addClass('searching');
         },
         response: function (event, ui) {
@@ -137,6 +138,7 @@
     toggle: function () {
       var self = this;
       if (this.model.get('isOpen')) {
+        this.enableMouse();
         this.$el.removeClass('open');
         this.$body.removeClass('valet-open');
         this.model.set('isOpen', false);
@@ -152,10 +154,10 @@
           }, 500);
         }
         this.$input[0].blur();
-        this.$window.off('click.valet-link');
+        this.$window.off('click.valet');
       }
       else {
-        this.$input.val('').attr('disabled', false);
+        this.disableMouse();
         this.getData(this.autoComplete.bind(this));
         this.$el.addClass('open');
         this.$body.addClass('valet-open');
@@ -163,7 +165,7 @@
         this.$input.focus();
         // delay binding of window click.
         setTimeout(function () {
-          self.$window.on('click.valet-link', function (e) {
+          self.$window.on('click.valet', function (e) {
             if (!$(e.target).closest('.valet-inner').length) {
               self.toggle();
             }
@@ -233,6 +235,19 @@
 
     keyUp: function (e) {
       this.down[e.keyCode] = false;
+    },
+
+    enableMouse: function () {
+      this.$results.removeClass('valet-mouse-disabled');
+      this.$window.off('mousemove.valet');
+    },
+
+    disableMouse: function () {
+      var self = this;
+      this.$results.addClass('valet-mouse-disabled');
+      this.$window.on('mousemove.valet', function () {
+        self.enableMouse();
+      });
     }
 
   });
