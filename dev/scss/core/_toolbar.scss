@@ -1,6 +1,9 @@
-.toolbar .toolbar-bar .toolbar-icon-valet::before,
-.toolbar .toolbar-bar .toolbar-icon-valet.active::before {
-  opacity: 0.8;
-  background-image: url('../images/magnifier.svg');
-  background-size: ($font-size-inner * 1.25) ($font-size-inner * 1.25) !important;
+.toolbar .toolbar-bar .toolbar-icon-valet,
+.toolbar .toolbar-bar .toolbar-icon-valet.active {
+
+  &::before {
+    opacity: 0.8;
+    background-image: url('../images/magnifier.svg');
+    background-size: ($font-size-inner * 1.25) ($font-size-inner * 1.25) !important;
+  }
 }

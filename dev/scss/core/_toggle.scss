@@ -70,7 +70,7 @@
     color: $white;
     background-color: $primary-color;
     opacity: 1;
-    box-shadow: 0 2px 12px rgba($black, 0.4);
+    box-shadow: 0 2px 12px transparentize($black, 0.6);
     border-radius: $border-radius 0 0;
     font-weight: bold;
     font-size: $font-size-inner / 1.5;

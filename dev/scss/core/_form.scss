@@ -13,7 +13,7 @@
     // transform: translate3d(0, 3em, 0);
   }
 
-  .valet-input[type=search] {
+  [type=search] {
     @include valet-font;
     font-size: $font-size-inner * 3;
     line-height: $font-size-inner * 4;
@@ -46,8 +46,8 @@
     }
 
     // remove cross in IE
-    &::-ms-clear {
-      display: none;
-    }
+    // &::-ms-clear {
+    //   display: none;
+    // }
   }
 }

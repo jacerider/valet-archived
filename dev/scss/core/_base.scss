@@ -7,8 +7,8 @@
   left: -1000px;
   width: 0;
   height: 100vh;
-  box-shadow: 0 0 0 rgba($black, 0);
-  background-color: rgba($black, 0.6);
+  box-shadow: 0 0 0 transparentize($black, 1);
+  background-color: transparentize($black, 0.4);
   backdrop-filter: blur(4px) grayscale(100%);
 
   * {
@@ -34,7 +34,7 @@
     .valet-inner {
       opacity: 1;
       width: 90%;
-      box-shadow: 0 2px 12px rgba($black, 0.4);
+      box-shadow: 0 2px 12px transparentize($black, 0.6);
 
       @include medium-device-size {
         width: 50%;
