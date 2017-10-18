@@ -107,6 +107,8 @@
         },
         // source: data,
         focus: function (event, ui) {
+          $('.ui-state-focus', event.currentTarget).removeClass('ui-state-focus');
+          $('.ui-state-active', event.currentTarget).closest('li').addClass('ui-state-focus');
           return false;
         },
         select: function (event, ui) {

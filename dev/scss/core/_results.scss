@@ -97,27 +97,30 @@
   //prevent active flicker of first result while search
   &.searching {
 
-    li:first-child {
-      border: 0;
-      box-shadow: 0 2px 5px transparentize($black, 0.6);
-      width: 100%;
-      opacity: 1 !important;
-      //use important to override jquery+seven theme defaults
-      background: $bg-color !important;
-      margin: -1px auto $valet-margin;
+    li {
 
-      strong {
-        color: $primary-color;
-      }
+      &:first-child {
+        border: 0;
+        box-shadow: 0 2px 5px transparentize($black, 0.6);
+        width: 100%;
+        opacity: 1 !important;
+        //use important to override jquery+seven theme defaults
+        background: $bg-color !important;
+        margin: -1px auto $valet-margin;
 
-      em {
-        color: darken($grey, 25%);
-      }
+        strong {
+          color: $primary-color;
+        }
 
-      small {
-        height: $font-size-inner * 2.25;
-        margin-top: $valet-padding * 0.75;
-        padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
+        em {
+          color: darken($grey, 25%);
+        }
+
+        small {
+          height: $font-size-inner * 2.25;
+          margin-top: $valet-padding * 0.75;
+          padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
+        }
       }
     }
   }

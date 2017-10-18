@@ -10,6 +10,11 @@
 
   // Close Valet link
   .valet-close {
+
+    @include medium-device-size {
+      right: 0;
+    }
+
     width: $font-size-inner * 4;
     height: $font-size-inner * 4;
     position: absolute;
@@ -24,10 +29,6 @@
     transition-delay: 0;
     z-index: 1;
     top: $valet-margin * 1.25;
-
-    @include medium-device-size {
-      right: 0;
-    }
 
     &:hover {
 
@@ -64,6 +65,11 @@
 
   // Open Valet link - Not sure if this is needed anymore since we integrate with default toolbar
   .valet-open-link {
+
+    @include small-device-size {
+      display: block;
+    }
+
     position: fixed;
     right: 0;
     bottom: 0;
@@ -77,10 +83,6 @@
     text-transform: uppercase;
     transition: opacity 300ms, background-color 300ms;
     display: none;
-
-    @include small-device-size {
-      display: block;
-    }
 
     span {
       display: none;
@@ -107,16 +109,17 @@
   &.open {
 
     .valet-close {
-      opacity: 1;
-      pointer-events: auto;
-      right: 0;
-      transition-delay: 200ms;
-      top: -$valet-margin * 4.5;
 
       @include medium-device-size {
         right: -$valet-margin * 4;
         top: $valet-margin * 1.25;
       }
+
+      opacity: 1;
+      pointer-events: auto;
+      right: 0;
+      transition-delay: 200ms;
+      top: -$valet-margin * 4.5;
     }
 
     .valet-open-link {
@@ -128,7 +131,6 @@
   &.overlay {
 
     .valet-close {
-      border-radius: $border-radius;
 
       @include medium-device-size {
         border-bottom-left-radius: 0;
@@ -136,6 +138,8 @@
         border-bottom-right-radius: $border-radius;
         border-top-right-radius: $border-radius;
       }
+
+      border-radius: $border-radius;
     }
   }
 

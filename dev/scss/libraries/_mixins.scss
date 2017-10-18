@@ -33,8 +33,7 @@
   font-size: $font-size;
   font-family: $font-family;
   font-weight: $font-weight;
-  font-smoothing: always;
   line-height: $font-size-inner;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; // sass-lint:disable-line no-vendor-prefixes
+  -moz-osx-font-smoothing: grayscale; // sass-lint:disable-line no-vendor-prefixes
 }

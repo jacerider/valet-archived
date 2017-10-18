@@ -32,9 +32,6 @@
     left: 0;
 
     .valet-inner {
-      opacity: 1;
-      width: 90%;
-      box-shadow: 0 2px 12px transparentize($black, 0.6);
 
       @include medium-device-size {
         width: 50%;
@@ -47,6 +44,10 @@
       @include xlarge-device-size {
         width: 30%;
       }
+
+      opacity: 1;
+      width: 90%;
+      box-shadow: 0 2px 12px transparentize($black, 0.6);
     }
   }
 
