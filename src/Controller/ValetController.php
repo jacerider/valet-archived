@@ -109,7 +109,8 @@ class ValetController extends ControllerBase {
             }
           }
           if (empty($item['icon']) && !empty($item['command'])) {
-            if ($icon = exo_icon('valet:command:' . $item['command'])->match([
+            if ($icon = exo_icon($item['command'])->match([
+              'valet_command',
               'valet',
               'admin',
               'local_task',
@@ -123,7 +124,7 @@ class ValetController extends ControllerBase {
       // Append prefix and titles to commands as needed.
       foreach ($data as &$item) {
         if (!empty($item['command'])) {
-          $item['command'] = ':' . $item['command'] . ' ' . $item['label'];
+          $item['command'] = ':' . $item['command'];
         }
       }
 

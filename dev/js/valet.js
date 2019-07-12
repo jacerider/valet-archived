@@ -13,9 +13,21 @@
   var initSource = proto._initSource;
 
   function filter(array, term) {
-    var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
+    var matcher;
+    if (term.charAt(0) === ':') {
+      var command = term.match(/^:[a-z]+/);
+      if (command) {
+        term = term.replace(/^:[a-z]+ /, '');
+        command = command[0];
+        matcher = new RegExp($.ui.autocomplete.escapeRegex(command), 'i');
+        array = $.grep(array, function (value) {
+          return matcher.test(value.command);
+        });
+      }
+    }
+    matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
     return $.grep(array, function (value) {
-      return matcher.test(value.command) || matcher.test(value.label) || matcher.test(value.value) || matcher.test(value.tags);
+      return matcher.test(value.label) || matcher.test(value.value) || matcher.test(value.tags);
     });
   }
 

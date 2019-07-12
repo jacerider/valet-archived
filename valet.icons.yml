@@ -4,6 +4,18 @@ valet.front:
   icon: regular-home
   prefix: valet
 valet.command.view:
-  text: valet:command:view
+  text: view
   icon: regular-list-alt
+  prefix: valet_command
+valet.manage_fields:
+  regex: manage fields$
+  icon: regular-shield
+  prefix: valet
+valet.manage_form_display:
+  regex: manage form display$
+  icon: regular-shield-alt
+  prefix: valet
+valet.manage_display:
+  regex: manage display$
+  icon: regular-shield-check
   prefix: valet

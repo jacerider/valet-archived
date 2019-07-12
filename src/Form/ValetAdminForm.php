@@ -38,7 +38,11 @@ class ValetAdminForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Hotkey Modifier'),
       '#required' => TRUE,
-      '#options' => [18 => $this->t('Alt'), 17 => $this->t('Ctrl'), 16 => $this->t('Shift')],
+      '#options' => [
+        18 => $this->t('Alt'),
+        17 => $this->t('Ctrl'),
+        16 => $this->t('Shift'),
+      ],
       '#default_value' => $config->get('modifier'),
     ];
     $form['hotkey'] = [
@@ -116,13 +120,6 @@ class ValetAdminForm extends ConfigFormBase {
     }
 
     return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
   }
 
   /**

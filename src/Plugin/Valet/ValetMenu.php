@@ -55,8 +55,12 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
-   *   The user storage.
+   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
+   *   Menu link tree.
+   * @param \Drupal\Core\Menu\LocalTaskManagerInterface $local_task_manager
+   *   Local task manager.
+   * @param \Drupal\Core\Access\AccessManagerInterface $access_manager
+   *   Access manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MenuLinkTreeInterface $menu_link_tree, LocalTaskManagerInterface $local_task_manager, AccessManagerInterface $access_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -151,7 +155,6 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
           'label' => $link->getTitle(),
           'value' => $urlString,
           'description' => $link->getDescription(),
-          'command' => $link->getProvider(),
           'tags' => $tags,
         ]);
 
@@ -161,7 +164,6 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
             'label' => $link->getTitle() . ': ' . $task['title'],
             'value' => $task['url']->toString(),
             'description' => isset($task['description']) ? $task['description'] : $task['title'],
-            'command' => $link->getProvider(),
             'tags' => $tags,
           ]);
         }
