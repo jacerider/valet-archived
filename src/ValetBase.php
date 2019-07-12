@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\valet\Plugin\ValetBase.
- */
-
 namespace Drupal\valet;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -24,7 +19,7 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
    *
    * @var array
    */
-  protected $config = array();
+  protected $config = [];
 
   /**
    * The plugin settings.
@@ -67,14 +62,13 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    return array();
+    return [];
   }
 
   /**
-   * Build out all results. Utilize addResult() to add an individual item to
-   * the results output.
+   * Build out all results.
    *
-   * @return none
+   * Utilize addResult() to add an individual item to the results output.
    */
   protected function prepareResults() {
     // Utilize addResult() to build up a list of results.
@@ -98,20 +92,30 @@ abstract class ValetBase extends PluginBase implements ValetInterface {
    *   An array of data that must contain at minium
    *   ('label' => 'Administration', 'value' => '/admin').
    */
-  protected function addResult($id, $data) {
+  protected function addResult($id, array $data) {
     $results = &drupal_static(__FUNCTION__);
     if (!is_array($data)) {
       return;
     }
-    $data += ['label' => '', 'value' => '', 'description' => '', 'command' => '', 'icon' => ''];
+    $data += [
+      'label' => '',
+      'value' => '',
+      'description' => '',
+      'command' => '',
+      'icon' => '',
+      'tags' => [],
+    ];
     if (isset($results[$id]) || empty($data['label']) || empty($data['value'])) {
       return;
     }
     if (!empty($data['label']) && is_string($data['label'])) {
-      $data['label'] = $this->t($data['label']);
+      $data['label'] = $data['label'];
     }
     if (!empty($data['description']) && is_string($data['description'])) {
-      $data['description'] = $this->t($data['description']);
+      $data['description'] = $data['description'];
+    }
+    if (is_array($data['tags'])) {
+      $data['tags'] = implode(' ', array_unique($data['tags']));
     }
     $results[$id] = $data;
   }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\Menu.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\valet\ValetBase;
@@ -21,7 +16,6 @@ use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Expose a Menu plugin.
- *
  *
  * @Valet(
  *   id = "menu",
@@ -88,13 +82,13 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    if(\Drupal::moduleHandler()->moduleExists('menu_ui')){
-      $form['menus'] = array(
+    if (\Drupal::moduleHandler()->moduleExists('menu_ui')) {
+      $form['menus'] = [
         '#type' => 'checkboxes',
         '#title' => t('Available menus'),
         '#options' => $this->getMenuLabels(),
         '#default_value' => $this->settings['menus'],
-      );
+      ];
     }
 
     return $form;
@@ -139,20 +133,26 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
           // @todo This is just an ugly workaround for Drupal 8's inability to
           // process URL CSRFs without a render array.
           $urlBubbleable = $link->getUrlObject()->toString(TRUE);
-          $urlRender = array(
+          $urlRender = [
             '#markup' => $urlBubbleable->getGeneratedUrl(),
-          );
+          ];
           BubbleableMetadata::createFromRenderArray($urlRender)
             ->merge($urlBubbleable)->applyTo($urlRender);
           $urlString = \Drupal::service('renderer')->renderPlain($urlRender);
         }
         // Redirect token which is replaced via JS with actual url.
         $urlString = str_replace('/api/valet', 'RETURN_URL', htmlspecialchars_decode($urlString));
+        $tags = [
+          $link->getProvider(),
+          str_replace('_', ' ', $link->getProvider()),
+        ];
 
         $this->addResult($link->getRouteName(), [
           'label' => $link->getTitle(),
           'value' => $urlString,
           'description' => $link->getDescription(),
+          'command' => $link->getProvider(),
+          'tags' => $tags,
         ]);
 
         $tasks = $this->getLocalTasksForRoute($link->getRouteName(), $link->getRouteParameters());
@@ -160,7 +160,9 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
           $this->addResult($route_name, [
             'label' => $link->getTitle() . ': ' . $task['title'],
             'value' => $task['url']->toString(),
-            'description' => $task['title'],
+            'description' => isset($task['description']) ? $task['description'] : $task['title'],
+            'command' => $link->getProvider(),
+            'tags' => $tags,
           ]);
         }
       }
@@ -221,7 +223,7 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
    *     - localized_options: the localized options for the local task.
    */
   protected function getLocalTasksForRoute($route_name, array $route_parameters) {
-    $links = array();
+    $links = [];
 
     $tree = $this->localTaskManager->getLocalTasksForRoute($route_name);
     $route_match = \Drupal::routeMatch();
@@ -246,4 +248,5 @@ class ValetMenu extends ValetBase implements ContainerFactoryPluginInterface {
 
     return $links;
   }
+
 }

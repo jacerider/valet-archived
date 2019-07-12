@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\valet\Plugin\ValetInterface.
- */
-
 namespace Drupal\valet;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;

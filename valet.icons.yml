@@ -1,0 +1,9 @@
+# eXo Icon icon definitions.
+valet.front:
+  text: front page
+  icon: regular-home
+  prefix: valet
+valet.command.view:
+  text: valet:command:view
+  icon: regular-list-alt
+  prefix: valet

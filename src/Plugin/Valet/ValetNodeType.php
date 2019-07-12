@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\User.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -14,12 +9,10 @@ use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Drupal\Core\Url;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 
 /**
  * Expose a User plugin.
- *
  *
  * @Valet(
  *   id = "node_type",
@@ -89,7 +82,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    */
   public function prepareResults() {
     foreach ($this->entityManager->getStorage('node_type')->loadMultiple() as $entity) {
-      foreach($this->listBuilder->getOperations($entity) as $id => $operation) {
+      foreach ($this->listBuilder->getOperations($entity) as $id => $operation) {
         $id = 'node_type.' . $entity->id() . '.' . $id;
         $this->addResult($id, [
           'label' => $entity->label() . ': ' . $operation['title'],
@@ -101,6 +94,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
       $this->addCacheTags($entity->getCacheTags());
     }
     // Clear Valet cache with user operations.
-    $this->addCacheTags(array('config:node_type_list'));
+    $this->addCacheTags(['config:node_type_list']);
   }
+
 }

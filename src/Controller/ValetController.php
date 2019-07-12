@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Controller\ValetController.
- */
-
 namespace Drupal\valet\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
@@ -15,6 +10,9 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Access\CsrfTokenGenerator;
 
+/**
+ * Instance of ValetController.
+ */
 class ValetController extends ControllerBase {
 
   /**
@@ -52,25 +50,26 @@ class ValetController extends ControllerBase {
   /**
    * Return the data for Valet consumption.
    *
-   * @return json
+   * @return Symfony\Component\HttpFoundation\JsonResponse
+   *   A json object.
    */
   public function data() {
     $cid = 'valet:' . $this->csrfToken->get('/api/valet');
-    $data = array();
+    $data = [];
     if ($cache = \Drupal::cache()->get($cid)) {
       $data = $cache->data;
     }
     else {
-      $data = array();
-      $tags = array(
+      $data = [];
+      $tags = [
         'valet',
         'config:valet.admin',
         'config:core.extension',
-      );
+      ];
       $config = \Drupal::config('valet.admin');
       $manager = \Drupal::service('plugin.manager.valet');
-      foreach($config->get('plugins') as $id => $plugin){
-        if(!empty($plugin['enabled'])){
+      foreach ($config->get('plugins') as $id => $plugin) {
+        if (!empty($plugin['enabled'])) {
           $definition = $manager->getDefinition($id);
           if (!$definition['class']::isApplicable()) {
             continue;
@@ -78,7 +77,7 @@ class ValetController extends ControllerBase {
           $instance = $manager->createInstance($id);
           if ($instance->access(\Drupal::currentUser())->isAllowed()) {
             $plugin_results = $instance->getResults();
-            if(is_array($plugin_results)){
+            if (is_array($plugin_results)) {
               $data += $plugin_results;
             }
             $tags = Cache::mergeTags($tags, $instance->getCacheTags());
@@ -86,9 +85,9 @@ class ValetController extends ControllerBase {
         }
       }
 
-      // Micon integration
+      // Micon integration.
       if (\Drupal::moduleHandler()->moduleExists('micon') && function_exists('micon')) {
-        foreach($data as &$item) {
+        foreach ($data as &$item) {
           if (empty($item['icon'])) {
             if ($icon = micon('valet:' . $item['command'])->getIcon()) {
               $item['icon'] = $icon->getSelector();
@@ -97,8 +96,32 @@ class ValetController extends ControllerBase {
         }
       }
 
+      // eXo Icon integration.
+      if (\Drupal::moduleHandler()->moduleExists('exo_icon')) {
+        foreach ($data as &$item) {
+          if (empty($item['icon'])) {
+            if ($icon = exo_icon($item['label'])->match([
+              'valet',
+              'admin',
+              'local_task',
+            ])->getIcon()) {
+              $item['icon'] = $icon->getSelector();
+            }
+          }
+          if (empty($item['icon']) && !empty($item['command'])) {
+            if ($icon = exo_icon('valet:command:' . $item['command'])->match([
+              'valet',
+              'admin',
+              'local_task',
+            ])->getIcon()) {
+              $item['icon'] = $icon->getSelector();
+            }
+          }
+        }
+      }
+
       // Append prefix and titles to commands as needed.
-      foreach($data as &$item) {
+      foreach ($data as &$item) {
         if (!empty($item['command'])) {
           $item['command'] = ':' . $item['command'] . ' ' . $item['label'];
         }
@@ -107,15 +130,16 @@ class ValetController extends ControllerBase {
       // Invoke alter hook.
       $this->moduleHandler->alter('valet_results', $data);
 
-      // Clean up array keys
+      // Clean up array keys.
       $data = array_values($data);
 
       // Cache for 1 day.
-      $cache_time = time() + (60*60*24);
+      $cache_time = time() + (60 * 60 * 24);
       \Drupal::cache()->set($cid, $data, $cache_time, $tags);
       // Cache time of rebuild.
       \Drupal::cache()->set($cid . ':timestamp', time(), $cache_time, $tags);
     }
     return new JsonResponse($data);
   }
+
 }

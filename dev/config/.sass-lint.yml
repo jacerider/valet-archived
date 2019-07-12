@@ -28,7 +28,7 @@ rules:
     - convention: '([a-z0-9]+-?)+'
 
   clean-import-paths:
-    - 1
+    - 0
     - filename-extension: false
       leading-underscore: false
 
@@ -84,7 +84,7 @@ rules:
 
   nesting-depth:
     - 1
-    - max-depth: 4
+    - max-depth: 3
 
   no-color-keywords: 1
 

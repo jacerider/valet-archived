@@ -15,7 +15,7 @@
   function filter(array, term) {
     var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
     return $.grep(array, function (value) {
-      return matcher.test(value.command) || matcher.test(value.label) || matcher.test(value.value);
+      return matcher.test(value.command) || matcher.test(value.label) || matcher.test(value.value) || matcher.test(value.tags);
     });
   }
 
@@ -164,7 +164,7 @@
         this.$el.addClass('open');
         this.$body.addClass('valet-open');
         this.model.set('isOpen', true);
-        this.$input.focus();
+        this.$input.val('').focus();
         // delay binding of window click.
         setTimeout(function () {
           self.$window.on('click.valet', function (e) {

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\Node.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -16,7 +11,6 @@ use Drupal\Core\Url;
 
 /**
  * Expose a Node plugin.
- *
  *
  * @Valet(
  *   id = "node",
@@ -75,7 +69,7 @@ class ValetNode extends ValetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function prepareResults() {
-    foreach($this->nodeStorage->loadMultiple() as $node){
+    foreach ($this->nodeStorage->loadMultiple() as $node) {
       $this->addResult('node.' . $node->id(), [
         'label' => $node->label(),
         'value' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(),
@@ -86,4 +80,5 @@ class ValetNode extends ValetBase implements ContainerFactoryPluginInterface {
     // Clear Valet cache with node operations.
     $this->addCacheTags(['node_list']);
   }
+
 }

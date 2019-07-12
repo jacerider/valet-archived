@@ -1,27 +1,18 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\User.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
-
 use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Drupal\Core\Url;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
  * Expose a User plugin.
- *
  *
  * @Valet(
  *   id = "views",
@@ -56,6 +47,8 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityManager $entity_manager
    *   The user storage.
+   * @param \Drupal\Core\Config\Entity\ConfigEntityListBuilder $list_builder
+   *   The list builder.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManager $entity_manager, ConfigEntityListBuilder $list_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -98,7 +91,7 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
    */
   public function prepareResults() {
     foreach ($this->entityManager->getStorage('view')->loadMultiple() as $entity) {
-      foreach($this->listBuilder->getOperations($entity) as $id => $operation) {
+      foreach ($this->listBuilder->getOperations($entity) as $id => $operation) {
         $id = 'view.' . $entity->id() . '.' . $id;
         $this->addResult($id, [
           'label' => $entity->label() . ': ' . $operation['title'],
@@ -110,7 +103,7 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
       $this->addCacheTags($entity->getCacheTags());
     }
     // Clear Valet cache with user operations.
-    $this->addCacheTags(array('config:view_list'));
+    $this->addCacheTags(['config:view_list']);
   }
 
   /**
@@ -119,4 +112,5 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
   public static function isApplicable() {
     return \Drupal::moduleHandler()->moduleExists('views');
   }
+
 }

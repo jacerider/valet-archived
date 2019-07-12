@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\valet\Form\ValetAdminForm.
- */
-
 namespace Drupal\valet\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
@@ -22,7 +17,7 @@ class ValetAdminForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'valet.admin'
+      'valet.admin',
     ];
   }
 
@@ -39,83 +34,83 @@ class ValetAdminForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('valet.admin');
 
-    $form['modifier'] = array(
+    $form['modifier'] = [
       '#type' => 'select',
       '#title' => $this->t('Hotkey Modifier'),
       '#required' => TRUE,
-      '#options' => array(18 => $this->t('Alt'), 17 => $this->t('Ctrl'), 16 => $this->t('Shift')),
+      '#options' => [18 => $this->t('Alt'), 17 => $this->t('Ctrl'), 16 => $this->t('Shift')],
       '#default_value' => $config->get('modifier'),
-    );
-    $form['hotkey'] = array(
+    ];
+    $form['hotkey'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Hotkey'),
       '#required' => TRUE,
       '#description' => $this->t('The value entered in this field will automatically be translated into the javascript keycode used to trigger Valet.'),
       '#maxlength' => 32,
       '#default_value' => $config->get('hotkey'),
-      '#attached' => array(
-        'library' => array(
+      '#attached' => [
+        'library' => [
           'valet/valet.admin',
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
 
-    $form['position'] = array(
+    $form['position'] = [
       '#type' => 'select',
       '#title' => $this->t('Position'),
       '#required' => TRUE,
-      '#options' => array(
+      '#options' => [
         'left' => $this->t('Left'),
         'right' => $this->t('Right'),
         'overlay' => $this->t('Overlay'),
-      ),
+      ],
       '#default_value' => $config->get('position'),
-    );
+    ];
 
     if (\Drupal::service('module_handler')->moduleExists('toolbar')) {
-      $form['toolbar_disable'] = array(
+      $form['toolbar_disable'] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Disable toolbar for user 1.'),
         '#default_value' => $config->get('toolbar_disable'),
-      );
+      ];
     }
 
-    $form['plugin_settings'] = array(
+    $form['plugin_settings'] = [
       '#type' => 'vertical_tabs',
-    );
+    ];
 
-    $form['plugins'] = array(
+    $form['plugins'] = [
       '#type' => 'container',
       '#tree' => TRUE,
-    );
+    ];
 
     $manager = \Drupal::service('plugin.manager.valet');
     $plugins = $manager->getDefinitions();
-    uasort($plugins, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
-    foreach($plugins as $id => $plugin){
+    uasort($plugins, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
+    foreach ($plugins as $id => $plugin) {
       $definition = $manager->getDefinition($id);
       if (!$definition['class']::isApplicable()) {
         continue;
       }
       $instance = $manager->createInstance($id);
-      $form['plugins'][$id] = array(
+      $form['plugins'][$id] = [
         '#type' => 'details',
         '#title' => $plugin['label'] . ' ' . $this->t('Plugin'),
         '#group' => 'plugin_settings',
-      );
+      ];
 
-      $form['plugins'][$id]['enabled'] = array(
+      $form['plugins'][$id]['enabled'] = [
         '#type' => 'checkbox',
         '#title' => t('Enabled'),
-        '#default_value' => $config->get('plugins.'.$id.'.enabled'),
-      );
+        '#default_value' => $config->get('plugins.' . $id . '.enabled'),
+      ];
 
-      if($plugin_form = $instance->buildForm(array(), $form_state)){
+      if ($plugin_form = $instance->buildForm([], $form_state)) {
         $form['plugins'][$id]['settings'] = $plugin_form + [
           '#type' => 'container',
-          '#states' => array(
-            'disabled' => array('input[name="plugins['.$id.'][enabled]"]' => array('checked' => FALSE)),
-          ),
+          '#states' => [
+            'disabled' => ['input[name="plugins[' . $id . '][enabled]"]' => ['checked' => FALSE]],
+          ],
         ];
       }
     }

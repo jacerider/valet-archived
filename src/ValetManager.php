@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\valet\Plugin\ValetManager.
- */
-
 namespace Drupal\valet;
 
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides the Valet plugin manager.

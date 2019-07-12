@@ -1,6 +1,7 @@
 {
   "name": "valet",
   "description": "An Alfred-inspired navigation system for Drupal.",
+  "bowerDir": "./bower_components",
   "browserSync": {
     "enabled" : true,
     "proxy" : "http://localhost",
@@ -9,19 +10,15 @@
     "notify" : false
   },
   "css": {
-    "file" : "valet.scss",
     "dest": "../css",
     "src": [
       "scss/**/*.scss"
-    ],
-    "includePaths": []
+    ]
   },
   "js": {
     "dest": "../js",
     "src": [
       "js/**/*.js"
-    ],
-    "vendorDest": "../js/vendor",
-    "vendorPaths": []
+    ]
   }
 }

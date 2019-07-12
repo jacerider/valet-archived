@@ -15,13 +15,12 @@ var config = require('./config/config.json');
 // Include plugins.
 var sass = require('gulp-sass');
 var sassLint = require('gulp-sass-lint');
-var shell = require('gulp-shell');
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
 var autoprefix = require('gulp-autoprefixer');
 var glob = require('gulp-sass-glob');
-var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var eslint = require('gulp-eslint');
 
@@ -67,6 +66,7 @@ gulp.task('css', function () {
     })
     .pipe(config.browserSync.enabled ? browserSync.reload({
       stream: true,
+      // once: true,
       match: '**/*.css'
     }) : gutil.noop());
 });
@@ -79,11 +79,15 @@ gulp.task('js', function () {
       configFile: 'config/.eslintrc',
       useEslintrc: false
     }))
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     .pipe(eslint.format())
     .pipe(uglify())
     .pipe(gulp.dest(config.js.dest))
     .pipe(config.browserSync.enabled ? browserSync.reload({
       stream: true,
+      // once: true,
       match: '**/*.js'
     }) : gutil.noop());
 });

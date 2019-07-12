@@ -1,15 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\vaet\Element\Valet.
- */
-
 namespace Drupal\valet\Element;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Element\RenderElement;
-use Drupal\Core\Render\Element;
 
 /**
  * Provides a render element for Valet.
@@ -29,10 +22,10 @@ class Valet extends RenderElement {
       '#attached' => [
         'library' => [
           'valet/valet',
-        ]
+        ],
       ],
       '#pre_render' => [
-        array($class, 'preRenderValet'),
+        [$class, 'preRenderValet'],
       ],
       // Metadata for the valet wrapping element.
       '#attributes' => [

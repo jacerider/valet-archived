@@ -9,9 +9,11 @@
     }
 
     i {
-      position: absolute;
+      // position: absolute;
+      float: right;
       font-size: $font-size-inner * 3.33;
-      right: $valet-margin / 3;
+      padding-left: $valet-padding / 3;
+      // right: 0;
       opacity: 0.25;
       transition: opacity 300ms;
     }

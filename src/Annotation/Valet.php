@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\valet\Annotation\Valet.
- */
-
 namespace Drupal\valet\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
@@ -39,7 +34,7 @@ class Valet extends Plugin {
    * An integer to determine the weight of this plugin relative to other
    * plugins in the Valet UI.
    *
-   * @var int optional
+   * @var intoptional
    */
   public $weight = NULL;
 

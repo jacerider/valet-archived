@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\valet\Plugin\Valet\User.
- */
-
 namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -15,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Expose a User plugin.
- *
  *
  * @Valet(
  *   id = "user",
@@ -66,12 +60,12 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
 
     $form['description']['#markup'] = $this->t('Expose users to Valet.');
     $form['shortcut']['#markup'] = '<br><code>' . $this->t('<strong>SHORTCUT</strong> :user') . '</code>';
-    $form['roles'] = array(
+    $form['roles'] = [
       '#type' => 'checkboxes',
       '#title' => t('Available roles'),
       '#options' => user_role_names(TRUE),
       '#default_value' => $this->settings['roles'],
-    );
+    ];
 
     return $form;
   }
@@ -84,14 +78,14 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
 
     $query = $this->userStorage->getQuery()
       ->condition('uid', 0, '>');
-    if(!empty($allowed) && empty($allowed['authenticated'])){
+    if (!empty($allowed) && empty($allowed['authenticated'])) {
       $query->condition('roles.target_id', $allowed, 'IN');
     }
     $uids = $query->execute();
     $users = $this->userStorage->loadMultiple($uids);
 
-    if(!empty($users)){
-      foreach($users as $user){
+    if (!empty($users)) {
+      foreach ($users as $user) {
         $this->addResult('user.' . $user->id(), [
           'label' => $user->getDisplayName(),
           'value' => '/user/' . $user->id(),
@@ -100,7 +94,8 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
         ]);
       }
       // Clear Valet cache with user operations.
-      $this->addCacheTags(array('user'));
+      $this->addCacheTags(['user']);
     }
   }
+
 }
