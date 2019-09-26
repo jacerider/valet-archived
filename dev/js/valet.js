@@ -26,9 +26,18 @@
       }
     }
     matcher = new RegExp($.ui.autocomplete.escapeRegex(term), 'i');
-    return $.grep(array, function (value) {
-      return matcher.test(value.label) || matcher.test(value.value) || matcher.test(value.tags);
+    var results = [];
+    var byLabel = $.grep(array, function (value) {
+      return matcher.test(value.label);
     });
+    var byValue = $.grep(array, function (value) {
+      return matcher.test(value.value);
+    });
+    var byTags = $.grep(array, function (value) {
+      return matcher.test(value.tags);
+    });
+    results = results.concat(byLabel).concat(byValue).concat(byTags);
+    return $.unique(results);
   }
 
   $.extend(proto, {
@@ -104,6 +113,7 @@
       // Autocomplete setup
       this.$input.autocomplete({
         appendTo: this.$results,
+        sortResults: false,
         minLength: 1,
         delay: 0,
         autoFocus: true,
