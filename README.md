@@ -1,11 +1,14 @@
 # Valet
-##### A site navigation tool similar to Alfred for OSX.
+
+**A site navigation tool similar to Alfred for MacOS.**
 
 ## How To Use
 
 Install and enable module as normal. Settings are available at:
 
-    admin/config/user-interface/valet
+```
+https://<domain>/admin/config/user-interface/valet
+```
 
 By default, Valet can be invoked by pressing SHIFT+SPACE at the same time,
 although it can be changed in settings.
@@ -22,21 +25,28 @@ First, you will need to install [NodeJS](https://nodejs.org/en/download/package-
 
 Run the following from the command line:
 
-    npm install
+```bash
+cd dev/
+npm install
+```
 
-Install the following gem from the command line:
+Install the following Ruby Gem from the command line:
 
-    gem install scss_lint
+```bash
+gem install scss_lint
+```
 
-Make a copy of example.config.js and set your local development settings here.
-Add this file to your .gitignore file to prevent breaking of team-members' dev
-setup.
+Make a copy of `example.config.js` and set your local development settings here.
+Add this file to your `.gitignore` file to prevent breaking of team-members' setups.
 
-    cp example.config.js config.js
+```bash
+cp example.config.js config.js
+```
 
-Run the following from the command line from the module directory to have gulp
-compile and watch for changes to both .scss files and .js files found within
-the /dev folder.
+Run the following from the command-line from the module directory to have Gulp
+compile and watch for changes to both `.scss` files and `.js` files found within
+the `dev/` folder.
 
-    gulp
-
+```bash
+gulp
+```
