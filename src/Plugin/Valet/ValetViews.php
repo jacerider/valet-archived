@@ -4,7 +4,7 @@ namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
@@ -50,7 +50,7 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
    * @param \Drupal\Core\Config\Entity\ConfigEntityListBuilder $list_builder
    *   The list builder.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManager $entity_manager, ConfigEntityListBuilder $list_builder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_manager, ConfigEntityListBuilder $list_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->listBuilder = $list_builder;
@@ -60,7 +60,7 @@ class ValetViews extends ValetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_manager = $container->get('entity.manager');
+    $entity_manager = $container->get('entity_type.manager');
     $definition = $entity_manager->getDefinition('view');
     $list_builder = ConfigEntityListBuilder::createInstance($container, $definition);
     return new static(

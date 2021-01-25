@@ -5,7 +5,7 @@ namespace Drupal\valet\Plugin\Valet;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
 
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -48,7 +48,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    * @param \Drupal\Core\Entity\EntityManager $entity_manager
    *   The user storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManager $entity_manager, ConfigEntityListBuilder $list_builder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_manager, ConfigEntityListBuilder $list_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->listBuilder = $list_builder;
@@ -58,7 +58,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_manager = $container->get('entity.manager');
+    $entity_manager = $container->get('entity_type.manager');
     $definition = $entity_manager->getDefinition('node');
     $list_builder = ConfigEntityListBuilder::createInstance($container, $definition);
     return new static(
@@ -81,7 +81,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function prepareResults() {
-    foreach ($this->entityManager->getStorage('node_type')->loadMultiple() as $entity) {
+    foreach ($this->entityManager->getStorage('node')->loadMultiple() as $entity) {
       foreach ($this->listBuilder->getOperations($entity) as $id => $operation) {
         $id = 'node_type.' . $entity->id() . '.' . $id;
         $this->addResult($id, [

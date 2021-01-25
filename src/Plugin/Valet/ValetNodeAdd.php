@@ -5,7 +5,7 @@ namespace Drupal\valet\Plugin\Valet;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
 
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -38,10 +38,10 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityManager $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_manager
    *   The user storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManager $entity_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
   }
@@ -52,7 +52,7 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $container->get('entity.manager')
+      $container->get('entity_type.manager')
     );
   }
 

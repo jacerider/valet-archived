@@ -50,7 +50,7 @@ class ValetNode extends ValetBase implements ContainerFactoryPluginInterface {
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $container->get('entity.manager')->getStorage('node')
+      $container->get('entity_type.manager')->getStorage('node')
     );
   }
 
