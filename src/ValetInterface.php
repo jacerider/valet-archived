@@ -14,6 +14,7 @@ interface ValetInterface extends PluginInspectionInterface {
    * Return the name of the plugin.
    *
    * @return string
+   *   The label.
    */
   public function getLabel();
 
@@ -21,6 +22,7 @@ interface ValetInterface extends PluginInspectionInterface {
    * Return a configuration form for the plugin.
    *
    * @return array
+   *   The form.
    */
   public function buildForm(array $form, FormStateInterface $form_state);
 
