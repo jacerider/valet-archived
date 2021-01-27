@@ -4,11 +4,9 @@ namespace Drupal\valet\Plugin\Valet;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\valet\ValetBase;
-
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 
 /**
@@ -23,11 +21,11 @@ use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The node type storage.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManager
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * The route provider.
@@ -45,12 +43,14 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityManager $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
    *   The user storage.
+   * @param \Drupal\Core\Config\Entity\ConfigEntityListBuilder $list_builder
+   *   Config entity list builder.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_manager, ConfigEntityListBuilder $list_builder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_type_manager, ConfigEntityListBuilder $list_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityManager = $entity_manager;
+    $this->entityTypeManager = $entity_type_manager;
     $this->listBuilder = $list_builder;
   }
 
@@ -58,12 +58,12 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_manager = $container->get('entity_type.manager');
-    $definition = $entity_manager->getDefinition('node');
+    $entity_type_manager = $container->get('entity_type.manager');
+    $definition = $entity_type_manager->getDefinition('node');
     $list_builder = ConfigEntityListBuilder::createInstance($container, $definition);
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $entity_manager,
+      $entity_type_manager,
       $list_builder
     );
   }
@@ -81,7 +81,7 @@ class ValetNodeType extends ValetBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function prepareResults() {
-    foreach ($this->entityManager->getStorage('node')->loadMultiple() as $entity) {
+    foreach ($this->entityTypeManager->getStorage('node_type')->loadMultiple() as $entity) {
       foreach ($this->listBuilder->getOperations($entity) as $id => $operation) {
         $id = 'node_type.' . $entity->id() . '.' . $id;
         $this->addResult($id, [
