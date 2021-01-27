@@ -105,6 +105,10 @@
         margin-top: $valet-padding * 0.75;
         padding: ($valet-padding / 3) ($valet-padding * 2) ($valet-padding / 3) ($valet-padding);
       }
+
+      .ui-menu-item-wrapper {
+        background: transparent !important;
+      }
     }
   }
 
