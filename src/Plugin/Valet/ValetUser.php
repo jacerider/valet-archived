@@ -86,6 +86,7 @@ class ValetUser extends ValetBase implements ContainerFactoryPluginInterface {
 
     if (!empty($users)) {
       foreach ($users as $user) {
+        /** @var \Drupal\user\UserInterface $user */
         $this->addResult('user.' . $user->id(), [
           'label' => $user->getDisplayName(),
           'value' => '/user/' . $user->id(),

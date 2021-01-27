@@ -23,11 +23,11 @@ use Drupal\Core\Url;
 class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The node type storage.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManager
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * Constructs a new ValetUser object.
@@ -38,12 +38,12 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManager $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
    *   The user storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManager $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityManager = $entity_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -69,8 +69,8 @@ class ValetNodeAdd extends ValetBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function prepareResults() {
-    foreach ($this->entityManager->getStorage('node_type')->loadMultiple() as $entity) {
-      if ($this->entityManager->getAccessControlHandler('node')->createAccess($entity->id())) {
+    foreach ($this->entityTypeManager->getStorage('node_type')->loadMultiple() as $entity) {
+      if ($this->entityTypeManager->getAccessControlHandler('node')->createAccess($entity->id())) {
         $this->addResult('node.add.' . $entity->id(), [
           'label' => $entity->label() . ': Add',
           'value' => Url::fromRoute('node.add', ['node_type' => $entity->id()])->toString(),
