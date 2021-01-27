@@ -37,7 +37,9 @@
       return matcher.test(value.tags);
     });
     results = results.concat(byLabel).concat(byValue).concat(byTags);
-    return $.unique(results);
+    return results.filter(function (elem, index, self) {
+      return index === self.indexOf(elem);
+    });
   }
 
   $.extend(proto, {
