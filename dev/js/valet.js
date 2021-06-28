@@ -179,7 +179,7 @@
             }, 300);
           }, 500);
         }
-        this.$input[0].trigger('blur');
+        this.$input[0].blur();
         this.$window.off('click.valet');
       }
       else {
