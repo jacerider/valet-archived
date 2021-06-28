@@ -179,7 +179,7 @@
             }, 300);
           }, 500);
         }
-        this.$input[0].blur();
+        this.$input[0].trigger('blur');
         this.$window.off('click.valet');
       }
       else {
@@ -188,9 +188,9 @@
         this.$el.addClass('open');
         this.$body.addClass('valet-open');
         this.model.set('isOpen', true);
-        this.$input.val('').focus();
         // delay binding of window click.
         setTimeout(function () {
+          self.$input.val('').trigger('focus');
           self.$window.on('click.valet', function (e) {
             if (!$(e.target).closest('.valet-inner').length) {
               self.toggle();
@@ -230,7 +230,7 @@
           url: drupalSettings.path.baseUrl + 'api/valet',
           dataType: 'json',
           success: function (data) {
-            self.$input.val('').attr('disabled', false).focus();
+            self.$input.val('').attr('disabled', false).trigger('focus');
             if (localStorage) {
               var time = Math.floor(new Date().getTime() / 1000);
               localStorage.setItem('valet', JSON.stringify({timestamp: time, data: data}));
