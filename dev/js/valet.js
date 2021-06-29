@@ -137,7 +137,7 @@
         },
         select: function (event, ui) {
           if (ui.item) {
-            self.go(ui.item.label, ui.item.value);
+            self.go(ui.item.value);
             return false;
           }
         }
@@ -188,9 +188,10 @@
         this.$el.addClass('open');
         this.$body.addClass('valet-open');
         this.model.set('isOpen', true);
+        this.$input.val('');
+        this.$input[0].focus();
         // delay binding of window click.
         setTimeout(function () {
-          self.$input.val('').trigger('focus');
           self.$window.on('click.valet', function (e) {
             if (!$(e.target).closest('.valet-inner').length) {
               self.toggle();
@@ -204,7 +205,7 @@
       this.$input.autocomplete('option', {source: data});
     },
 
-    go: function (label, value) {
+    go: function (value) {
       value = value.replace('RETURN_URL', window.location.pathname.substring(1));
 
       if (this.down[16]) {
@@ -230,7 +231,8 @@
           url: drupalSettings.path.baseUrl + 'api/valet',
           dataType: 'json',
           success: function (data) {
-            self.$input.val('').attr('disabled', false).trigger('focus');
+            self.$input.val('').attr('disabled', false);
+            self.$input[0].focus();
             if (localStorage) {
               var time = Math.floor(new Date().getTime() / 1000);
               localStorage.setItem('valet', JSON.stringify({timestamp: time, data: data}));
