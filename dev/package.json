@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
-    "browser-sync": "^2.17.5",
+    "browser-sync": "^2.27.10",
     "extend": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
